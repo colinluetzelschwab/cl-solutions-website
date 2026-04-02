@@ -58,7 +58,7 @@ export default function StepPackage({ data, onChange, errors }: Props) {
                 <Check className="w-5 h-5 text-accent-blue" />
               </div>
             )}
-            {pkg.isPopular && (
+            {'isPopular' in pkg && pkg.isPopular && (
               <span className="text-xs font-medium text-accent-blue uppercase tracking-wide">
                 Most Popular
               </span>
