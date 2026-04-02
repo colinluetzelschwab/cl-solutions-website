@@ -109,7 +109,7 @@ export default function PricingTable() {
               </div>
 
               {/* CTA Button */}
-              <Link href="/contact">
+              <Link href={`/contact?package=${tier.name.toLowerCase()}`}>
                 <Button
                   className={`w-full h-12 font-medium rounded-none transition-all duration-200 ${
                     tier.isPopular
