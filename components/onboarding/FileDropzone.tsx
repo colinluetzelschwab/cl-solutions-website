@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useCallback, useState, useRef } from 'react'
+import { upload } from '@vercel/blob/client'
 import { Upload, X, FileText, Image as ImageIcon, Loader2 } from 'lucide-react'
 import type { UploadedFile } from '@/lib/onboarding-types'
 
@@ -48,25 +49,23 @@ export default function FileDropzone({
 
     for (const file of filesToUpload) {
       try {
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('category', category)
+        const timestamp = Date.now()
+        const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
 
-        const res = await fetch('/api/upload', { method: 'POST', body: formData })
-        const data = await res.json()
+        const blob = await upload(`onboarding/${category}/${timestamp}-${safeName}`, file, {
+          access: 'public',
+          handleUploadUrl: '/api/upload',
+        })
 
-        if (data.success) {
-          uploaded.push({
-            name: data.name,
-            url: data.url,
-            size: data.size,
-            type: data.type,
-          })
-        } else {
-          setError(data.error || 'Upload failed')
-        }
-      } catch {
-        setError('Upload failed. Please try again.')
+        uploaded.push({
+          name: file.name,
+          url: blob.url,
+          size: file.size,
+          type: file.type,
+        })
+      } catch (err) {
+        console.error('Upload error:', err)
+        setError(`Failed to upload ${file.name}. Please try again.`)
       }
     }
 
