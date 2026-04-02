@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResendClient(): Resend {
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY is not configured')
+  }
+  return new Resend(apiKey)
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -54,6 +60,7 @@ export async function POST(request: NextRequest) {
     const budgetRangeLabel = budgetRangeLabels[budgetRange] || budgetRange
 
     // Send email via Resend
+    const resend = getResendClient()
     const { data, error } = await resend.emails.send({
       from: 'CL Solutions <noreply@clsolutions.ch>',
       to: process.env.OWNER_EMAIL || 'colin@clsolutions.ch',
