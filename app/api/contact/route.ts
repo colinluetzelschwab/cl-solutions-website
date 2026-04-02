@@ -62,8 +62,8 @@ export async function POST(request: NextRequest) {
     // Send email via Resend
     const resend = getResendClient()
     const { data, error } = await resend.emails.send({
-      from: 'CL Solutions <noreply@clsolutions.ch>',
-      to: process.env.OWNER_EMAIL || 'colin@clsolutions.ch',
+      from: process.env.FROM_EMAIL || 'CL Solutions <onboarding@resend.dev>',
+      to: process.env.OWNER_EMAIL || 'colinluetzelschwab@gmail.com',
       subject: `New enquiry from ${name}`,
       html: `
         <!DOCTYPE html>
