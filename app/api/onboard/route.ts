@@ -59,8 +59,8 @@ export async function POST(request: NextRequest) {
     // Send notification email
     const resend = getResendClient()
     const { error: emailError } = await resend.emails.send({
-      from: process.env.FROM_EMAIL || 'CL Solutions <onboarding@resend.dev>',
-      to: process.env.OWNER_EMAIL || 'colinluetzelschwab@gmail.com',
+      from: process.env.FROM_EMAIL || 'CL Solutions <colin@clsolutions.dev>',
+      to: process.env.OWNER_EMAIL || 'colin@clsolutions.dev',
       subject: `New project brief: ${brief.businessInfo.name} (${selectedPkg?.name ?? 'Unknown'})`,
       html: buildEmailHtml(storedBrief, briefBlob.url, rufloPrompt),
     })

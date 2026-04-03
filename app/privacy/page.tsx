@@ -33,7 +33,7 @@ export default function PrivacyPage() {
                 CL Solutions<br />
                 Colin Lutzelschwab<br />
                 Switzerland<br />
-                Email: colin@clsolutions.ch
+                Email: colin@clsolutions.dev
               </p>
             </section>
 
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
               <p>
                 Under Swiss data protection law (nDSG) and, where applicable, the GDPR, you have
                 the right to access, correct, or delete your personal data. You may also object to
-                processing or request data portability. Contact us at colin@clsolutions.ch for
+                processing or request data portability. Contact us at colin@clsolutions.dev for
                 any data-related requests.
               </p>
             </section>

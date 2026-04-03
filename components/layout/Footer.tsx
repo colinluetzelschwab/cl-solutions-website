@@ -69,10 +69,10 @@ export default function Footer() {
             <div className="flex items-center space-x-2 text-text-muted">
               <Mail className="h-4 w-4" />
               <a
-                href="mailto:colin@clsolutions.ch"
+                href="mailto:colin@clsolutions.dev"
                 className="text-sm hover:text-text-secondary transition-colors duration-200"
               >
-                colin@clsolutions.ch
+                colin@clsolutions.dev
               </a>
             </div>
 

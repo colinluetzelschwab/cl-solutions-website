@@ -32,10 +32,10 @@ export default function ImprintPage() {
               <p>
                 Email:{' '}
                 <a
-                  href="mailto:colin@clsolutions.ch"
+                  href="mailto:colin@clsolutions.dev"
                   className="text-accent-blue hover:text-accent-blue-hover transition-colors"
                 >
-                  colin@clsolutions.ch
+                  colin@clsolutions.dev
                 </a>
                 <br />
                 Website:{' '}
