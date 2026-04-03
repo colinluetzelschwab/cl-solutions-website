@@ -35,7 +35,7 @@ const differentiators: Differentiator[] = [
 
 export default function WhyCL() {
   return (
-    <section className="w-full bg-background-primary py-12 md:py-20 lg:py-24">
+    <section className="w-full bg-background-primary py-20 md:py-28 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Headline */}
         <ScrollReveal>

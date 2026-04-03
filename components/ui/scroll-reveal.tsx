@@ -1,7 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 interface ScrollRevealProps {
   children: React.ReactNode
@@ -12,12 +11,37 @@ interface ScrollRevealProps {
   once?: boolean
 }
 
-const directionOffsets = {
-  up: { y: 40, x: 0 },
-  down: { y: -40, x: 0 },
-  left: { x: 40, y: 0 },
-  right: { x: -40, y: 0 },
-  none: { x: 0, y: 0 },
+const directionTransforms = {
+  up: 'translateY(30px)',
+  down: 'translateY(-30px)',
+  left: 'translateX(30px)',
+  right: 'translateX(-30px)',
+  none: 'translate(0)',
+}
+
+function useIntersection(once = true) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true)
+          if (once) observer.disconnect()
+        }
+      },
+      { threshold: 0.05 }
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [once])
+
+  return { ref, isVisible }
 }
 
 export default function ScrollReveal({
@@ -28,36 +52,20 @@ export default function ScrollReveal({
   duration = 0.6,
   once = true,
 }: ScrollRevealProps) {
-  const offset = directionOffsets[direction]
-
-  const variants: Variants = {
-    hidden: {
-      opacity: 0,
-      x: offset.x,
-      y: offset.y,
-    },
-    visible: {
-      opacity: 1,
-      x: 0,
-      y: 0,
-      transition: {
-        duration,
-        delay,
-        ease: [0.25, 0.1, 0.25, 1],
-      },
-    },
-  }
+  const { ref, isVisible } = useIntersection(once)
 
   return (
-    <motion.div
+    <div
+      ref={ref}
       className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: '-80px' }}
-      variants={variants}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translate(0)' : directionTransforms[direction],
+        transition: `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }
 
@@ -72,23 +80,23 @@ export function StaggerContainer({
   className,
   staggerDelay = 0.1,
 }: StaggerContainerProps) {
+  const { ref, isVisible } = useIntersection(true)
+
+  let staggerIndex = 0
+
   return (
-    <motion.div
-      className={className}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-80px' }}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
-    >
-      {children}
-    </motion.div>
+    <div ref={ref} className={className}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child) && child.type === StaggerItem) {
+          const currentIndex = staggerIndex++
+          return React.cloneElement(child as React.ReactElement<{ isVisible?: boolean; delay?: number }>, {
+            isVisible,
+            delay: currentIndex * staggerDelay,
+          })
+        }
+        return child
+      })}
+    </div>
   )
 }
 
@@ -97,28 +105,26 @@ export function StaggerItem({
   className,
   direction = 'up',
   duration = 0.5,
+  isVisible = false,
+  delay = 0,
 }: {
   children: React.ReactNode
   className?: string
   direction?: 'up' | 'down' | 'left' | 'right' | 'none'
   duration?: number
+  isVisible?: boolean
+  delay?: number
 }) {
-  const offset = directionOffsets[direction]
-
   return (
-    <motion.div
+    <div
       className={className}
-      variants={{
-        hidden: { opacity: 0, x: offset.x, y: offset.y },
-        visible: {
-          opacity: 1,
-          x: 0,
-          y: 0,
-          transition: { duration, ease: [0.25, 0.1, 0.25, 1] },
-        },
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translate(0)' : directionTransforms[direction],
+        transition: `opacity ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s, transform ${duration}s cubic-bezier(0.25, 0.1, 0.25, 1) ${delay}s`,
       }}
     >
       {children}
-    </motion.div>
+    </div>
   )
 }

@@ -34,7 +34,7 @@ const steps: Step[] = [
 
 export default function Process() {
   return (
-    <section className="w-full bg-background-surface py-12 md:py-16 lg:py-20">
+    <section className="w-full bg-background-surface py-20 md:py-28 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Headline */}
         <ScrollReveal>
