@@ -3,17 +3,21 @@ export interface StepBusinessInfo {
   email: string
   phone: string
   businessType: string
+  businessTypeOther: string
 }
 
 export interface StepPackage {
   selectedPackage: 'starter' | 'business' | 'pro' | ''
   couponCode: string
   couponValid: boolean
+  hostingPlan: 'none' | 'basic' | 'full'
 }
 
 export interface StepDesign {
   primaryColor: string
   secondaryColor: string
+  accentColor: string
+  textColor: string
   aesthetic: string
   darkMode: boolean
   referenceLiked: string
@@ -38,6 +42,7 @@ export interface StepUpload {
   logo: UploadedFile | null
   photos: UploadedFile[]
   document: UploadedFile | null
+  requestLogoGeneration: boolean
 }
 
 export interface StepNotes {

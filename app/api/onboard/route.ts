@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { put } from '@vercel/blob'
 import { Resend } from 'resend'
 import type { OnboardingBrief } from '@/lib/onboarding-types'
-import { COUPON_CODE, PACKAGES } from '@/lib/onboarding-constants'
+import { COUPON_CODE, PACKAGES, HOSTING_PLANS, LOGO_GENERATION_PRICE } from '@/lib/onboarding-constants'
 
 function getResendClient(): Resend {
   const apiKey = process.env.RESEND_API_KEY
@@ -33,7 +33,8 @@ export async function POST(request: NextRequest) {
     const isCouponValid = brief.package.couponCode.toLowerCase().trim() === COUPON_CODE
     const selectedPkg = PACKAGES.find(p => p.id === brief.package.selectedPackage)
     const basePrice = selectedPkg?.price ?? 0
-    const totalPrice = isCouponValid ? 0 : basePrice
+    const logoPrice = brief.uploads?.requestLogoGeneration ? LOGO_GENERATION_PRICE : 0
+    const totalPrice = isCouponValid ? logoPrice : basePrice + logoPrice
 
     // Generate brief ID and store
     const briefId = crypto.randomUUID()
@@ -88,21 +89,28 @@ export async function POST(request: NextRequest) {
 
 function buildRufloPrompt(brief: OnboardingBrief): string {
   const pkg = PACKAGES.find(p => p.id === brief.package.selectedPackage)
+  const hosting = HOSTING_PLANS.find(p => p.id === brief.package.hostingPlan)
   const pages = brief.pagesFeatures.pages.join(', ')
   const features = brief.pagesFeatures.features.join(', ')
+  const businessType = brief.businessInfo.businessType === 'other'
+    ? brief.businessInfo.businessTypeOther
+    : brief.businessInfo.businessType
 
   return `Read _agency/CLAUDE.md and _agency/MEMORY.md before anything else.
 
 You are building a website for:
 - Business: ${brief.businessInfo.name}
-- Sector: ${brief.businessInfo.businessType}
+- Sector: ${businessType}
 - Package: ${pkg?.name ?? 'Unknown'} (CHF ${pkg?.price ?? 0})
+- Hosting: ${hosting?.name ?? 'None'} (CHF ${hosting?.price ?? 0}/mt)
 - Email: ${brief.businessInfo.email}
 - Phone: ${brief.businessInfo.phone || 'Not provided'}
 
 Design preferences:
 - Primary colour: ${brief.design.primaryColor || 'Not specified'}
 - Secondary colour: ${brief.design.secondaryColor || 'Not specified'}
+- Accent colour: ${brief.design.accentColor || 'Not specified'}
+- Text colour: ${brief.design.textColor || 'Not specified'}
 - Aesthetic: ${brief.design.aesthetic || 'Not specified'}
 - Dark mode: ${brief.design.darkMode ? 'YES' : 'NO'}
 - Reference sites liked: ${brief.design.referenceLiked || 'None'}
@@ -115,7 +123,7 @@ Features: ${features || 'None selected'}
 ${brief.pagesFeatures.otherFeatures ? `Other features: ${brief.pagesFeatures.otherFeatures}` : ''}
 
 Assets:
-- Logo: ${brief.uploads.logo?.url ?? 'Not uploaded'}
+- Logo: ${brief.uploads.logo?.url ?? (brief.uploads.requestLogoGeneration ? 'GENERATE AI LOGO — client requested logo generation' : 'Not uploaded')}
 - Photos: ${brief.uploads.photos.length > 0 ? brief.uploads.photos.map(p => p.url).join(', ') : 'None'}
 - Document: ${brief.uploads.document?.url ?? 'None'}
 
@@ -134,6 +142,10 @@ Wait for my approval.`
 
 function buildEmailHtml(brief: OnboardingBrief, briefUrl: string, rufloPrompt: string): string {
   const pkg = PACKAGES.find(p => p.id === brief.package.selectedPackage)
+  const hosting = HOSTING_PLANS.find(p => p.id === brief.package.hostingPlan)
+  const businessType = brief.businessInfo.businessType === 'other'
+    ? brief.businessInfo.businessTypeOther
+    : brief.businessInfo.businessType
 
   return `<!DOCTYPE html><html><head><meta charset="utf-8">
 <style>
@@ -163,13 +175,16 @@ function buildEmailHtml(brief: OnboardingBrief, briefUrl: string, rufloPrompt: s
   <div class="field"><span class="label">Name:</span> <span class="value">${brief.businessInfo.name}</span></div>
   <div class="field"><span class="label">Email:</span> <span class="value"><a href="mailto:${brief.businessInfo.email}">${brief.businessInfo.email}</a></span></div>
   <div class="field"><span class="label">Phone:</span> <span class="value">${brief.businessInfo.phone || '—'}</span></div>
-  <div class="field"><span class="label">Business type:</span> <span class="value">${brief.businessInfo.businessType}</span></div>
+  <div class="field"><span class="label">Business type:</span> <span class="value">${businessType}</span></div>
 </div>
 
 <div class="section">
-  <h2>Package & Payment</h2>
+  <h2>Package & Hosting</h2>
   <div class="field"><span class="label">Package:</span> <span class="value">${pkg?.name}</span></div>
+  <div class="field"><span class="label">Hosting:</span> <span class="value">${hosting?.name ?? 'None'} ${hosting && hosting.price > 0 ? `(CHF ${hosting.price}/mt)` : ''}</span></div>
+  ${brief.uploads?.requestLogoGeneration ? `<div class="field"><span class="label">Logo generation:</span> <span class="value">+CHF ${LOGO_GENERATION_PRICE}</span></div>` : ''}
   <div class="price">CHF ${brief.totalPrice.toLocaleString()}</div>
+  ${hosting && hosting.price > 0 ? `<div class="field" style="margin-top:4px"><span class="label">Monthly:</span> <span class="value">CHF ${hosting.price}/mt</span></div>` : ''}
   ${brief.package.couponValid ? '<span class="coupon">Coupon: hetschgern (100% off)</span>' : ''}
 </div>
 
@@ -177,6 +192,8 @@ function buildEmailHtml(brief: OnboardingBrief, briefUrl: string, rufloPrompt: s
   <h2>Design</h2>
   <div class="field"><span class="label">Primary colour:</span> <span class="value">${brief.design.primaryColor || '—'} ${brief.design.primaryColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.primaryColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
   <div class="field"><span class="label">Secondary colour:</span> <span class="value">${brief.design.secondaryColor || '—'} ${brief.design.secondaryColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.secondaryColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
+  <div class="field"><span class="label">Accent colour:</span> <span class="value">${brief.design.accentColor || '—'} ${brief.design.accentColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.accentColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
+  <div class="field"><span class="label">Text colour:</span> <span class="value">${brief.design.textColor || '—'} ${brief.design.textColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.textColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
   <div class="field"><span class="label">Aesthetic:</span> <span class="value">${brief.design.aesthetic || '—'}</span></div>
   <div class="field"><span class="label">Dark mode:</span> <span class="value">${brief.design.darkMode ? 'Yes' : 'No'}</span></div>
   <div class="field"><span class="label">References liked:</span> <span class="value">${brief.design.referenceLiked || '—'}</span></div>
@@ -193,7 +210,7 @@ function buildEmailHtml(brief: OnboardingBrief, briefUrl: string, rufloPrompt: s
 
 <div class="section">
   <h2>Assets</h2>
-  <div class="field"><span class="label">Logo:</span> ${brief.uploads.logo ? `<a class="file-link" href="${brief.uploads.logo.url}">${brief.uploads.logo.name}</a>` : '—'}</div>
+  <div class="field"><span class="label">Logo:</span> ${brief.uploads.logo ? `<a class="file-link" href="${brief.uploads.logo.url}">${brief.uploads.logo.name}</a>` : brief.uploads?.requestLogoGeneration ? '<strong>AI Logo Generation Requested</strong>' : '—'}</div>
   <div class="field"><span class="label">Photos:</span> ${brief.uploads.photos.length > 0 ? brief.uploads.photos.map(p => `<a class="file-link" href="${p.url}">${p.name}</a>`).join(', ') : '—'}</div>
   <div class="field"><span class="label">Document:</span> ${brief.uploads.document ? `<a class="file-link" href="${brief.uploads.document.url}">${brief.uploads.document.name}</a>` : '—'}</div>
 </div>

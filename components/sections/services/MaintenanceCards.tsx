@@ -12,22 +12,22 @@ interface MaintenanceTier {
 const tiers: MaintenanceTier[] = [
   {
     name: 'Basic',
-    price: 'CHF 149/month',
+    price: 'CHF 49/month',
     features: [
-      'Hosting monitored',
-      'Security updates',
-      '1 content change/month',
+      'Vercel hosting',
+      'SSL certificate',
       'Uptime monitoring',
+      '99.9% uptime SLA',
     ],
   },
   {
-    name: 'Full',
-    price: 'CHF 299/month',
+    name: 'Full Service',
+    price: 'CHF 149/month',
     features: [
       'Everything in Basic',
-      '3 content changes/month',
-      'Monthly performance report',
-      'Priority 24h response',
+      'Monthly text changes',
+      'Performance reports',
+      'Priority support',
     ],
   },
 ]

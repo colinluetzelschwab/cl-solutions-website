@@ -70,7 +70,12 @@ export default function StepBusinessInfo({ data, onChange, errors }: Props) {
           </label>
           <select
             value={data.businessType}
-            onChange={(e) => update('businessType', e.target.value)}
+            onChange={(e) => {
+              update('businessType', e.target.value)
+              if (e.target.value !== 'other') {
+                onChange({ ...data, businessType: e.target.value, businessTypeOther: '' })
+              }
+            }}
             className="w-full h-10 px-3 bg-background-surface border border-border-default text-text-primary text-sm rounded-none focus:outline-none focus:ring-2 focus:ring-accent-blue"
           >
             <option value="">Select your industry</option>
@@ -79,6 +84,18 @@ export default function StepBusinessInfo({ data, onChange, errors }: Props) {
             ))}
           </select>
           {errors.businessType && <p className="text-sm text-red-500 mt-1">{errors.businessType}</p>}
+
+          {data.businessType === 'other' && (
+            <div className="mt-3">
+              <Input
+                value={data.businessTypeOther}
+                onChange={(e) => update('businessTypeOther', e.target.value)}
+                placeholder="Describe your business type..."
+                className="bg-background-surface border-border-default text-text-primary placeholder:text-text-muted"
+              />
+              {errors.businessTypeOther && <p className="text-sm text-red-500 mt-1">{errors.businessTypeOther}</p>}
+            </div>
+          )}
         </div>
       </div>
     </div>

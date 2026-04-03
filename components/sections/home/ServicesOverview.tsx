@@ -16,20 +16,20 @@ interface ServicePackage {
 const packages: ServicePackage[] = [
   {
     name: 'Starter',
-    price: 'CHF 900',
+    price: 'CHF 1,500',
     description: 'For businesses that need a clean, professional web presence. Fast.',
-    features: ['4 pages', '1 revision', '3–5 days'],
+    features: ['4 pages', '1 revision', '3-5 days'],
   },
   {
     name: 'Business',
-    price: 'CHF 1,900',
+    price: 'CHF 3,500',
     description: 'For businesses that want design that actually stands out.',
     features: ['6 pages', 'CMS included', 'Animations'],
     isPopular: true,
   },
   {
     name: 'Pro',
-    price: 'From CHF 3,500',
+    price: 'From CHF 7,500',
     description: 'Custom scope. Integrations. Ongoing partnership.',
     features: ['Custom', 'Multilingual', 'Retainer option'],
   },

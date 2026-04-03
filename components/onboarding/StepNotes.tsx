@@ -2,17 +2,38 @@
 
 import React from 'react'
 import { Textarea } from '@/components/ui/textarea'
-import { PACKAGES } from '@/lib/onboarding-constants'
+import { Pencil } from 'lucide-react'
+import { PACKAGES, HOSTING_PLANS, LOGO_GENERATION_PRICE } from '@/lib/onboarding-constants'
 import type { OnboardingBrief } from '@/lib/onboarding-types'
 
 interface Props {
   brief: Omit<OnboardingBrief, 'id' | 'createdAt' | 'totalPrice'>
   onNotesChange: (notes: string) => void
+  onEditStep: (step: number) => void
 }
 
-export default function StepNotes({ brief, onNotesChange }: Props) {
+function SectionHeader({ title, step, onEdit }: { title: string; step: number; onEdit: (s: number) => void }) {
+  return (
+    <div className="flex items-center justify-between mb-2">
+      <p className="text-xs font-medium text-text-muted uppercase tracking-wide">{title}</p>
+      <button
+        type="button"
+        onClick={() => onEdit(step)}
+        className="flex items-center gap-1 text-xs text-accent-blue hover:text-accent-blue-hover transition-colors"
+      >
+        <Pencil className="w-3 h-3" />
+        Edit
+      </button>
+    </div>
+  )
+}
+
+export default function StepNotes({ brief, onNotesChange, onEditStep }: Props) {
   const pkg = PACKAGES.find(p => p.id === brief.package.selectedPackage)
-  const price = brief.package.couponValid ? 0 : (pkg?.price ?? 0)
+  const hosting = HOSTING_PLANS.find(p => p.id === brief.package.hostingPlan)
+  const basePrice = brief.package.couponValid ? 0 : (pkg?.price ?? 0)
+  const logoPrice = brief.uploads.requestLogoGeneration ? LOGO_GENERATION_PRICE : 0
+  const totalPrice = basePrice + logoPrice
 
   return (
     <div className="space-y-6">
@@ -22,82 +43,168 @@ export default function StepNotes({ brief, onNotesChange }: Props) {
       </div>
 
       {/* Summary */}
-      <div className="bg-background-surface border border-border-subtle p-6 space-y-4">
-        <div className="grid grid-cols-2 gap-4 text-sm">
-          <div>
-            <p className="text-text-muted">Business</p>
-            <p className="text-text-primary font-medium">{brief.businessInfo.name}</p>
+      <div className="bg-background-surface border border-border-subtle divide-y divide-border-subtle">
+        {/* Business Info */}
+        <div className="p-5">
+          <SectionHeader title="Business" step={0} onEdit={onEditStep} />
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <p className="text-text-muted text-xs">Name</p>
+              <p className="text-text-primary font-medium">{brief.businessInfo.name}</p>
+            </div>
+            <div>
+              <p className="text-text-muted text-xs">Email</p>
+              <p className="text-text-primary font-medium">{brief.businessInfo.email}</p>
+            </div>
+            {brief.businessInfo.phone && (
+              <div>
+                <p className="text-text-muted text-xs">Phone</p>
+                <p className="text-text-primary">{brief.businessInfo.phone}</p>
+              </div>
+            )}
+            <div>
+              <p className="text-text-muted text-xs">Type</p>
+              <p className="text-text-primary capitalize">
+                {brief.businessInfo.businessType === 'other'
+                  ? brief.businessInfo.businessTypeOther || 'Other'
+                  : brief.businessInfo.businessType.replace('-', ' ')}
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-text-muted">Email</p>
-            <p className="text-text-primary font-medium">{brief.businessInfo.email}</p>
+        </div>
+
+        {/* Package & Hosting */}
+        <div className="p-5">
+          <SectionHeader title="Package & Hosting" step={1} onEdit={onEditStep} />
+          <div className="grid grid-cols-2 gap-3 text-sm">
+            <div>
+              <p className="text-text-muted text-xs">Package</p>
+              <p className="text-text-primary font-medium">{pkg?.name ?? '—'}</p>
+            </div>
+            <div>
+              <p className="text-text-muted text-xs">One-time price</p>
+              <p className={`font-bold text-lg ${basePrice === 0 ? 'text-green-500' : 'text-text-primary'}`}>
+                CHF {basePrice.toLocaleString()}
+                {brief.package.couponValid && (
+                  <span className="text-xs text-green-500 ml-2">Coupon applied</span>
+                )}
+              </p>
+            </div>
+            <div>
+              <p className="text-text-muted text-xs">Hosting</p>
+              <p className="text-text-primary">
+                {hosting && hosting.price > 0
+                  ? `${hosting.name} (CHF ${hosting.price}/mt)`
+                  : 'No managed hosting'}
+              </p>
+            </div>
+            {brief.uploads.requestLogoGeneration && (
+              <div>
+                <p className="text-text-muted text-xs">Logo generation</p>
+                <p className="text-text-primary">+CHF {LOGO_GENERATION_PRICE}</p>
+              </div>
+            )}
           </div>
-          <div>
-            <p className="text-text-muted">Package</p>
-            <p className="text-text-primary font-medium">{pkg?.name ?? '—'}</p>
-          </div>
-          <div>
-            <p className="text-text-muted">Total</p>
-            <p className={`font-bold text-lg ${price === 0 ? 'text-green-500' : 'text-text-primary'}`}>
-              CHF {price.toLocaleString()}
-              {brief.package.couponValid && (
-                <span className="text-xs text-green-500 ml-2">Coupon applied</span>
+          {(logoPrice > 0 || (hosting && hosting.price > 0)) && (
+            <div className="mt-3 pt-3 border-t border-border-subtle text-sm">
+              <p className="text-text-muted text-xs">Total one-time</p>
+              <p className="text-text-primary font-bold text-xl">CHF {totalPrice.toLocaleString()}</p>
+              {hosting && hosting.price > 0 && (
+                <p className="text-text-muted text-xs mt-1">+ CHF {hosting.price}/mt recurring</p>
               )}
-            </p>
-          </div>
+            </div>
+          )}
         </div>
 
-        <div className="border-t border-border-subtle pt-4 text-sm">
-          <p className="text-text-muted mb-1">Pages</p>
-          <div className="flex flex-wrap gap-1">
-            {brief.pagesFeatures.pages.map(p => (
-              <span key={p} className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs">
-                {p}
-              </span>
-            ))}
-            {brief.pagesFeatures.pages.length === 0 && (
-              <span className="text-text-muted">None selected</span>
-            )}
-          </div>
-        </div>
-
-        <div className="border-t border-border-subtle pt-4 text-sm">
-          <p className="text-text-muted mb-1">Features</p>
-          <div className="flex flex-wrap gap-1">
-            {brief.pagesFeatures.features.map(f => (
-              <span key={f} className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs">
-                {f}
-              </span>
-            ))}
-            {brief.pagesFeatures.features.length === 0 && (
-              <span className="text-text-muted">None selected</span>
-            )}
-          </div>
-        </div>
-
-        <div className="border-t border-border-subtle pt-4 text-sm">
-          <p className="text-text-muted mb-1">Design</p>
-          <div className="flex items-center gap-4">
+        {/* Design */}
+        <div className="p-5">
+          <SectionHeader title="Design" step={2} onEdit={onEditStep} />
+          <div className="flex flex-wrap items-center gap-4 text-sm">
             {brief.design.primaryColor && (
               <div className="flex items-center gap-2">
-                <span className="w-4 h-4 border border-border-default" style={{ backgroundColor: brief.design.primaryColor }} />
+                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.primaryColor }} />
                 <span className="text-text-secondary text-xs">{brief.design.primaryColor}</span>
               </div>
             )}
-            {brief.design.aesthetic && (
-              <span className="text-text-secondary capitalize">{brief.design.aesthetic}</span>
+            {brief.design.secondaryColor && (
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.secondaryColor }} />
+                <span className="text-text-secondary text-xs">{brief.design.secondaryColor}</span>
+              </div>
             )}
-            <span className="text-text-secondary">{brief.design.darkMode ? 'Dark mode' : 'Light mode'}</span>
+            {brief.design.accentColor && (
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.accentColor }} />
+                <span className="text-text-secondary text-xs">{brief.design.accentColor}</span>
+              </div>
+            )}
+            {brief.design.textColor && (
+              <div className="flex items-center gap-2">
+                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.textColor }} />
+                <span className="text-text-secondary text-xs">{brief.design.textColor}</span>
+              </div>
+            )}
+            {brief.design.aesthetic && (
+              <span className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs capitalize">
+                {brief.design.aesthetic}
+              </span>
+            )}
+            <span className="text-text-secondary text-xs">{brief.design.darkMode ? 'Dark mode' : 'Light mode'}</span>
           </div>
         </div>
 
-        <div className="border-t border-border-subtle pt-4 text-sm">
-          <p className="text-text-muted mb-1">Assets</p>
-          <p className="text-text-secondary">
-            Logo: {brief.uploads.logo ? brief.uploads.logo.name : 'Not uploaded'} |
-            Photos: {brief.uploads.photos.length} |
-            Document: {brief.uploads.document ? brief.uploads.document.name : 'None'}
-          </p>
+        {/* Pages & Features */}
+        <div className="p-5">
+          <SectionHeader title="Pages & Features" step={3} onEdit={onEditStep} />
+          <div className="space-y-3 text-sm">
+            <div>
+              <p className="text-text-muted text-xs mb-1">Pages</p>
+              <div className="flex flex-wrap gap-1">
+                {brief.pagesFeatures.pages.map(p => (
+                  <span key={p} className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs">
+                    {p}
+                  </span>
+                ))}
+                {brief.pagesFeatures.pages.length === 0 && (
+                  <span className="text-text-muted">None selected</span>
+                )}
+              </div>
+            </div>
+            <div>
+              <p className="text-text-muted text-xs mb-1">Features</p>
+              <div className="flex flex-wrap gap-1">
+                {brief.pagesFeatures.features.map(f => (
+                  <span key={f} className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs">
+                    {f}
+                  </span>
+                ))}
+                {brief.pagesFeatures.features.length === 0 && (
+                  <span className="text-text-muted">None selected</span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Assets */}
+        <div className="p-5">
+          <SectionHeader title="Assets" step={4} onEdit={onEditStep} />
+          <div className="text-sm space-y-1">
+            <p className="text-text-secondary">
+              <span className="text-text-muted">Logo:</span>{' '}
+              {brief.uploads.logo
+                ? brief.uploads.logo.name
+                : brief.uploads.requestLogoGeneration
+                  ? 'AI-generated (requested)'
+                  : 'Not uploaded'}
+            </p>
+            <p className="text-text-secondary">
+              <span className="text-text-muted">Photos:</span> {brief.uploads.photos.length} uploaded
+            </p>
+            <p className="text-text-secondary">
+              <span className="text-text-muted">Document:</span> {brief.uploads.document ? brief.uploads.document.name : 'None'}
+            </p>
+          </div>
         </div>
       </div>
 

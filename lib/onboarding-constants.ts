@@ -2,24 +2,49 @@ export const PACKAGES = [
   {
     id: 'starter' as const,
     name: 'Starter',
-    price: 900,
+    price: 1500,
     description: 'Clean, professional web presence. Fast.',
-    features: ['4 pages', '1 revision round', '3–5 day delivery'],
+    features: ['4 pages', 'Responsive design', 'Contact form', '1 revision round', '3-5 day delivery'],
   },
   {
     id: 'business' as const,
     name: 'Business',
-    price: 1900,
+    price: 3500,
     description: 'Design that actually stands out.',
-    features: ['6 pages', 'CMS included', 'Scroll animations', '1 revision round'],
+    features: ['6 pages', 'Premium design + animations', 'CMS included', 'Full SEO setup', '1 revision round'],
     isPopular: true,
   },
   {
     id: 'pro' as const,
     name: 'Pro',
-    price: 3500,
+    price: 7500,
     description: 'Custom scope. Integrations. Ongoing partnership.',
-    features: ['Custom page count', 'Multilingual', 'Integrations', '2 revision rounds'],
+    features: ['Custom page count', 'Multilingual', 'Custom integrations', 'Advanced SEO', '2 revision rounds'],
+  },
+] as const
+
+export const HOSTING_PLANS = [
+  {
+    id: 'none' as const,
+    name: 'No hosting',
+    price: 0,
+    description: 'Self-managed hosting',
+    features: [],
+  },
+  {
+    id: 'basic' as const,
+    name: 'Basic',
+    price: 49,
+    description: 'Hosting, SSL, uptime monitoring',
+    features: ['Vercel hosting', 'SSL certificate', 'Uptime monitoring', '99.9% uptime SLA'],
+  },
+  {
+    id: 'full' as const,
+    name: 'Full Service',
+    price: 149,
+    description: 'Everything managed for you',
+    features: ['Everything in Basic', 'Monthly text changes', 'Performance reports', 'Priority support'],
+    isPopular: true,
   },
 ] as const
 
@@ -84,3 +109,5 @@ export const STEPS = [
   'Upload Assets',
   'Review & Submit',
 ] as const
+
+export const LOGO_GENERATION_PRICE = 300

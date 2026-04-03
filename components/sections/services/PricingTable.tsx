@@ -18,7 +18,7 @@ interface PricingTier {
 const tiers: PricingTier[] = [
   {
     name: 'Starter',
-    price: 'CHF 900',
+    price: 'CHF 1,500',
     features: [
       { text: 'Up to 4 pages', included: true },
       { text: 'Custom responsive design', included: true },
@@ -32,7 +32,7 @@ const tiers: PricingTier[] = [
   },
   {
     name: 'Business',
-    price: 'CHF 1,900',
+    price: 'CHF 3,500',
     isPopular: true,
     features: [
       { text: 'Up to 6 pages', included: true },
@@ -48,7 +48,7 @@ const tiers: PricingTier[] = [
   },
   {
     name: 'Pro',
-    price: 'From CHF 3,500',
+    price: 'From CHF 7,500',
     features: [
       { text: 'Custom page count', included: true },
       { text: 'Fully custom design direction', included: true },

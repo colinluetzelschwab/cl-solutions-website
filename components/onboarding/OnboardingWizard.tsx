@@ -29,18 +29,19 @@ export default function OnboardingWizard() {
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const [businessInfo, setBusinessInfo] = useState<BusinessInfoData>({
-    name: '', email: '', phone: '', businessType: '',
+    name: '', email: '', phone: '', businessType: '', businessTypeOther: '',
   })
 
   const [packageData, setPackageData] = useState<PackageData>({
     selectedPackage: preselectedPackage || '',
     couponCode: '',
     couponValid: false,
+    hostingPlan: 'none',
   })
 
   const [design, setDesign] = useState<DesignData>({
-    primaryColor: '', secondaryColor: '', aesthetic: '',
-    darkMode: false, referenceLiked: '', referenceDisliked: '',
+    primaryColor: '', secondaryColor: '', accentColor: '', textColor: '',
+    aesthetic: '', darkMode: false, referenceLiked: '', referenceDisliked: '',
   })
 
   const [pagesFeatures, setPagesFeatures] = useState<PagesFeaturesData>({
@@ -49,7 +50,7 @@ export default function OnboardingWizard() {
   })
 
   const [uploads, setUploads] = useState<UploadData>({
-    logo: null, photos: [], document: null,
+    logo: null, photos: [], document: null, requestLogoGeneration: false,
   })
 
   const [notes, setNotes] = useState('')
@@ -62,18 +63,23 @@ export default function OnboardingWizard() {
       if (!businessInfo.email.trim()) newErrors.email = 'Email is required'
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(businessInfo.email)) newErrors.email = 'Invalid email'
       if (!businessInfo.businessType) newErrors.businessType = 'Please select a business type'
+      if (businessInfo.businessType === 'other' && !businessInfo.businessTypeOther.trim()) {
+        newErrors.businessTypeOther = 'Please describe your business type'
+      }
     }
 
     if (step === 1) {
       if (!packageData.selectedPackage) newErrors.selectedPackage = 'Please select a package'
     }
 
-    // Step 4 (uploads): logo required but only warn, don't block
-    // Steps 2, 3, 5: no required fields
+    if (step === 2) {
+      if (!design.aesthetic) newErrors.aesthetic = 'Please select an aesthetic style'
+      if (!design.primaryColor.trim()) newErrors.primaryColor = 'Please choose a primary colour'
+    }
 
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
-  }, [step, businessInfo, packageData])
+  }, [step, businessInfo, packageData, design])
 
   const nextStep = () => {
     if (validateStep()) {
@@ -82,6 +88,8 @@ export default function OnboardingWizard() {
   }
 
   const prevStep = () => setStep(s => Math.max(s - 1, 0))
+
+  const goToStep = (s: number) => setStep(s)
 
   const handleSubmit = async () => {
     setIsSubmitting(true)
@@ -147,13 +155,14 @@ export default function OnboardingWizard() {
       <div className="min-h-[400px]">
         {step === 0 && <StepBusinessInfo data={businessInfo} onChange={setBusinessInfo} errors={errors} />}
         {step === 1 && <StepPackage data={packageData} onChange={setPackageData} errors={errors} />}
-        {step === 2 && <StepDesign data={design} onChange={setDesign} />}
+        {step === 2 && <StepDesign data={design} onChange={setDesign} errors={errors} />}
         {step === 3 && <StepPagesFeatures data={pagesFeatures} onChange={setPagesFeatures} />}
         {step === 4 && <StepUpload data={uploads} onChange={setUploads} errors={errors} />}
         {step === 5 && (
           <StepNotes
             brief={{ businessInfo, package: packageData, design, pagesFeatures, uploads, notes }}
             onNotesChange={setNotes}
+            onEditStep={goToStep}
           />
         )}
       </div>
