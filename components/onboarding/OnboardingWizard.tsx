@@ -41,7 +41,8 @@ export default function OnboardingWizard() {
 
   const [design, setDesign] = useState<DesignData>({
     primaryColor: '', secondaryColor: '', accentColor: '', textColor: '',
-    aesthetic: '', darkMode: false, referenceLiked: '', referenceDisliked: '',
+    designPreferences: [], fontPreference: 'no-preference', language: 'de',
+    darkMode: false, referenceLiked: '', referenceDisliked: '',
   })
 
   const [pagesFeatures, setPagesFeatures] = useState<PagesFeaturesData>({
@@ -73,7 +74,7 @@ export default function OnboardingWizard() {
     }
 
     if (step === 2) {
-      if (!design.aesthetic) newErrors.aesthetic = 'Please select an aesthetic style'
+      if (!design.designPreferences || design.designPreferences.length === 0) newErrors.designPreferences = 'Please select at least one design preference'
       if (!design.primaryColor.trim()) newErrors.primaryColor = 'Please choose a primary colour'
     }
 
@@ -156,7 +157,7 @@ export default function OnboardingWizard() {
         {step === 0 && <StepBusinessInfo data={businessInfo} onChange={setBusinessInfo} errors={errors} />}
         {step === 1 && <StepPackage data={packageData} onChange={setPackageData} errors={errors} />}
         {step === 2 && <StepDesign data={design} onChange={setDesign} errors={errors} />}
-        {step === 3 && <StepPagesFeatures data={pagesFeatures} onChange={setPagesFeatures} />}
+        {step === 3 && <StepPagesFeatures data={pagesFeatures} onChange={setPagesFeatures} businessType={businessInfo.businessType} />}
         {step === 4 && <StepUpload data={uploads} onChange={setUploads} errors={errors} />}
         {step === 5 && (
           <StepNotes

@@ -18,8 +18,11 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border-subtle bg-background-primary">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+    <footer className="w-full border-t border-border-subtle bg-background-primary relative">
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-blue/20 to-transparent" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10">
         <div className="flex flex-col space-y-6">
           {/* Top Section: Logo and Nav Links */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">

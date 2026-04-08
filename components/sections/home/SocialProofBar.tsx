@@ -1,33 +1,50 @@
 import React from 'react'
 
 const businesses = [
-  'Local Clinic',
-  'Restaurant',
+  'Healthcare',
+  'Gastronomy',
   'Real Estate',
-  'Studio',
+  'Creative Studios',
   'Consulting',
+  'E-Commerce',
+  'Finance',
+  'Architecture',
 ]
 
 export default function SocialProofBar() {
   return (
-    <section className="w-full bg-background-surface py-6 md:py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
-          <p className="text-sm md:text-base text-text-muted mb-4">
-            Trusted by businesses across Switzerland
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-sm md:text-base text-text-muted">
-            {businesses.map((business, index) => (
-              <React.Fragment key={business}>
-                <span>{business}</span>
-                {index < businesses.length - 1 && (
-                  <span className="hidden sm:inline">·</span>
-                )}
-              </React.Fragment>
+    <section className="w-full bg-background-surface relative overflow-hidden">
+      {/* Top accent line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-blue/30 to-transparent" />
+
+      <div className="py-5 md:py-6">
+        <p className="text-[11px] md:text-xs text-text-muted uppercase tracking-[0.2em] text-center mb-4">
+          Trusted across industries
+        </p>
+
+        {/* Ticker container */}
+        <div className="relative overflow-hidden">
+          {/* Fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-r from-background-surface to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-24 bg-gradient-to-l from-background-surface to-transparent z-10" />
+
+          <div className="flex animate-ticker whitespace-nowrap">
+            {/* Double the items for seamless loop */}
+            {[...businesses, ...businesses].map((business, index) => (
+              <span
+                key={`${business}-${index}`}
+                className="inline-flex items-center mx-6 md:mx-8 text-sm text-text-muted/70"
+              >
+                <span className="w-1 h-1 bg-accent-blue/40 rounded-full mr-3" />
+                {business}
+              </span>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Bottom accent line */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
     </section>
   )
 }

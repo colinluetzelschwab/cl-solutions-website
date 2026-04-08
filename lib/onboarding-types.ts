@@ -18,7 +18,9 @@ export interface StepDesign {
   secondaryColor: string
   accentColor: string
   textColor: string
-  aesthetic: string
+  designPreferences: string[]
+  fontPreference: 'serif' | 'sans-serif' | 'display' | 'no-preference'
+  language: 'de' | 'en' | 'fr' | 'it'
   darkMode: boolean
   referenceLiked: string
   referenceDisliked: string

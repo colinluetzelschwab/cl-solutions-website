@@ -3,11 +3,12 @@
 import React from 'react'
 import { Input } from '@/components/ui/input'
 import type { StepPagesFeatures as StepData } from '@/lib/onboarding-types'
-import { PAGE_OPTIONS, FEATURE_OPTIONS } from '@/lib/onboarding-constants'
+import { PAGE_OPTIONS, FEATURE_OPTIONS, INDUSTRY_FEATURES } from '@/lib/onboarding-constants'
 
 interface Props {
   data: StepData
   onChange: (data: StepData) => void
+  businessType?: string
 }
 
 function TogglePill({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
@@ -26,7 +27,9 @@ function TogglePill({ label, active, onClick }: { label: string; active: boolean
   )
 }
 
-export default function StepPagesFeatures({ data, onChange }: Props) {
+export default function StepPagesFeatures({ data, onChange, businessType }: Props) {
+  const suggestedFeatures = businessType ? (INDUSTRY_FEATURES[businessType] || []) : []
+
   const togglePage = (page: string) => {
     const pages = data.pages.includes(page)
       ? data.pages.filter(p => p !== page)
@@ -72,6 +75,23 @@ export default function StepPagesFeatures({ data, onChange }: Props) {
           />
         </div>
       </div>
+
+      {/* Industry-specific suggestions */}
+      {suggestedFeatures.length > 0 && (
+        <div className="bg-accent-blue-glow border border-accent-blue/20 p-4">
+          <p className="text-xs font-medium text-accent-blue mb-2">Recommended for your industry</p>
+          <div className="flex flex-wrap gap-2">
+            {suggestedFeatures.map((feature) => (
+              <TogglePill
+                key={feature}
+                label={feature}
+                active={data.features.includes(feature)}
+                onClick={() => toggleFeature(feature)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Features */}
       <div>

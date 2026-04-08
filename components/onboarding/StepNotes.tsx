@@ -119,37 +119,29 @@ export default function StepNotes({ brief, onNotesChange, onEditStep }: Props) {
         {/* Design */}
         <div className="p-5">
           <SectionHeader title="Design" step={2} onEdit={onEditStep} />
-          <div className="flex flex-wrap items-center gap-4 text-sm">
-            {brief.design.primaryColor && (
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.primaryColor }} />
-                <span className="text-text-secondary text-xs">{brief.design.primaryColor}</span>
+          <div className="space-y-3 text-sm">
+            <div className="flex flex-wrap items-center gap-3">
+              {[brief.design.primaryColor, brief.design.secondaryColor, brief.design.accentColor, brief.design.textColor].filter(Boolean).map((color, i) => (
+                <div key={i} className="flex items-center gap-1.5">
+                  <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: color }} />
+                  <span className="text-text-secondary text-xs">{color}</span>
+                </div>
+              ))}
+            </div>
+            {brief.design.designPreferences && brief.design.designPreferences.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {brief.design.designPreferences.map((p: string) => (
+                  <span key={p} className="px-2 py-0.5 bg-accent-blue/10 text-accent-blue text-xs rounded-full">{p}</span>
+                ))}
               </div>
             )}
-            {brief.design.secondaryColor && (
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.secondaryColor }} />
-                <span className="text-text-secondary text-xs">{brief.design.secondaryColor}</span>
-              </div>
-            )}
-            {brief.design.accentColor && (
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.accentColor }} />
-                <span className="text-text-secondary text-xs">{brief.design.accentColor}</span>
-              </div>
-            )}
-            {brief.design.textColor && (
-              <div className="flex items-center gap-2">
-                <span className="w-5 h-5 border border-border-default rounded-sm" style={{ backgroundColor: brief.design.textColor }} />
-                <span className="text-text-secondary text-xs">{brief.design.textColor}</span>
-              </div>
-            )}
-            {brief.design.aesthetic && (
-              <span className="px-2 py-0.5 bg-background-elevated text-text-secondary text-xs capitalize">
-                {brief.design.aesthetic}
-              </span>
-            )}
-            <span className="text-text-secondary text-xs">{brief.design.darkMode ? 'Dark mode' : 'Light mode'}</span>
+            <div className="flex gap-3 text-xs text-text-secondary">
+              <span>Font: {brief.design.fontPreference || 'no preference'}</span>
+              <span>·</span>
+              <span>Language: {brief.design.language || 'de'}</span>
+              <span>·</span>
+              <span>{brief.design.darkMode ? 'Dark mode' : 'Light mode'}</span>
+            </div>
           </div>
         </div>
 

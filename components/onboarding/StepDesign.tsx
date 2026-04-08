@@ -4,7 +4,7 @@ import React from 'react'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import type { StepDesign as StepData } from '@/lib/onboarding-types'
-import { AESTHETIC_OPTIONS } from '@/lib/onboarding-constants'
+import { DESIGN_PREFERENCES, FONT_OPTIONS, LANGUAGE_OPTIONS } from '@/lib/onboarding-constants'
 
 interface Props {
   data: StepData
@@ -13,18 +13,49 @@ interface Props {
 }
 
 export default function StepDesign({ data, onChange, errors }: Props) {
-  const update = (field: keyof StepData, value: string | boolean) => {
+  const update = (field: keyof StepData, value: string | boolean | string[]) => {
     onChange({ ...data, [field]: value })
   }
 
+  const togglePreference = (pref: string) => {
+    const current = data.designPreferences || []
+    const updated = current.includes(pref)
+      ? current.filter(p => p !== pref)
+      : current.length < 4 ? [...current, pref] : current
+    update('designPreferences', updated)
+  }
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-semibold text-text-primary mb-1">Design preferences</h2>
         <p className="text-text-secondary">Help us understand the look and feel you want.</p>
       </div>
 
-      {/* Colors */}
+      {/* ── Language ── */}
+      <div>
+        <label className="block text-sm font-medium text-text-primary mb-2">
+          Website language
+        </label>
+        <div className="flex gap-2">
+          {LANGUAGE_OPTIONS.map((lang) => (
+            <button
+              key={lang.value}
+              type="button"
+              onClick={() => update('language', lang.value)}
+              className={`px-4 py-2 text-sm border transition-all ${
+                data.language === lang.value
+                  ? 'border-accent-blue bg-accent-blue text-text-primary'
+                  : 'border-border-default bg-background-surface text-text-secondary hover:border-text-muted'
+              }`}
+            >
+              {lang.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Colors ── */}
       <div>
         <label className="block text-sm font-medium text-text-primary mb-3">Brand colours</label>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -100,32 +131,76 @@ export default function StepDesign({ data, onChange, errors }: Props) {
         {errors.primaryColor && <p className="text-sm text-red-500 mt-2">{errors.primaryColor}</p>}
       </div>
 
-      {/* Aesthetic */}
+      {/* ── Design Preferences — Multi-select chips ── */}
       <div>
-        <label className="block text-sm font-medium text-text-primary mb-2">
-          Aesthetic <span className="text-red-500">*</span>
+        <label className="block text-sm font-medium text-text-primary mb-1">
+          Design style <span className="text-red-500">*</span>
         </label>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {AESTHETIC_OPTIONS.map((opt) => (
+        <p className="text-xs text-text-muted mb-3">Choose up to 4 that best describe your vision.</p>
+        <div className="flex flex-wrap gap-2">
+          {DESIGN_PREFERENCES.map((pref) => {
+            const isActive = (data.designPreferences || []).includes(pref)
+            return (
+              <button
+                key={pref}
+                type="button"
+                onClick={() => togglePreference(pref)}
+                className={`px-4 py-2 rounded-full text-sm transition-all ${
+                  isActive
+                    ? 'bg-accent-blue text-text-primary'
+                    : 'bg-background-surface border border-border-default text-text-secondary hover:border-text-muted'
+                }`}
+              >
+                {pref}
+              </button>
+            )
+          })}
+        </div>
+        {(data.designPreferences || []).length > 0 && (
+          <p className="text-xs text-text-muted mt-2">
+            {(data.designPreferences || []).length}/4 selected
+          </p>
+        )}
+        {errors.designPreferences && <p className="text-sm text-red-500 mt-2">{errors.designPreferences}</p>}
+      </div>
+
+      {/* ── Font Preference — Visual cards ── */}
+      <div>
+        <label className="block text-sm font-medium text-text-primary mb-3">
+          Font style
+        </label>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {FONT_OPTIONS.map((font) => (
             <button
-              key={opt.value}
+              key={font.value}
               type="button"
-              onClick={() => update('aesthetic', opt.value)}
-              className={`p-3 border-2 text-left transition-all ${
-                data.aesthetic === opt.value
+              onClick={() => update('fontPreference', font.value)}
+              className={`p-4 border-2 text-left transition-all ${
+                data.fontPreference === font.value
                   ? 'border-accent-blue bg-accent-blue-glow'
                   : 'border-border-default hover:border-text-muted bg-background-surface'
               }`}
             >
-              <p className="text-sm font-medium text-text-primary">{opt.label}</p>
-              <p className="text-xs text-text-muted mt-0.5">{opt.description}</p>
+              {font.preview && (
+                <p className="text-lg mb-2 text-text-primary" style={{
+                  fontFamily: font.value === 'serif' ? 'Georgia, serif'
+                    : font.value === 'display' ? 'system-ui'
+                    : 'system-ui, sans-serif',
+                  fontStyle: font.value === 'serif' ? 'italic' : 'normal',
+                  fontWeight: font.value === 'display' ? 600 : 400,
+                  letterSpacing: font.value === 'display' ? '-0.03em' : undefined,
+                }}>
+                  Aa
+                </p>
+              )}
+              <p className="text-sm font-medium text-text-primary">{font.label}</p>
+              <p className="text-xs text-text-muted mt-0.5">{font.description}</p>
             </button>
           ))}
         </div>
-        {errors.aesthetic && <p className="text-sm text-red-500 mt-2">{errors.aesthetic}</p>}
       </div>
 
-      {/* Dark mode */}
+      {/* ── Dark mode ── */}
       <div className="flex items-center gap-3">
         <label className="relative inline-flex items-center cursor-pointer">
           <input
@@ -140,7 +215,7 @@ export default function StepDesign({ data, onChange, errors }: Props) {
         <span className="text-xs text-text-muted">(light mode recommended for most businesses)</span>
       </div>
 
-      {/* Reference sites */}
+      {/* ── Reference sites ── */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-sm font-medium text-text-primary mb-1.5">

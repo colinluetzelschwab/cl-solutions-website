@@ -111,7 +111,9 @@ Design preferences:
 - Secondary colour: ${brief.design.secondaryColor || 'Not specified'}
 - Accent colour: ${brief.design.accentColor || 'Not specified'}
 - Text colour: ${brief.design.textColor || 'Not specified'}
-- Aesthetic: ${brief.design.aesthetic || 'Not specified'}
+- Design style: ${(brief.design.designPreferences || []).join(', ') || 'Not specified'}
+- Font preference: ${brief.design.fontPreference || 'no-preference'}
+- Language: ${brief.design.language || 'de'}
 - Dark mode: ${brief.design.darkMode ? 'YES' : 'NO'}
 - Reference sites liked: ${brief.design.referenceLiked || 'None'}
 - Reference sites disliked: ${brief.design.referenceDisliked || 'None'}
@@ -194,7 +196,9 @@ function buildEmailHtml(brief: OnboardingBrief, briefUrl: string, rufloPrompt: s
   <div class="field"><span class="label">Secondary colour:</span> <span class="value">${brief.design.secondaryColor || '—'} ${brief.design.secondaryColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.secondaryColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
   <div class="field"><span class="label">Accent colour:</span> <span class="value">${brief.design.accentColor || '—'} ${brief.design.accentColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.accentColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
   <div class="field"><span class="label">Text colour:</span> <span class="value">${brief.design.textColor || '—'} ${brief.design.textColor ? `<span style="display:inline-block;width:16px;height:16px;background:${brief.design.textColor};vertical-align:middle;border:1px solid #ccc;"></span>` : ''}</span></div>
-  <div class="field"><span class="label">Aesthetic:</span> <span class="value">${brief.design.aesthetic || '—'}</span></div>
+  <div class="field"><span class="label">Design style:</span> <span class="value">${(brief.design.designPreferences || []).join(', ') || '—'}</span></div>
+  <div class="field"><span class="label">Font:</span> <span class="value">${brief.design.fontPreference || '—'}</span></div>
+  <div class="field"><span class="label">Language:</span> <span class="value">${brief.design.language || 'de'}</span></div>
   <div class="field"><span class="label">Dark mode:</span> <span class="value">${brief.design.darkMode ? 'Yes' : 'No'}</span></div>
   <div class="field"><span class="label">References liked:</span> <span class="value">${brief.design.referenceLiked || '—'}</span></div>
   <div class="field"><span class="label">References disliked:</span> <span class="value">${brief.design.referenceDisliked || '—'}</span></div>

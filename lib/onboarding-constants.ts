@@ -85,13 +85,41 @@ export const FEATURE_OPTIONS = [
   'Multi-language',
 ] as const
 
-export const AESTHETIC_OPTIONS = [
-  { value: 'professional', label: 'Professional', description: 'Clean, corporate, trustworthy' },
-  { value: 'warm', label: 'Warm', description: 'Friendly, inviting, approachable' },
-  { value: 'premium', label: 'Premium', description: 'Luxury, elegant, high-end' },
-  { value: 'minimal', label: 'Minimal', description: 'Simple, lots of whitespace' },
-  { value: 'bold', label: 'Bold', description: 'Strong colors, impactful, modern' },
+export const DESIGN_PREFERENCES = [
+  'Viel Weissraum',
+  'Grosse Bilder',
+  'Animationen',
+  'Schlicht & Clean',
+  'Premium & Luxus',
+  'Modern & Bold',
+  'Traditionell & Seriös',
+  'Warm & Einladend',
+  'Dunkel & Edel',
 ] as const
+
+export const FONT_OPTIONS = [
+  { value: 'serif' as const, label: 'Serif', description: 'Elegant & Klassisch', preview: 'Playfair Display' },
+  { value: 'sans-serif' as const, label: 'Sans-Serif', description: 'Modern & Clean', preview: 'Inter' },
+  { value: 'display' as const, label: 'Display', description: 'Auffällig & Kreativ', preview: 'Space Grotesk' },
+  { value: 'no-preference' as const, label: 'Keine Präferenz', description: 'Wir wählen für Sie', preview: '' },
+] as const
+
+export const LANGUAGE_OPTIONS = [
+  { value: 'de' as const, label: 'Deutsch' },
+  { value: 'en' as const, label: 'English' },
+  { value: 'fr' as const, label: 'Français' },
+  { value: 'it' as const, label: 'Italiano' },
+] as const
+
+export const INDUSTRY_FEATURES: Record<string, string[]> = {
+  'restaurant': ['Speisekarte / Menü', 'Reservierungsformular', 'Öffnungszeiten', 'Fotogalerie'],
+  'clinic': ['Fachbereiche', 'Ärzteteam', 'Online-Terminbuchung', 'Notfall-Kontakt'],
+  'studio': ['Portfolio / Galerie', 'Kursplan', 'Team-Sektion', 'Preisliste'],
+  'retail': ['Produktkatalog', 'Preisliste', 'Online-Shop Anbindung', 'Öffnungszeiten'],
+  'consultant': ['Leistungen', 'Referenzen', 'Erstgespräch buchen', 'Blog'],
+  'real-estate': ['Immobilien-Listings', 'Suchfilter', 'Kontaktformular', 'Virtueller Rundgang'],
+  'local-service': ['Leistungen', 'Preisliste', 'Bewertungen', 'Anfahrt / Karte'],
+}
 
 export const COUPON_CODE = 'hetschgern'
 

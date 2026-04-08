@@ -18,20 +18,20 @@ const packages: ServicePackage[] = [
     name: 'Starter',
     price: 'CHF 1,500',
     description: 'For businesses that need a clean, professional web presence. Fast.',
-    features: ['4 pages', '1 revision', '3-5 days'],
+    features: ['4 pages', '1 revision round', '3–5 day delivery'],
   },
   {
     name: 'Business',
     price: 'CHF 3,500',
     description: 'For businesses that want design that actually stands out.',
-    features: ['6 pages', 'CMS included', 'Animations'],
+    features: ['6 pages', 'CMS included', 'Custom animations'],
     isPopular: true,
   },
   {
     name: 'Pro',
     price: 'From CHF 7,500',
     description: 'Custom scope. Integrations. Ongoing partnership.',
-    features: ['Custom', 'Multilingual', 'Retainer option'],
+    features: ['Custom scope', 'Multilingual', 'Retainer option'],
   },
 ]
 
@@ -40,11 +40,11 @@ export default function ServicesOverview() {
     <section className="w-full bg-background-primary py-20 md:py-28 lg:py-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <ScrollReveal className="text-center mb-12 md:mb-16">
-          <p className="text-sm md:text-base text-text-muted uppercase tracking-wide mb-3">
-            What we build
+        <ScrollReveal className="text-center mb-14 md:mb-20">
+          <p className="text-[11px] md:text-xs text-accent-blue uppercase tracking-[0.25em] mb-4">
+            Packages
           </p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary tracking-[-0.02em]">
             One agency. Three packages.
           </h2>
         </ScrollReveal>
@@ -57,44 +57,47 @@ export default function ServicesOverview() {
           {packages.map((pkg) => (
             <StaggerItem key={pkg.name}>
               <div
-                className={`relative bg-background-surface border transition-all duration-300 p-6 lg:p-8 flex flex-col h-full ${
+                className={`relative bg-background-surface border transition-all duration-400 p-7 lg:p-9 flex flex-col h-full group ${
                   pkg.isPopular
-                    ? 'border-accent-blue border-2 hover:shadow-[0_0_40px_rgba(65,105,255,0.15)]'
-                    : 'border-border-default hover:border-border-subtle'
+                    ? 'border-accent-blue/40 hover:border-accent-blue/70 hover:shadow-[0_0_60px_rgba(65,105,255,0.12)]'
+                    : 'border-border-default hover:border-border-subtle card-glow'
                 }`}
               >
                 {/* Popular Badge */}
                 {pkg.isPopular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="bg-accent-blue text-text-primary text-xs font-medium px-3 py-1 uppercase tracking-wide">
+                  <div className="absolute -top-3 left-6">
+                    <span className="bg-accent-blue text-text-primary text-[10px] font-semibold px-3 py-1 uppercase tracking-[0.15em]">
                       Most Popular
                     </span>
                   </div>
                 )}
 
                 {/* Package Name */}
-                <h3 className="text-xl md:text-2xl font-semibold text-text-primary mb-2">
+                <p className="text-xs text-text-muted uppercase tracking-[0.15em] mb-2">
                   {pkg.name}
-                </h3>
+                </p>
 
                 {/* Price */}
-                <p className="text-2xl md:text-3xl font-semibold text-text-primary mb-4">
+                <p className="text-3xl md:text-4xl font-semibold text-text-primary mb-1 tracking-[-0.02em]">
                   {pkg.price}
                 </p>
 
                 {/* Description */}
-                <p className="text-text-secondary mb-6 flex-grow">
+                <p className="text-text-secondary text-sm leading-relaxed mb-8 mt-3 flex-grow">
                   {pkg.description}
                 </p>
 
+                {/* Divider */}
+                <div className="h-px bg-border-subtle mb-6" />
+
                 {/* Features */}
-                <div className="space-y-2 mb-6">
+                <div className="space-y-3 mb-8">
                   {pkg.features.map((feature) => (
                     <div
                       key={feature}
                       className="flex items-center text-text-secondary text-sm"
                     >
-                      <span className="w-1.5 h-1.5 bg-accent-blue rounded-full mr-3" />
+                      <span className="w-1 h-1 bg-accent-blue mr-3 flex-shrink-0" />
                       {feature}
                     </div>
                   ))}
@@ -103,10 +106,10 @@ export default function ServicesOverview() {
                 {/* CTA Link */}
                 <Link
                   href="/services"
-                  className="flex items-center text-text-primary hover:text-accent-blue transition-colors duration-200 font-medium group"
+                  className="inline-flex items-center text-sm text-text-muted hover:text-accent-blue transition-colors duration-200 font-medium group/link"
                 >
                   See details
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
+                  <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform duration-200" />
                 </Link>
               </div>
             </StaggerItem>
