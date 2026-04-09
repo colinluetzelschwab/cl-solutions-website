@@ -7,6 +7,10 @@ import {
   AlertCircle,
   Loader2,
   Tag,
+  Copy,
+  Check,
+  Rocket,
+  Clock,
 } from 'lucide-react'
 
 interface BriefSummary {
@@ -22,8 +26,8 @@ interface BriefSummary {
 
 const packageLabels: Record<string, string> = {
   starter: 'Starter',
-  professional: 'Professional',
-  premium: 'Premium',
+  business: 'Business',
+  pro: 'Pro',
 }
 
 function formatDate(iso: string): string {
@@ -41,10 +45,34 @@ function formatPrice(price: number): string {
   return `CHF ${price.toLocaleString('de-CH')}`
 }
 
+function generateBuildCommand(brief: BriefSummary): string {
+  const slug = brief.clientName
+    .toLowerCase()
+    .replace(/[äàá]/g, 'a').replace(/[öòó]/g, 'o').replace(/[üùú]/g, 'u')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+  return `claude -p "Du bist der CL Solutions Build-Coordinator.
+
+1. Lade den Brief von ${brief.blobUrl}
+2. Führe den Generator aus: npx tsx _agency/scripts/generate-project.ts
+3. Starte den Content-Agent für alle Seiten
+4. Starte den QA-Agent
+5. Bei Score >= 85: git push → Vercel auto-deploy
+6. Melde den Status zurück.
+
+Projekt: ${brief.clientName}
+Slug: ${slug}
+Package: ${brief.packageId}" \\
+  --allowedTools "Bash,Read,Write,Edit" \\
+  --output-format json`
+}
+
 export default function BriefsPanel() {
   const [briefs, setBriefs] = useState<BriefSummary[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const [copiedId, setCopiedId] = useState<string | null>(null)
 
   async function fetchBriefs() {
     setIsLoading(true)
@@ -62,6 +90,13 @@ export default function BriefsPanel() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  async function copyBuildCommand(brief: BriefSummary) {
+    const cmd = generateBuildCommand(brief)
+    await navigator.clipboard.writeText(cmd)
+    setCopiedId(brief.id)
+    setTimeout(() => setCopiedId(null), 2000)
   }
 
   useEffect(() => {
@@ -127,7 +162,10 @@ export default function BriefsPanel() {
             </div>
 
             <div className="flex items-center gap-3 text-xs text-text-muted">
-              <span>{formatDate(brief.createdAt)}</span>
+              <span className="flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {formatDate(brief.createdAt)}
+              </span>
               <span className="font-medium text-text-secondary">
                 {formatPrice(brief.totalPrice)}
               </span>
@@ -139,16 +177,39 @@ export default function BriefsPanel() {
               )}
             </div>
 
-            <div className="mt-auto pt-1">
+            {/* ── Actions ── */}
+            <div className="mt-auto pt-2 border-t border-border-subtle flex items-center gap-3">
               <a
                 href={brief.blobUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 text-xs text-accent-blue hover:text-accent-blue-hover transition-colors"
+                className="flex items-center gap-1 text-xs text-text-secondary hover:text-text-primary transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
-                View full brief
+                Brief
               </a>
+
+              <button
+                onClick={() => void copyBuildCommand(brief)}
+                className="flex items-center gap-1 text-xs text-accent-blue hover:text-accent-blue-hover transition-colors"
+              >
+                {copiedId === brief.id ? (
+                  <>
+                    <Check className="w-3 h-3" />
+                    Copied!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3 h-3" />
+                    Build Command
+                  </>
+                )}
+              </button>
+
+              <span className="flex items-center gap-1 text-xs text-text-muted ml-auto">
+                <Rocket className="w-3 h-3" />
+                Pending
+              </span>
             </div>
           </div>
         ))}
