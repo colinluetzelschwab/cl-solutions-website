@@ -69,6 +69,23 @@ export async function POST(request: NextRequest) {
       console.error('Email error:', emailError)
     }
 
+    // Push notification via ntfy (instant iPhone notification)
+    const ntfyTopic = process.env.NTFY_TOPIC || 'clsolutions-briefs'
+    try {
+      await fetch(`https://ntfy.sh/${ntfyTopic}`, {
+        method: 'POST',
+        headers: {
+          'Title': `Neuer Brief: ${brief.businessInfo.name}`,
+          'Tags': 'briefcase,moneybag',
+          'Priority': '4',
+          'Click': 'https://clsolutions.dev/cockpit',
+        },
+        body: `${selectedPkg?.name ?? 'Unknown'} · CHF ${totalPrice.toLocaleString('de-CH')}\n${brief.businessInfo.email}`,
+      })
+    } catch (ntfyErr) {
+      console.error('ntfy error:', ntfyErr)
+    }
+
     return NextResponse.json({
       success: true,
       data: {
