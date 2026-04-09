@@ -43,6 +43,31 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
   const [copied, setCopied] = useState(false);
   const [building, setBuilding] = useState(false);
   const [buildStatus, setBuildStatus] = useState<string | null>(null);
+  const [buildSlug, setBuildSlug] = useState<string | null>(null);
+  const [buildLog, setBuildLog] = useState<string | null>(null);
+  const [buildComplete, setBuildComplete] = useState(false);
+
+  // Poll build status every 5s when building
+  useEffect(() => {
+    if (!buildSlug || buildComplete) return;
+    const interval = setInterval(async () => {
+      try {
+        const res = await fetch("/api/dashboard/build", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ slug: buildSlug }),
+        });
+        const data = await res.json();
+        if (data.log) setBuildLog(data.log);
+        if (data.status === "complete") {
+          setBuildComplete(true);
+          setBuildStatus("✅ Build fertig! " + buildSlug + ".vercel.app");
+          setBuilding(false);
+        }
+      } catch { /* ignore polling errors */ }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [buildSlug, buildComplete]);
 
   // Open animation
   useEffect(() => {
@@ -167,7 +192,9 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
                     });
                     const data = await res.json();
                     if (data.success) {
-                      setBuildStatus("Build gestartet! " + data.slug);
+                      setBuildSlug(data.slug);
+                      setBuildStatus("⏳ Build läuft... " + data.slug);
+                      setBuildComplete(false);
                     } else {
                       setBuildStatus("Fehler: " + (data.error || "Unknown"));
                     }
@@ -194,9 +221,35 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
               </button>
 
               {buildStatus && (
-                <p className={`text-center text-sm ${buildStatus.startsWith("Fehler") || buildStatus.startsWith("VPS") ? "text-red-400" : "text-green-400"}`}>
-                  {buildStatus}
-                </p>
+                <div className="space-y-2">
+                  <p className={`text-center text-sm font-medium ${
+                    buildStatus.startsWith("Fehler") || buildStatus.startsWith("VPS")
+                      ? "text-red-400"
+                      : buildStatus.startsWith("✅")
+                        ? "text-green-400"
+                        : "text-amber-400"
+                  }`}>
+                    {buildStatus}
+                  </p>
+                  {buildLog && !buildComplete && (
+                    <div className="bg-background-elevated rounded-lg p-3 max-h-32 overflow-y-auto">
+                      <pre className="text-[10px] text-text-muted font-mono whitespace-pre-wrap break-all leading-relaxed">
+                        {buildLog}
+                      </pre>
+                    </div>
+                  )}
+                  {buildComplete && buildSlug && (
+                    <a
+                      href={`https://${buildSlug}.vercel.app`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-1.5 text-sm text-accent-blue py-2 font-medium"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      {buildSlug}.vercel.app öffnen
+                    </a>
+                  )}
+                </div>
               )}
 
               {/* Copy Command als Fallback */}
