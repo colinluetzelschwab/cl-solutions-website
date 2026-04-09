@@ -157,12 +157,9 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
                   setBuilding(true);
                   setBuildStatus(null);
                   try {
-                    const res = await fetch("http://46.225.88.110:3333/build", {
+                    const res = await fetch("/api/dashboard/build", {
                       method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: "Bearer cl-build-21cc7b7be633ce72a982f84efda7eee6",
-                      },
+                      headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
                         briefUrl: brief.blobUrl,
                         clientName: brief.clientName,
