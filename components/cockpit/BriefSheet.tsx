@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Copy, Check, ExternalLink } from "lucide-react";
+import { Copy, Check, ExternalLink, Rocket, Loader2 } from "lucide-react";
 import type { BriefSummary } from "./InboxTab";
 
 interface BriefSheetProps {
@@ -41,6 +41,8 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
   const [visible, setVisible] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [building, setBuilding] = useState(false);
+  const [buildStatus, setBuildStatus] = useState<string | null>(null);
 
   // Open animation
   useEffect(() => {
@@ -148,19 +150,72 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
 
             {/* Actions */}
             <div className="space-y-3 pb-2">
+              {/* Build starten Button */}
+              <button
+                onClick={async () => {
+                  if (!brief || building) return;
+                  setBuilding(true);
+                  setBuildStatus(null);
+                  try {
+                    const res = await fetch("http://46.225.88.110:3333/build", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: "Bearer cl-build-21cc7b7be633ce72a982f84efda7eee6",
+                      },
+                      body: JSON.stringify({
+                        briefUrl: brief.blobUrl,
+                        clientName: brief.clientName,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      setBuildStatus("Build gestartet! " + data.slug);
+                    } else {
+                      setBuildStatus("Fehler: " + (data.error || "Unknown"));
+                    }
+                  } catch {
+                    setBuildStatus("VPS nicht erreichbar");
+                  } finally {
+                    setBuilding(false);
+                  }
+                }}
+                disabled={building}
+                className="w-full h-14 bg-green-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 active:opacity-80 transition-opacity disabled:opacity-50"
+              >
+                {building ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Starting...
+                  </>
+                ) : (
+                  <>
+                    <Rocket className="w-5 h-5" strokeWidth={1.5} />
+                    Build starten
+                  </>
+                )}
+              </button>
+
+              {buildStatus && (
+                <p className={`text-center text-sm ${buildStatus.startsWith("Fehler") || buildStatus.startsWith("VPS") ? "text-red-400" : "text-green-400"}`}>
+                  {buildStatus}
+                </p>
+              )}
+
+              {/* Copy Command als Fallback */}
               <button
                 onClick={handleCopy}
-                className="w-full h-14 bg-accent-blue text-white font-semibold rounded-xl flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
+                className="w-full h-12 border border-border-default text-text-secondary font-medium rounded-xl flex items-center justify-center gap-2 active:opacity-80 transition-opacity"
               >
                 {copied ? (
                   <>
-                    <Check className="w-5 h-5" strokeWidth={2} />
+                    <Check className="w-4 h-4" />
                     Copied!
                   </>
                 ) : (
                   <>
-                    <Copy className="w-5 h-5" strokeWidth={1.5} />
-                    Copy Build Command
+                    <Copy className="w-4 h-4" strokeWidth={1.5} />
+                    Copy Command (manual)
                   </>
                 )}
               </button>
