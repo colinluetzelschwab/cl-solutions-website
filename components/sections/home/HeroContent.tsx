@@ -23,7 +23,7 @@ export default function HeroContent() {
           className="mb-8 md:mb-10"
         >
           <p className="text-sm md:text-base text-text-muted uppercase tracking-[0.25em] mb-3">
-            Swiss Web Agency
+            Web Design Studio · Switzerland
           </p>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -39,12 +39,12 @@ export default function HeroContent() {
           animate="visible"
           variants={fadeUpVariant}
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.15 }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-semibold text-text-primary mb-6 md:mb-8 tracking-[-0.02em] leading-[1.05]"
+          className="text-5xl sm:text-6xl md:text-7xl lg:text-[6rem] font-semibold text-text-primary mb-6 md:mb-8 tracking-[-0.02em] leading-[1.05]"
         >
-          Websites that
+          We build websites
           <br />
-          make you look{' '}
-          <span className="text-shimmer">serious.</span>
+          that{' '}
+          <span className="text-shimmer">win clients.</span>
         </motion.h1>
 
         {/* Subheadline */}
@@ -55,8 +55,7 @@ export default function HeroContent() {
           transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
           className="text-lg md:text-xl lg:text-2xl text-text-secondary max-w-3xl mx-auto mb-10 md:mb-14 leading-relaxed"
         >
-          We build fast, premium websites for Swiss businesses. Fixed price.
-          3–5 day delivery. No templates.
+          Premium websites for Swiss businesses. Fixed price. Ready in days, not months.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -72,7 +71,7 @@ export default function HeroContent() {
               size="lg"
               className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-10 h-13 md:h-14 text-base md:text-lg rounded-none w-full sm:w-auto transition-all duration-300 glow-pulse"
             >
-              Get a Quote
+              Start Your Project
             </Button>
           </Link>
           <Link href="/work">
@@ -81,7 +80,7 @@ export default function HeroContent() {
               variant="outline"
               className="border border-text-primary/30 text-text-primary hover:bg-text-primary/10 hover:border-text-primary/60 font-medium px-10 h-13 md:h-14 text-base md:text-lg rounded-none w-full sm:w-auto transition-all duration-300"
             >
-              See Our Work
+              View Our Work
             </Button>
           </Link>
         </motion.div>

@@ -13,22 +13,22 @@ const steps: Step[] = [
   {
     number: 1,
     title: 'Brief',
-    description: 'Fill in the intake form. Tell us about your business and goals.',
+    description: 'Tell us about your business, your goals, and your timeline.',
   },
   {
     number: 2,
     title: 'Plan',
-    description: 'We plan the full site before writing a single line of code.',
+    description: 'We map out every page and section before writing code.',
   },
   {
     number: 3,
     title: 'Build',
-    description: 'Built in 3–5 days with live preview updates throughout.',
+    description: 'Your site is built in 3–5 days with live progress updates.',
   },
   {
     number: 4,
     title: 'Launch',
-    description: 'Domain connected, hosting live, full handoff to you.',
+    description: 'We connect your domain, go live, and hand over the keys.',
   },
 ]
 
@@ -40,10 +40,10 @@ export default function Process() {
         <ScrollReveal>
           <div className="text-center mb-14 md:mb-20">
             <p className="text-[11px] md:text-xs text-accent-blue uppercase tracking-[0.25em] mb-4">
-              Process
+              Our process
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary tracking-[-0.02em]">
-              How it works.
+              Four steps to launch.
             </h2>
           </div>
         </ScrollReveal>

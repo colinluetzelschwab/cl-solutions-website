@@ -14,9 +14,9 @@ interface CTABannerProps {
 }
 
 export default function CTABanner({
-  headline = 'Ready to get started?',
-  subtext = "Tell us about your business. We'll send a proposal within 48 hours.",
-  buttonText = 'Get a Quote',
+  headline = "Let's build something great.",
+  subtext = "Fill out our brief — we'll get back to you within 24 hours with a proposal.",
+  buttonText = 'Start Your Project',
   buttonHref = '/contact',
 }: CTABannerProps) {
   return (

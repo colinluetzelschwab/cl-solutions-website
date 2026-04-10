@@ -28,15 +28,18 @@ export default function Footer() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/">
-                <Image
-                  src="/images/cl-solutions-light.png"
-                  alt="CL Solutions"
-                  width={100}
-                  height={33}
-                  className="h-7 w-auto"
-                />
-              </Link>
+              <div>
+                <Link href="/">
+                  <Image
+                    src="/images/cl-solutions-light.png"
+                    alt="CL Solutions"
+                    width={100}
+                    height={33}
+                    className="h-7 w-auto"
+                  />
+                </Link>
+                <p className="text-xs text-text-muted mt-2">Web Design Studio</p>
+              </div>
             </div>
 
             {/* Navigation Links */}
@@ -69,11 +72,11 @@ export default function Footer() {
           {/* Bottom Section: Email and Copyright */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 pt-4 border-t border-border-subtle">
             {/* Email */}
-            <div className="flex items-center space-x-2 text-text-muted">
+            <div className="flex items-center space-x-2 text-text-secondary">
               <Mail className="h-4 w-4" />
               <a
                 href="mailto:colin@clsolutions.dev"
-                className="text-sm hover:text-text-secondary transition-colors duration-200"
+                className="text-sm hover:text-accent-blue transition-colors duration-200"
               >
                 colin@clsolutions.dev
               </a>
@@ -81,7 +84,7 @@ export default function Footer() {
 
             {/* Copyright */}
             <p className="text-sm text-text-muted">
-              © 2026 CL Solutions. Switzerland.
+              © 2026 CL Solutions. Zurich, Switzerland.
             </p>
           </div>
         </div>

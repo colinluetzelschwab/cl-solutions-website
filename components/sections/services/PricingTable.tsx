@@ -73,7 +73,7 @@ export default function PricingTable() {
               key={tier.name}
               className={`relative bg-background-surface border p-6 lg:p-8 flex flex-col ${
                 tier.isPopular
-                  ? 'border-accent-blue border-2'
+                  ? 'border-accent-blue border-2 shadow-[0_0_40px_rgba(65,105,225,0.08)]'
                   : 'border-border-default'
               }`}
             >

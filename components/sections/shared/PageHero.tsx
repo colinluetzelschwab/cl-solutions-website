@@ -1,14 +1,20 @@
 import React from 'react'
 
 interface PageHeroProps {
+  label?: string
   headline: string
   subtext: string
 }
 
-export default function PageHero({ headline, subtext }: PageHeroProps) {
+export default function PageHero({ label, headline, subtext }: PageHeroProps) {
   return (
     <section className="w-full bg-background-primary py-16 md:py-24 lg:py-32">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        {label && (
+          <p className="text-sm font-medium text-accent-blue tracking-[0.25em] uppercase mb-4">
+            {label}
+          </p>
+        )}
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-text-primary mb-4 md:mb-6">
           {headline}
         </h1>

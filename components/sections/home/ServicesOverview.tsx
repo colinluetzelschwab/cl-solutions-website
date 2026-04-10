@@ -17,20 +17,20 @@ const packages: ServicePackage[] = [
   {
     name: 'Starter',
     price: 'CHF 1,500',
-    description: 'For businesses that need a clean, professional web presence. Fast.',
+    description: 'A clean, fast website that gets straight to the point.',
     features: ['4 pages', '1 revision round', '3–5 day delivery'],
   },
   {
     name: 'Business',
     price: 'CHF 3,500',
-    description: 'For businesses that want design that actually stands out.',
+    description: 'The full package — design, CMS, animations, SEO.',
     features: ['6 pages', 'CMS included', 'Custom animations'],
     isPopular: true,
   },
   {
     name: 'Pro',
     price: 'From CHF 7,500',
-    description: 'Custom scope. Integrations. Ongoing partnership.',
+    description: 'Custom scope for businesses that need more.',
     features: ['Custom scope', 'Multilingual', 'Retainer option'],
   },
 ]
@@ -42,10 +42,10 @@ export default function ServicesOverview() {
         {/* Section Header */}
         <ScrollReveal className="text-center mb-14 md:mb-20">
           <p className="text-[11px] md:text-xs text-accent-blue uppercase tracking-[0.25em] mb-4">
-            Packages
+            What we offer
           </p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary tracking-[-0.02em]">
-            One agency. Three packages.
+            Three packages. Zero surprises.
           </h2>
         </ScrollReveal>
 
@@ -59,7 +59,7 @@ export default function ServicesOverview() {
               <div
                 className={`relative bg-background-surface border transition-all duration-400 p-7 lg:p-9 flex flex-col h-full group ${
                   pkg.isPopular
-                    ? 'border-accent-blue/40 hover:border-accent-blue/70 hover:shadow-[0_0_60px_rgba(65,105,255,0.12)]'
+                    ? 'border-accent-blue/40 hover:border-accent-blue/70 hover:shadow-[0_0_60px_rgba(65,105,255,0.12)] border-t-2 border-t-accent-blue'
                     : 'border-border-default hover:border-border-subtle card-glow'
                 }`}
               >
@@ -78,7 +78,7 @@ export default function ServicesOverview() {
                 </p>
 
                 {/* Price */}
-                <p className="text-3xl md:text-4xl font-semibold text-text-primary mb-1 tracking-[-0.02em]">
+                <p className="text-4xl md:text-5xl font-semibold text-text-primary mb-1 tracking-[-0.02em]">
                   {pkg.price}
                 </p>
 

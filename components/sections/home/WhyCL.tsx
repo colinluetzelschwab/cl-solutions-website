@@ -14,22 +14,22 @@ const differentiators: Differentiator[] = [
   {
     icon: <Clock className="w-5 h-5 md:w-6 md:h-6" />,
     title: 'Fast delivery',
-    description: 'Most sites live in 3–5 days. Not weeks.',
+    description: 'Your site goes live in 3–5 working days. Not weeks, not months.',
   },
   {
     icon: <Tag className="w-5 h-5 md:w-6 md:h-6" />,
     title: 'Fixed pricing',
-    description: 'No hourly billing. No surprises. One price, full scope.',
+    description: 'You know the price before we start. No hourly surprises.',
   },
   {
     icon: <Sparkles className="w-5 h-5 md:w-6 md:h-6" />,
     title: 'Premium design',
-    description: 'Custom every time. No Wix, no templates, no shortcuts.',
+    description: 'Every site is custom-built. No templates. No shortcuts.',
   },
   {
     icon: <MapPin className="w-5 h-5 md:w-6 md:h-6" />,
     title: 'Swiss-based',
-    description: 'We understand the Swiss market, the language, the standards.',
+    description: 'Based in Switzerland. We understand the market, the language, the expectations.',
   },
 ]
 
@@ -41,10 +41,10 @@ export default function WhyCL() {
         <ScrollReveal>
           <div className="text-center mb-14 md:mb-20">
             <p className="text-[11px] md:text-xs text-accent-blue uppercase tracking-[0.25em] mb-4">
-              Why us
+              The CL difference
             </p>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-text-primary tracking-[-0.02em]">
-              Built different.
+              Why businesses choose us.
             </h2>
           </div>
         </ScrollReveal>

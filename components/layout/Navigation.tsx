@@ -67,7 +67,7 @@ export default function Navigation() {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-1">
+            <div className="hidden lg:flex items-center space-x-2">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
@@ -82,8 +82,8 @@ export default function Navigation() {
             {/* CTA Button - Desktop */}
             <div className="hidden lg:flex items-center">
               <Link href="/contact">
-                <Button className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-6 h-10 rounded-none transition-colors duration-200">
-                  Get a Quote
+                <Button className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-6 h-10 rounded-none transition-colors duration-200 border-l-2 border-accent-blue">
+                  Start a Project
                 </Button>
               </Link>
             </div>
@@ -140,7 +140,7 @@ export default function Navigation() {
             <div className="pt-4 px-4">
               <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button className="w-full bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium h-11 rounded-none">
-                  Get a Quote
+                  Start a Project
                 </Button>
               </Link>
             </div>

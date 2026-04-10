@@ -17,15 +17,15 @@ export default function WorkPage() {
       <Navigation />
 
       <PageHero
-        headline="Our work."
-        subtext="A selection of recent projects for Swiss businesses."
+        headline="Our Work"
+        subtext="Real projects. Real results."
       />
 
       <ProjectGrid />
 
       <CTABanner
-        headline="Your business could be next."
-        subtext="Tell us about your project. We'll send a proposal within 48 hours."
+        headline="Like what you see?"
+        subtext="Let's create something just as impressive for your business."
       />
 
       <Footer />

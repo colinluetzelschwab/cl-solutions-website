@@ -6,9 +6,11 @@ const businesses = [
   'Real Estate',
   'Creative Studios',
   'Consulting',
-  'E-Commerce',
-  'Finance',
+  'Legal',
   'Architecture',
+  'Fitness & Wellness',
+  'Automotive',
+  'Education',
 ]
 
 export default function SocialProofBar() {
@@ -19,7 +21,7 @@ export default function SocialProofBar() {
 
       <div className="py-5 md:py-6">
         <p className="text-[11px] md:text-xs text-text-muted uppercase tracking-[0.2em] text-center mb-4">
-          Trusted across industries
+          Built for every industry
         </p>
 
         {/* Ticker container */}
@@ -35,7 +37,7 @@ export default function SocialProofBar() {
                 key={`${business}-${index}`}
                 className="inline-flex items-center mx-6 md:mx-8 text-sm text-text-muted/70"
               >
-                <span className="w-1 h-1 bg-accent-blue/40 rounded-full mr-3" />
+                <span className="w-1.5 h-1.5 bg-accent-blue/60 rounded-full mr-3" />
                 {business}
               </span>
             ))}

@@ -48,8 +48,11 @@ export default function FAQ() {
   return (
     <section className="w-full bg-background-surface py-16 md:py-24">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <p className="text-sm font-medium text-accent-blue tracking-[0.25em] uppercase text-center mb-4">
+          Common questions
+        </p>
         <h2 className="text-3xl md:text-4xl font-semibold text-text-primary text-center mb-12">
-          FAQ
+          Everything you need to know.
         </h2>
 
         <Accordion className="space-y-4">
