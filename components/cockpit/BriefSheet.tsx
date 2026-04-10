@@ -7,6 +7,7 @@ import type { BriefSummary } from "./InboxTab";
 interface BriefSheetProps {
   brief: BriefSummary | null;
   onClose: () => void;
+  onBuildStarted?: (slug: string, clientName: string) => void;
 }
 
 function formatPackage(packageId: string): string {
@@ -37,7 +38,7 @@ function generateBuildCommand(brief: BriefSummary): string {
   return `claude -p "Build website for ${brief.clientName} from brief ${brief.blobUrl}" --allowedTools "Bash,Read,Write,Edit" --output-format json`;
 }
 
-export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
+export default function BriefSheet({ brief, onClose, onBuildStarted }: BriefSheetProps) {
   const [visible, setVisible] = useState(false);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -192,9 +193,8 @@ export default function BriefSheet({ brief, onClose }: BriefSheetProps) {
                     });
                     const data = await res.json();
                     if (data.success) {
-                      setBuildSlug(data.slug);
-                      setBuildStatus("⏳ Build läuft... " + data.slug);
-                      setBuildComplete(false);
+                      // Navigate to build monitor immediately
+                      onBuildStarted?.(data.slug, brief.clientName);
                     } else {
                       setBuildStatus("Fehler: " + (data.error || "Unknown"));
                     }
