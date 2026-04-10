@@ -31,7 +31,14 @@ export default function LiveTab() {
     }
   }, [status, build, completeBuild, updateStatus]);
 
-  if (build) {
+  const [showTerminal, setShowTerminal] = useState(!!build);
+
+  // Auto-show terminal when build starts
+  useEffect(() => {
+    if (build) setShowTerminal(true);
+  }, [build]);
+
+  if (build && showTerminal) {
     return (
       <div className="fixed inset-0 bg-[#050508] flex flex-col z-50"
         style={{ paddingTop: "env(safe-area-inset-top)", paddingBottom: "env(safe-area-inset-bottom)" }}>
@@ -42,7 +49,8 @@ export default function LiveTab() {
           phase={phase}
           status={status === "idle" ? "running" : status}
           elapsed={elapsed}
-          onBack={() => clearBuild()}
+          onBack={() => setShowTerminal(false)}
+          onAbort={() => { clearBuild(); setShowTerminal(false); }}
         />
       </div>
     );
@@ -52,7 +60,25 @@ export default function LiveTab() {
     <div>
       <HudLabel>Live Builds</HudLabel>
 
-      <HudEmpty message="NO ACTIVE BUILDS" />
+      {/* Active build card (when terminal is minimized) */}
+      {build && !showTerminal && (
+        <HudCard active onClick={() => setShowTerminal(true)} className="mt-3 mb-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="w-2.5 h-2.5 rounded-full hud-dot-pulse" style={{ color: C.warning, background: C.warning }} />
+              <div>
+                <p className="text-sm lg:text-base font-medium">{build.clientName}</p>
+                <p className="text-[10px] lg:text-xs mt-0.5" style={{ color: `${C.primary}35` }}>{build.slug}.vercel.app</p>
+              </div>
+            </div>
+            <span className="text-[10px] lg:text-xs tracking-wider font-bold" style={{ color: C.warning }}>
+              OPEN →
+            </span>
+          </div>
+        </HudCard>
+      )}
+
+      {!build && <HudEmpty message="NO ACTIVE BUILDS" />}
 
       {/* Build History */}
       {history.length > 0 && (

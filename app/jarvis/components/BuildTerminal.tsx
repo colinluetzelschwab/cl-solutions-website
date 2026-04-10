@@ -12,9 +12,10 @@ interface BuildTerminalProps {
   status: "running" | "complete" | "error" | "idle";
   elapsed: number;
   onBack?: () => void;
+  onAbort?: () => void;
 }
 
-export default function BuildTerminal({ slug, clientName, log, phase, status, elapsed, onBack }: BuildTerminalProps) {
+export default function BuildTerminal({ slug, clientName, log, phase, status, elapsed, onBack, onAbort }: BuildTerminalProps) {
   const [bootText, setBootText] = useState("");
   const [bootDone, setBootDone] = useState(false);
   const logRef = useRef<HTMLDivElement>(null);
@@ -42,11 +43,18 @@ export default function BuildTerminal({ slug, clientName, log, phase, status, el
     <div className="flex flex-col h-full hud-scanline">
       {/* Header */}
       <div className="flex items-center justify-between px-4 lg:px-6 py-2.5 border-b" style={{ borderColor: C.border }}>
-        {onBack && (
-          <button onClick={onBack} className="text-[10px] lg:text-xs tracking-wider active:opacity-60 font-medium" style={{ color: `${C.primary}50` }}>
-            ← ESC
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {onBack && (
+            <button onClick={onBack} className="text-[10px] lg:text-xs tracking-wider active:opacity-60 font-medium" style={{ color: `${C.primary}50` }}>
+              ← BACK
+            </button>
+          )}
+          {onAbort && status === "running" && (
+            <button onClick={onAbort} className="text-[10px] lg:text-xs tracking-wider active:opacity-60 font-medium" style={{ color: `${C.error}60` }}>
+              ■ ABORT
+            </button>
+          )}
+        </div>
         <span className="text-[10px] lg:text-xs tracking-[0.3em]" style={{ color: `${C.primary}30` }}>CL BUILD SYSTEM</span>
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full hud-dot-pulse" style={{ color: isComplete ? C.success : C.warning, background: isComplete ? C.success : C.warning }} />
