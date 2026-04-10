@@ -36,11 +36,11 @@ const fragmentShader = `
     vec2 uv = vUv;
     uv.x *= uResolution.x / uResolution.y;
 
-    // Color palette
-    vec3 colorBase = vec3(0.016, 0.022, 0.060);      // deep navy
-    vec3 colorMidGlow = vec3(0.040, 0.070, 0.200);   // mid glow
-    vec3 colorBrightCrest = vec3(0.160, 0.280, 0.780); // bright crest
-    vec3 colorWhiteGlint = vec3(0.520, 0.660, 0.980);  // white glint
+    // Color palette — warm amber/bronze caustics
+    vec3 colorBase = vec3(0.030, 0.028, 0.035);        // warm near-black
+    vec3 colorMidGlow = vec3(0.080, 0.055, 0.035);     // deep bronze
+    vec3 colorBrightCrest = vec3(0.280, 0.180, 0.100); // warm amber crest
+    vec3 colorWhiteGlint = vec3(0.520, 0.380, 0.260);  // golden highlight
 
     // Calculate caustic pattern at 3 different scales
     float scale1 = caustic(uv * 2.0, uTime);
@@ -211,7 +211,7 @@ export default function HeroCanvas() {
   if (!webGLSupported) {
     return (
       <div className="fixed inset-0 z-0">
-        <div className="w-full h-full bg-gradient-to-br from-[#04050f] via-[#0a0e28] to-[#0a0e28]" />
+        <div className="w-full h-full bg-gradient-to-br from-[#0A0A0C] via-[#12100E] to-[#0A0A0C]" />
       </div>
     )
   }
@@ -220,7 +220,7 @@ export default function HeroCanvas() {
     <div
       ref={containerRef}
       className="fixed inset-0 z-0"
-      style={{ backgroundColor: '#04050f' }}
+      style={{ backgroundColor: '#0A0A0C' }}
     />
   )
 }
