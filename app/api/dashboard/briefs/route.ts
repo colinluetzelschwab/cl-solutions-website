@@ -94,7 +94,7 @@ export async function PATCH(request: NextRequest) {
     await put(
       `briefs/${briefId}.status.json`,
       JSON.stringify({ briefId, status, buildSlug, updatedAt: new Date().toISOString() }),
-      { access: 'public', contentType: 'application/json' }
+      { access: 'public', contentType: 'application/json', allowOverwrite: true }
     )
 
     return NextResponse.json({ success: true })
