@@ -1,45 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { list } from '@vercel/blob'
+import { list, put } from '@vercel/blob'
 
-/**
- * Dashboard briefs API — lists briefs stored in Vercel Blob
- *
- * Briefs are stored by the onboarding flow at `briefs/{id}.json`
- */
-
-interface StoredBrief {
-  id: string
-  createdAt: string
-  totalPrice: number
-  businessInfo: {
-    name: string
-    email: string
-    phone?: string
-    businessType: string
-  }
-  package: {
-    selectedPackage: string
-    couponCode: string
-    couponValid: boolean
-  }
-  design: {
-    primaryColor: string
-    secondaryColor: string
-    aesthetic: string
-    darkMode: boolean
-  }
-}
-
-interface BriefSummary {
-  id: string
-  clientName: string
-  email: string
-  packageId: string
-  totalPrice: number
-  createdAt: string
-  couponUsed: boolean
-  blobUrl: string
-}
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 function isAuthenticated(request: NextRequest): boolean {
   return request.cookies.get('dashboard_auth')?.value === 'true'
@@ -53,14 +15,30 @@ export async function GET(request: NextRequest) {
   try {
     const { blobs } = await list({ prefix: 'briefs/' })
 
-    const briefs: BriefSummary[] = []
+    // Separate brief JSONs from status JSONs
+    const briefBlobs = blobs.filter(b => b.pathname.endsWith('.json') && !b.pathname.endsWith('.status.json'))
+    const statusBlobs = blobs.filter(b => b.pathname.endsWith('.status.json'))
 
-    for (const blob of blobs) {
+    // Load status files into a map
+    const statusMap = new Map<string, string>()
+    for (const sb of statusBlobs) {
+      try {
+        const res = await fetch(sb.url)
+        if (res.ok) {
+          const data = await res.json()
+          statusMap.set(data.briefId, data.status)
+        }
+      } catch { /* skip */ }
+    }
+
+    const briefs: any[] = []
+
+    for (const blob of briefBlobs) {
       try {
         const response = await fetch(blob.url)
         if (!response.ok) continue
+        const brief = await response.json()
 
-        const brief = (await response.json()) as StoredBrief
         briefs.push({
           id: brief.id,
           clientName: brief.businessInfo?.name ?? 'Unknown',
@@ -70,25 +48,58 @@ export async function GET(request: NextRequest) {
           createdAt: brief.createdAt ?? blob.uploadedAt.toISOString(),
           couponUsed: brief.package?.couponValid ?? false,
           blobUrl: blob.url,
+          status: statusMap.get(brief.id) ?? 'new',
+          // Design fields for expanded view
+          primaryColor: brief.design?.primaryColor ?? null,
+          secondaryColor: brief.design?.secondaryColor ?? null,
+          accentColor: brief.design?.accentColor ?? null,
+          pages: brief.pagesFeatures?.pages ?? [],
+          features: brief.pagesFeatures?.features ?? [],
+          designPreferences: brief.design?.designPreferences ?? [],
+          fontPreference: brief.design?.fontPreference ?? null,
+          language: brief.design?.language ?? 'de',
+          darkMode: brief.design?.darkMode ?? false,
+          notes: brief.notes ?? '',
+          businessType: brief.businessInfo?.businessType ?? '',
+          hostingPlan: brief.package?.hostingPlan ?? 'none',
         })
       } catch {
-        // Skip malformed briefs
         console.error('Failed to parse brief:', blob.pathname)
       }
     }
 
-    // Sort by creation date, newest first
     briefs.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
 
     return NextResponse.json({ briefs })
   } catch (error) {
     console.error('Briefs API error:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch briefs' },
-      { status: 500 }
+    return NextResponse.json({ error: 'Failed to fetch briefs' }, { status: 500 })
+  }
+}
+
+/** PATCH — update brief status (new → building → built → failed) */
+export async function PATCH(request: NextRequest) {
+  if (!isAuthenticated(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const { briefId, status, buildSlug } = await request.json()
+    if (!briefId || !status) {
+      return NextResponse.json({ error: 'briefId and status required' }, { status: 400 })
+    }
+
+    await put(
+      `briefs/${briefId}.status.json`,
+      JSON.stringify({ briefId, status, buildSlug, updatedAt: new Date().toISOString() }),
+      { access: 'public', contentType: 'application/json' }
     )
+
+    return NextResponse.json({ success: true })
+  } catch (error) {
+    console.error('Brief status update error:', error)
+    return NextResponse.json({ error: 'Failed to update status' }, { status: 500 })
   }
 }

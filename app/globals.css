@@ -288,7 +288,7 @@
 }
 
 .hud-progress-bar {
-  background: linear-gradient(90deg, transparent, #00F0FF, #00FF88, #00F0FF, transparent);
+  background: linear-gradient(90deg, transparent, #00E5FF, #00FF7F, #00E5FF, transparent);
   background-size: 200% 100%;
   animation: hud-progress 2s linear infinite;
 }
