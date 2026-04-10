@@ -130,17 +130,13 @@ function LoginView({ onAuth }: { onAuth: () => void }) {
       "> VPS 46.225.88.110 — ONLINE",
       "> Awaiting authentication...",
     ];
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < lines.length) {
-        setBootLines(prev => [...prev, lines[i]]);
-        i++;
-      } else {
-        clearInterval(interval);
-        inputRef.current?.focus();
-      }
-    }, 300);
-    return () => clearInterval(interval);
+    const timers = lines.map((line, idx) =>
+      setTimeout(() => {
+        setBootLines(prev => [...prev, line]);
+        if (idx === lines.length - 1) inputRef.current?.focus();
+      }, (idx + 1) * 300)
+    );
+    return () => timers.forEach(clearTimeout);
   }, []);
 
   const submit = async () => {
