@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
           'Title': `Neuer Brief: ${brief.businessInfo.name}`,
           'Tags': 'briefcase,moneybag',
           'Priority': '4',
-          'Click': 'https://clsolutions.dev/cockpit',
+          'Click': 'https://clsolutions.dev/jarvis',
         },
         body: `${selectedPkg?.name ?? 'Unknown'} · CHF ${totalPrice.toLocaleString('de-CH')}\n${brief.businessInfo.email}`,
       })
