@@ -73,14 +73,14 @@ export default function PricingTable() {
               key={tier.name}
               className={`relative bg-background-surface border p-6 lg:p-8 flex flex-col ${
                 tier.isPopular
-                  ? 'border-accent-blue border-2 shadow-[0_0_40px_rgba(65,105,225,0.08)]'
+                  ? 'border-accent-blue border-2 shadow-[0_0_40px_rgba(200,149,108,0.12)]'
                   : 'border-border-default'
               }`}
             >
               {/* Popular Badge */}
               {tier.isPopular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-accent-blue text-text-primary text-xs font-medium px-3 py-1 uppercase tracking-wide">
+                  <span className="bg-accent-blue text-white text-xs font-medium px-3 py-1 uppercase tracking-wide">
                     Most Popular
                   </span>
                 </div>
@@ -113,7 +113,7 @@ export default function PricingTable() {
                 <Button
                   className={`w-full h-12 font-medium rounded-none transition-all duration-200 ${
                     tier.isPopular
-                      ? 'bg-accent-blue text-text-primary hover:bg-accent-blue-hover'
+                      ? 'bg-accent-blue text-white hover:bg-accent-blue-hover'
                       : 'bg-background-elevated text-text-primary hover:bg-background-primary border border-border-default'
                   }`}
                 >

@@ -57,7 +57,7 @@ export default function WhyCL() {
           {differentiators.map((item, index) => (
             <StaggerItem key={index}>
               <div className="bg-background-surface p-8 lg:p-12 flex flex-col items-start h-full card-glow border border-transparent group cursor-default">
-                <div className="text-accent-blue mb-5 p-2.5 bg-accent-blue/[0.07] border border-accent-blue/10 transition-colors duration-300 group-hover:bg-accent-blue/[0.12] group-hover:border-accent-blue/20">
+                <div className="text-accent-blue mb-5 p-2.5 bg-accent-blue/[0.10] border border-accent-blue/10 transition-colors duration-300 group-hover:bg-accent-blue/[0.18] group-hover:border-accent-blue/20">
                   {item.icon}
                 </div>
                 <h3 className="text-xl md:text-2xl font-semibold text-text-primary mb-3 tracking-[-0.01em]">

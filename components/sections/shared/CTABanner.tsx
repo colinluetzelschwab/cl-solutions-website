@@ -23,7 +23,7 @@ export default function CTABanner({
     <section className="w-full bg-background-surface py-20 md:py-28 lg:py-32 relative overflow-hidden">
       {/* Subtle radial glow behind content */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div className="w-[600px] h-[400px] bg-accent-blue/[0.04] rounded-full blur-[120px]" />
+        <div className="w-[600px] h-[400px] bg-accent-blue/[0.08] rounded-full blur-[120px]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -40,7 +40,7 @@ export default function CTABanner({
           <Link href={buttonHref}>
             <Button
               size="lg"
-              className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-10 h-13 md:h-14 text-base md:text-lg rounded-none transition-all duration-300 glow-pulse group"
+              className="bg-accent-blue text-white hover:bg-accent-blue-hover font-medium px-10 h-13 md:h-14 text-base md:text-lg rounded-none transition-all duration-300 glow-pulse group"
             >
               {buttonText}
               <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />

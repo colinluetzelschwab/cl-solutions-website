@@ -28,7 +28,7 @@ export default function Error({
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Button
             onClick={reset}
-            className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-8 h-11 rounded-none"
+            className="bg-accent-blue text-white hover:bg-accent-blue-hover font-medium px-8 h-11 rounded-none"
           >
             Try Again
           </Button>

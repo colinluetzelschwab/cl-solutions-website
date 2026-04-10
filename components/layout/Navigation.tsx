@@ -56,7 +56,7 @@ export default function Navigation() {
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
                 <Image
-                  src="/images/cl-solutions-light.png"
+                  src={isScrolled ? "/images/cl-solutions-dark.png" : "/images/cl-solutions-light.png"}
                   alt="CL Solutions"
                   width={120}
                   height={40}
@@ -72,7 +72,11 @@ export default function Navigation() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className="px-4 py-2 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors duration-200"
+                  className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
+                    isScrolled
+                      ? 'text-text-secondary hover:text-text-primary'
+                      : 'text-white/70 hover:text-white'
+                  }`}
                 >
                   {link.label}
                 </Link>
@@ -82,7 +86,7 @@ export default function Navigation() {
             {/* CTA Button - Desktop */}
             <div className="hidden lg:flex items-center">
               <Link href="/contact">
-                <Button className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium px-6 h-10 rounded-none transition-colors duration-200 border-l-2 border-accent-blue">
+                <Button className="bg-accent-blue text-white hover:bg-accent-blue-hover font-medium px-6 h-10 rounded-none transition-colors duration-200 border-l-2 border-accent-blue">
                   Start a Project
                 </Button>
               </Link>
@@ -139,7 +143,7 @@ export default function Navigation() {
             ))}
             <div className="pt-4 px-4">
               <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button className="w-full bg-accent-blue text-text-primary hover:bg-accent-blue-hover font-medium h-11 rounded-none">
+                <Button className="w-full bg-accent-blue text-white hover:bg-accent-blue-hover font-medium h-11 rounded-none">
                   Start a Project
                 </Button>
               </Link>

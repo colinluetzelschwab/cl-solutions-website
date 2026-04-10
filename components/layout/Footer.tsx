@@ -18,7 +18,7 @@ const legalLinks = [
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border-subtle bg-background-primary relative">
+    <footer className="w-full border-t border-border-subtle bg-background-elevated relative">
       {/* Top accent line */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent-blue/20 to-transparent" />
 
@@ -31,7 +31,7 @@ export default function Footer() {
               <div>
                 <Link href="/">
                   <Image
-                    src="/images/cl-solutions-light.png"
+                    src="/images/cl-solutions-dark.png"
                     alt="CL Solutions"
                     width={100}
                     height={33}
@@ -72,7 +72,7 @@ export default function Footer() {
           {/* Bottom Section: Email and Copyright */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 pt-4 border-t border-border-subtle">
             {/* Email */}
-            <div className="flex items-center space-x-2 text-text-secondary">
+            <div className="flex items-center space-x-2 text-text-secondary hover:text-accent-blue transition-colors duration-200">
               <Mail className="h-4 w-4" />
               <a
                 href="mailto:colin@clsolutions.dev"
