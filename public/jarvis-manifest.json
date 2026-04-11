@@ -1,0 +1,23 @@
+{
+  "name": "JARVIS — CL Solutions",
+  "short_name": "JARVIS",
+  "description": "CL Solutions Build System",
+  "start_url": "/jarvis",
+  "scope": "/jarvis",
+  "display": "standalone",
+  "background_color": "#050508",
+  "theme_color": "#050508",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/jarvis-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/jarvis-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

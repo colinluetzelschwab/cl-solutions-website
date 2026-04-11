@@ -23,7 +23,7 @@ export default function LoginView({ onAuth }: { onAuth: (pw: string) => Promise<
       setTimeout(() => {
         setBootLines(prev => [...prev, line]);
         if (idx === lines.length - 1) inputRef.current?.focus();
-      }, (idx + 1) * 250)
+      }, (idx + 1) * 200)
     );
     return () => timers.forEach(clearTimeout);
   }, []);
@@ -70,19 +70,20 @@ export default function LoginView({ onAuth }: { onAuth: (pw: string) => Promise<
                   onChange={e => setPw(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && submit()}
                   placeholder="password"
-                  className="flex-1 bg-transparent border px-4 py-3 text-sm lg:text-base outline-none font-mono"
-                  style={{ borderColor: err ? `${C.error}60` : `${C.primary}25`, color: C.primary }}
+                  autoComplete="current-password"
+                  className="flex-1 bg-transparent border px-4 py-4 text-base outline-none font-mono"
+                  style={{ borderColor: err ? `${C.error}60` : `${C.primary}25`, color: C.primary, fontSize: "16px" }}
                 />
                 <button
                   onClick={submit}
                   disabled={loading}
-                  className="px-5 py-3 text-xs lg:text-sm tracking-wider font-bold disabled:opacity-30 transition-opacity"
+                  className="px-6 py-4 text-sm tracking-wider font-bold disabled:opacity-30 transition-opacity active:scale-95"
                   style={{ background: `${C.primary}18`, color: C.primary, border: `1px solid ${C.primary}35` }}
                 >
                   {loading ? "..." : "AUTH"}
                 </button>
               </div>
-              {err && <p className="text-[11px] lg:text-xs mt-2 font-medium" style={{ color: C.error }}>{err}</p>}
+              {err && <p className="text-xs mt-2 font-medium" style={{ color: C.error }}>{err}</p>}
             </div>
           </div>
         )}

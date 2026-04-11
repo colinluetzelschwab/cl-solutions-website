@@ -8,7 +8,7 @@ import { HudLabel, HudBadge, HudCard, HudEmpty, HudSkeleton } from "./HudElement
 
 function ColorDot({ color }: { color?: string }) {
   if (!color) return null;
-  return <span className="w-4 h-4 lg:w-5 lg:h-5 rounded-sm border border-white/10 shrink-0" style={{ background: color }} />;
+  return <span className="w-5 h-5 rounded-sm border border-white/10 shrink-0" style={{ background: color }} />;
 }
 
 function BriefDetail({ brief }: { brief: BriefSummary }) {
@@ -32,7 +32,7 @@ function BriefDetail({ brief }: { brief: BriefSummary }) {
           <HudLabel>Pages</HudLabel>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {brief.pages.map(p => (
-              <span key={p} className="text-[9px] lg:text-[10px] px-2 py-0.5" style={{ background: C.surface, color: `${C.primary}70`, border: `1px solid ${C.primary}12` }}>
+              <span key={p} className="text-[10px] px-2 py-1" style={{ background: C.surface, color: `${C.primary}70`, border: `1px solid ${C.primary}12` }}>
                 {p}
               </span>
             ))}
@@ -46,7 +46,7 @@ function BriefDetail({ brief }: { brief: BriefSummary }) {
           <HudLabel>Features</HudLabel>
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {brief.features.map(f => (
-              <span key={f} className="text-[9px] lg:text-[10px] px-2 py-0.5" style={{ background: C.surface, color: "rgba(255,255,255,0.4)" }}>
+              <span key={f} className="text-[10px] px-2 py-1" style={{ background: C.surface, color: "rgba(255,255,255,0.4)" }}>
                 {f}
               </span>
             ))}
@@ -58,14 +58,14 @@ function BriefDetail({ brief }: { brief: BriefSummary }) {
       {brief.notes && (
         <div>
           <HudLabel>Notes</HudLabel>
-          <p className="text-[11px] lg:text-xs mt-1.5 leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <p className="text-xs mt-1.5 leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
             {brief.notes.slice(0, 200)}{brief.notes.length > 200 ? "..." : ""}
           </p>
         </div>
       )}
 
       {/* Meta */}
-      <div className="flex gap-3 text-[9px] lg:text-[10px]" style={{ color: "rgba(255,255,255,0.2)" }}>
+      <div className="flex gap-3 text-[10px]" style={{ color: "rgba(255,255,255,0.2)" }}>
         <span>{brief.language?.toUpperCase() ?? "DE"}</span>
         <span>{brief.fontPreference ?? "—"}</span>
         <span>{brief.darkMode ? "DARK" : "LIGHT"}</span>
@@ -101,12 +101,16 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
         <div className="flex items-center gap-3">
           <HudLabel>Incoming Briefs</HudLabel>
           {newBriefs.length > 0 && (
-            <span className="text-[10px] lg:text-xs px-2 py-0.5 font-bold tabular-nums" style={{ background: `${C.primary}15`, color: C.primary }}>
+            <span className="text-xs px-2.5 py-1 font-bold tabular-nums" style={{ background: `${C.primary}15`, color: C.primary }}>
               {newBriefs.length}
             </span>
           )}
         </div>
-        <button onClick={refresh} className="text-[10px] lg:text-xs tracking-wider font-medium active:opacity-60 transition-opacity" style={{ color: `${C.primary}50` }}>
+        <button
+          onClick={refresh}
+          className="text-xs tracking-wider font-medium active:opacity-60 active:scale-95 transition-all px-3 py-2 -mr-3"
+          style={{ color: `${C.primary}50` }}
+        >
           REFRESH
         </button>
       </div>
@@ -126,15 +130,15 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
               >
                 <div className="flex items-start justify-between">
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm lg:text-base font-medium truncate">{brief.clientName}</p>
-                    <p className="text-[10px] lg:text-xs mt-0.5 truncate" style={{ color: `${C.primary}35` }}>{brief.email}</p>
+                    <p className="text-base font-medium truncate">{brief.clientName}</p>
+                    <p className="text-xs mt-0.5 truncate" style={{ color: `${C.primary}35` }}>{brief.email}</p>
                   </div>
                   <div className="flex flex-col items-end ml-3 shrink-0 gap-1.5">
                     <HudBadge label={PACKAGE_LABELS[brief.packageId] ?? brief.packageId} color={pkgColor} />
-                    <span className="text-[10px] lg:text-xs tabular-nums font-medium" style={{ color: `${C.primary}40` }}>
+                    <span className="text-xs tabular-nums font-medium" style={{ color: `${C.primary}40` }}>
                       CHF {brief.totalPrice.toLocaleString("de-CH")}
                     </span>
-                    <span className="text-[9px] lg:text-[10px] tabular-nums" style={{ color: "rgba(255,255,255,0.15)" }}>
+                    <span className="text-[10px] tabular-nums" style={{ color: "rgba(255,255,255,0.15)" }}>
                       {relTime(brief.createdAt)}
                     </span>
                   </div>
@@ -146,7 +150,7 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
                     <button
                       onClick={(e) => { e.stopPropagation(); handleBuild(brief); }}
                       disabled={building}
-                      className="w-full mt-4 h-12 lg:h-14 text-sm lg:text-base font-bold tracking-wider disabled:opacity-30 transition-all active:scale-[0.98]"
+                      className="w-full mt-4 h-14 text-base font-bold tracking-wider disabled:opacity-30 transition-all active:scale-[0.97]"
                       style={{
                         background: building ? `${C.warning}15` : `${C.success}12`,
                         border: `1px solid ${building ? `${C.warning}40` : `${C.success}40`}`,
@@ -170,8 +174,8 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
           <HudLabel>Previously Built</HudLabel>
           <div className="space-y-1 mt-2">
             {briefs.filter(b => b.status !== "new").map(brief => (
-              <div key={brief.id} className="flex items-center justify-between py-2 px-3" style={{ background: C.surface }}>
-                <span className="text-xs lg:text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>{brief.clientName}</span>
+              <div key={brief.id} className="flex items-center justify-between py-3 px-3" style={{ background: C.surface }}>
+                <span className="text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>{brief.clientName}</span>
                 <HudBadge label={brief.status.toUpperCase()} color={brief.status === "built" ? C.success : brief.status === "failed" ? C.error : C.warning} />
               </div>
             ))}
