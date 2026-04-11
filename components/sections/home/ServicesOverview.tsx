@@ -36,7 +36,7 @@ export default function ServicesOverview() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-text-primary tracking-[-0.02em] leading-[1.1]">
             Three options.
             <br />
-            <span className="font-[family-name:var(--font-display)] italic text-text-secondary">Zero surprises.</span>
+            <span className="font-[family-name:var(--font-display)] italic text-text-secondary pr-[0.15em]">Zero surprises.</span>
           </h2>
         </ScrollReveal>
 

@@ -17,7 +17,7 @@ export default function CTABanner({ headline, subtext }: CTABannerProps) {
         <ScrollReveal>
           <p className="text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase mb-4">Ready?</p>
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-text-primary tracking-[-0.02em] leading-[1.05] mb-6 md:mb-8">
-            {headline ? headline : (<>Let&apos;s build something<br /><span className="font-[family-name:var(--font-display)] italic text-[#C8956C]">great.</span></>)}
+            {headline ? headline : (<>Let&apos;s build something<br /><span className="font-[family-name:var(--font-display)] italic text-[#C8956C] pr-[0.15em]">great.</span></>)}
           </h2>
           <p className="text-base md:text-lg text-text-secondary max-w-md leading-relaxed mb-10 md:mb-14">
             {subtext ?? "Fill out our brief — we'll get back to you within 24 hours with a proposal."}

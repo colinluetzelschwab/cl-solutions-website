@@ -84,7 +84,7 @@ export default function HeroContent() {
               <br />
               that make businesses
               <br />
-              <span className="font-[family-name:var(--font-display)] italic font-normal text-[#C8956C]">
+              <span className="font-[family-name:var(--font-display)] italic font-normal text-[#C8956C] pr-[0.15em]">
                 grow.
               </span>
             </motion.h1>

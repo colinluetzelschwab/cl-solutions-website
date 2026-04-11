@@ -19,7 +19,7 @@ export default function ContactPage() {
         <div className="max-w-3xl mx-auto px-6 sm:px-10 lg:px-16">
           <h1 className="text-4xl md:text-5xl font-light text-text-primary tracking-[-0.02em] mb-3">
             Start your{' '}
-            <span className="font-[family-name:var(--font-display)] italic font-normal">
+            <span className="font-[family-name:var(--font-display)] italic font-normal pr-[0.15em]">
               project.
             </span>
           </h1>
