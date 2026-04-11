@@ -69,7 +69,7 @@ export default function ServicesOverview() {
                 </div>
 
                 <Link
-                  href="/contact"
+                  href="/contact/start"
                   className="inline-flex items-center text-sm text-text-muted hover:text-text-primary transition-colors group/link"
                 >
                   Get started

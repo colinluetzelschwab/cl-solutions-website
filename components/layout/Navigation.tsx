@@ -60,7 +60,7 @@ export default function Navigation() {
                 </Link>
               ))}
               <Link
-                href="/contact"
+                href="/contact/start"
                 className="ml-4 px-6 py-2.5 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors duration-200"
               >
                 Start a Project
@@ -108,7 +108,7 @@ export default function Navigation() {
           ))}
           <div className="mt-8 pt-8 border-t border-border-subtle w-full">
             <Link
-              href="/contact"
+              href="/contact/start"
               className="inline-block px-8 py-4 text-base font-medium bg-text-primary text-background-primary"
               onClick={() => setIsMobileMenuOpen(false)}
             >

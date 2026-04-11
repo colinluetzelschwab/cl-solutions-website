@@ -23,7 +23,7 @@ export default function CTABanner({ headline, subtext }: CTABannerProps) {
             {subtext ?? "Fill out our brief — we'll get back to you within 24 hours with a proposal."}
           </p>
           <Link
-            href="/contact"
+            href="/contact/start"
             className="inline-flex items-center gap-2 px-8 py-4 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors group"
           >
             Start your project

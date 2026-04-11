@@ -94,7 +94,7 @@ export default function HeroContent() {
             </motion.p>
 
             <motion.div variants={fade} className="flex flex-col sm:flex-row items-start gap-3 mt-10 md:mt-14">
-              <Link href="/contact" className="inline-flex items-center gap-2 px-8 py-4 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors group">
+              <Link href="/contact/start" className="inline-flex items-center gap-2 px-8 py-4 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors group">
                 Start a project
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>

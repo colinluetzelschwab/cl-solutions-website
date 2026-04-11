@@ -67,7 +67,7 @@ export default function MaintenanceCards() {
               </div>
 
               {/* CTA */}
-              <Link href="/contact">
+              <Link href="/contact/start">
                 <Button className="w-full h-12 bg-background-elevated text-text-primary hover:bg-background-primary border border-border-default font-medium rounded-none transition-all duration-200">
                   Get Started
                 </Button>
