@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 
@@ -41,7 +42,7 @@ function Grain() {
     }
     ctx.putImageData(d, 0, 0)
   }, [])
-  return <canvas ref={ref} className="absolute inset-0 w-full h-full pointer-events-none opacity-50" style={{ mixBlendMode: 'overlay' }} aria-hidden="true" />
+  return <canvas ref={ref} className="absolute inset-0 w-full h-full pointer-events-none opacity-50 z-20" style={{ mixBlendMode: 'overlay' }} aria-hidden="true" />
 }
 
 export default function HeroContent() {
@@ -51,8 +52,26 @@ export default function HeroContent() {
     <section className="relative min-h-[100svh] w-full overflow-hidden bg-background-primary">
       <Grain />
 
-      {/* Subtle accent orb */}
-      <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(200,149,108,0.06) 0%, transparent 70%)' }} />
+      {/* Image — right side on desktop, behind text on mobile */}
+      <div className="absolute inset-0 z-0">
+        {/* Image positioned right */}
+        <div className="absolute top-0 right-0 w-full md:w-[55%] h-full">
+          <Image
+            src="/images/hero/swiss-mountains.jpg"
+            alt=""
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 768px) 100vw, 55vw"
+          />
+          {/* Blend into cream bg — gradient from left */}
+          <div className="absolute inset-0 bg-gradient-to-r from-background-primary via-background-primary/90 md:via-background-primary/70 to-transparent" />
+          {/* Bottom blend */}
+          <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-transparent to-background-primary/30" />
+          {/* Desaturate + warm tint */}
+          <div className="absolute inset-0 bg-background-primary/20 mix-blend-color" />
+        </div>
+      </div>
 
       <motion.div initial="hidden" animate="visible" variants={container} className="relative z-10 min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 lg:px-16 pt-28 md:pt-32 pb-10 md:pb-14">
         {/* Top — location + time */}
