@@ -9,66 +9,71 @@ interface LogoProps {
   iconOnly?: boolean
 }
 
-export default function Logo({ variant = 'dark', className = '', width = 160, iconOnly = false }: LogoProps) {
-  const iconSize = 36
+/**
+ * CL Solutions Logo
+ *
+ * Mark: Two overlapping angular brackets forming a "CL" monogram.
+ * The left bracket (C) and right vertical+base (L) interlock,
+ * creating depth through overlapping opacity.
+ *
+ * Inspired by: EZMID's diagonal energy, Howel's geometric simplicity,
+ * NVIDIA's contained bold mark.
+ */
+export default function Logo({ variant = 'dark', className = '', width = 150, iconOnly = false }: LogoProps) {
   const textColor = variant === 'dark' ? '#1A1815' : '#FFFFFF'
+  const markColor = variant === 'dark' ? '#1A1815' : '#FFFFFF'
   const accentColor = '#C8956C'
-  const accentLight = '#D4A67D'
 
   if (iconOnly) {
     return (
       <svg
-        width={iconSize}
-        height={iconSize}
+        width={36}
+        height={36}
         viewBox="0 0 36 36"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         className={className}
         aria-label="CL Solutions"
       >
-        <LogoMark accentColor={accentColor} accentLight={accentLight} />
+        <Mark color={markColor} accent={accentColor} />
       </svg>
     )
   }
 
-  const height = Math.round(width * 0.25)
-
   return (
     <svg
       width={width}
-      height={height}
-      viewBox="0 0 160 40"
+      height={Math.round(width * 0.24)}
+      viewBox="0 0 150 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-label="CL Solutions"
     >
-      <g transform="translate(2, 2)">
-        <LogoMark accentColor={accentColor} accentLight={accentLight} />
-      </g>
+      {/* Mark */}
+      <Mark color={markColor} accent={accentColor} />
 
-      {/* CL — bold */}
+      {/* Text — CL bold, Solutions light */}
       <text
         x="44"
-        y="28"
-        fontFamily="system-ui, -apple-system, 'Helvetica Neue', sans-serif"
-        fontSize="20"
-        fontWeight="800"
-        letterSpacing="1"
+        y="24.5"
+        fontFamily="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        fontSize="18"
+        fontWeight="700"
+        letterSpacing="1.5"
         fill={textColor}
       >
         CL
       </text>
-
-      {/* SOLUTIONS — lighter weight, tracked */}
       <text
-        x="72"
-        y="28"
-        fontFamily="system-ui, -apple-system, 'Helvetica Neue', sans-serif"
-        fontSize="20"
+        x="71"
+        y="24.5"
+        fontFamily="system-ui, -apple-system, 'Segoe UI', sans-serif"
+        fontSize="18"
         fontWeight="300"
         letterSpacing="0.5"
         fill={textColor}
+        opacity="0.7"
       >
         Solutions
       </text>
@@ -76,33 +81,31 @@ export default function Logo({ variant = 'dark', className = '', width = 160, ic
   )
 }
 
-function LogoMark({ accentColor, accentLight }: { accentColor: string; accentLight: string }) {
+function Mark({ color, accent }: { color: string; accent: string }) {
   return (
-    <>
-      {/* Abstract angular spiral — two interlocking shapes that suggest motion/code brackets
-          Inspired by: NVIDIA's contained mark, iDIAL's swirl, EZMID's diagonal stripes */}
+    <g>
+      {/* Background square — subtle, grounds the mark */}
+      <rect x="2" y="2" width="32" height="32" rx="4" fill={accent} opacity="0.08" />
 
-      {/* Outer bracket/arc — the "C" */}
+      {/* "C" — open angular bracket */}
       <path
-        d="M26 4C14.954 4 6 12.954 6 24c0 3.866 1.097 7.473 2.997 10.528"
-        stroke={accentColor}
-        strokeWidth="4.5"
-        strokeLinecap="round"
-        fill="none"
-      />
-
-      {/* Inner angular element — the "L" / forward motion */}
-      <path
-        d="M18 10L10 22l8 12"
-        stroke={accentLight}
-        strokeWidth="4"
+        d="M22 7L10 18L22 29"
+        stroke={color}
+        strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         fill="none"
       />
 
-      {/* Accent dot — tech feel */}
-      <circle cx="30" cy="8" r="3" fill={accentColor} />
-    </>
+      {/* "L" — vertical + horizontal base */}
+      <path
+        d="M18 7V29H28"
+        stroke={accent}
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </g>
   )
 }

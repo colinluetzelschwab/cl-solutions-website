@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import Logo from '@/components/ui/Logo'
 
 interface NavLink {
@@ -22,23 +21,15 @@ export default function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50)
-    }
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
+    handleScroll()
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
-    }
-    return () => {
-      document.body.style.overflow = 'unset'
-    }
+    document.body.style.overflow = isMobileMenuOpen ? 'hidden' : 'unset'
+    return () => { document.body.style.overflow = 'unset' }
   }, [isMobileMenuOpen])
 
   return (
@@ -46,106 +37,87 @@ export default function Navigation() {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-background-primary/70 backdrop-blur-xl border-b border-border-subtle/50'
+            ? 'bg-background-primary/80 backdrop-blur-xl border-b border-border-subtle/50'
             : 'bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
-            <div className="flex-shrink-0">
-              <Link href="/" className="flex items-center">
-                <Logo
-                  variant={isScrolled ? 'dark' : 'dark'}
-                  width={120}
-                  className="h-8 md:h-10 w-auto"
-                />
-              </Link>
-            </div>
+            <Link href="/" className="flex items-center">
+              <Logo variant="dark" width={130} className="h-8 md:h-9 w-auto" />
+            </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`px-4 py-2 text-sm font-medium transition-colors duration-200 ${
-                    isScrolled
-                      ? 'text-text-secondary hover:text-text-primary'
-                      : 'text-white/70 hover:text-white'
-                  }`}
+                  className="px-5 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
               ))}
-            </div>
-
-            {/* CTA Button - Desktop */}
-            <div className="hidden lg:flex items-center">
-              <Link href="/contact">
-                <Button className="bg-accent-blue text-white hover:bg-accent-blue-hover font-medium px-6 h-10 rounded-none transition-colors duration-200 border-l-2 border-accent-blue">
-                  Start a Project
-                </Button>
+              <Link
+                href="/contact"
+                className="ml-4 px-6 py-2.5 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors duration-200"
+              >
+                Start a Project
               </Link>
             </div>
 
             {/* Mobile Menu Button */}
-            <div className="lg:hidden">
-              <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="inline-flex items-center justify-center p-2 text-text-secondary hover:text-text-primary transition-colors duration-200"
-                aria-label="Toggle menu"
-              >
-                {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
-            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="lg:hidden p-2 text-text-primary"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       <div
         className={`fixed inset-0 z-40 lg:hidden transition-all duration-300 ${
-          isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
       >
-        {/* Backdrop */}
         <div
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          className="absolute inset-0 bg-background-primary/95 backdrop-blur-lg"
           onClick={() => setIsMobileMenuOpen(false)}
         />
 
-        {/* Menu Panel */}
         <div
-          className={`absolute top-16 md:top-20 left-0 right-0 bg-background-primary border-b border-border-subtle transition-transform duration-300 ${
-            isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'
+          className={`absolute top-16 left-0 right-0 bottom-0 flex flex-col items-start justify-center px-10 transition-transform duration-300 ${
+            isMobileMenuOpen ? 'translate-y-0' : '-translate-y-8 opacity-0'
           }`}
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="block px-4 py-3 text-base font-medium text-text-secondary hover:text-text-primary hover:bg-background-elevated transition-colors duration-200 rounded-none"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
-            <div className="pt-4 px-4">
-              <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button className="w-full bg-accent-blue text-white hover:bg-accent-blue-hover font-medium h-11 rounded-none">
-                  Start a Project
-                </Button>
-              </Link>
-            </div>
+          {navLinks.map((link, i) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="text-4xl sm:text-5xl font-light text-text-primary hover:text-accent-blue transition-colors duration-200 py-4"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{ transitionDelay: `${i * 50}ms` }}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="mt-8 pt-8 border-t border-border-subtle w-full">
+            <Link
+              href="/contact"
+              className="inline-block px-8 py-4 text-base font-medium bg-text-primary text-background-primary"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              Start a Project
+            </Link>
           </div>
+          <p className="mt-auto pb-12 text-xs text-text-muted">
+            colin@clsolutions.dev
+          </p>
         </div>
       </div>
     </>
