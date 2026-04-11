@@ -125,7 +125,7 @@ export default function BuildTerminal({ slug, clientName, log, phase, status, el
             <div className="ml-auto w-3 h-3 border border-t-transparent rounded-full animate-spin" style={{ borderColor: `${C.warning}50`, borderTopColor: "transparent" }} />
           )}
         </div>
-        <div ref={logRef} className="flex-1 p-3 lg:p-4 overflow-y-auto" style={{ background: "#08080C" }}>
+        <div ref={logRef} className="flex-1 p-3 lg:p-4 overflow-y-auto" style={{ background: "#08080C", maxHeight: "55vh" }}>
           <pre className="text-[11px] lg:text-xs leading-relaxed whitespace-pre-wrap break-all" style={{ color: `${C.primary}60` }}>
             {bootText}
             {!bootDone && <span className="hud-cursor" style={{ color: C.primary }}>█</span>}
