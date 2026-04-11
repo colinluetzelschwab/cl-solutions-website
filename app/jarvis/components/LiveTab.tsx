@@ -40,8 +40,8 @@ export default function LiveTab() {
 
   if (build && showTerminal) {
     return (
-      <div className="fixed inset-0 bg-[#050508] flex flex-col z-50"
-        style={{ paddingTop: "env(safe-area-inset-top)", paddingBottom: "env(safe-area-inset-bottom)" }}>
+      <div className="bg-[#050508] flex flex-col rounded-sm -mx-4 lg:-mx-6 -mt-2"
+        style={{ minHeight: "calc(100vh - 120px)" }}>
         <BuildTerminal
           slug={build.slug}
           clientName={build.clientName}
