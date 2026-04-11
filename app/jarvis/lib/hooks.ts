@@ -171,16 +171,25 @@ export function useBuildStatus(slug: string | null) {
   return { status, log, phase };
 }
 
-/* ═══ Active Build (persisted) ═══ */
+/* ═══ Active Build (server-persisted via Vercel Blob — syncs across devices) ═══ */
 
 export function useActiveBuild() {
   const [build, setBuild] = useState<ActiveBuild | null>(null);
 
+  // Load from server on mount
   useEffect(() => {
-    const saved = localStorage.getItem("jarvis-build");
-    if (saved) {
-      try { setBuild(JSON.parse(saved)); } catch { /* */ }
-    }
+    fetch("/api/dashboard/build-state")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data?.activeBuild) setBuild(data.activeBuild); })
+      .catch(() => {});
+  }, []);
+
+  const saveBuildState = useCallback(async (b: ActiveBuild | null) => {
+    await fetch("/api/dashboard/build-state", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ activeBuild: b }),
+    }).catch(() => {});
   }, []);
 
   const startBuild = useCallback(async (briefUrl: string, clientName: string, briefId: string): Promise<ActiveBuild | null> => {
@@ -194,51 +203,55 @@ export function useActiveBuild() {
       if (data.success) {
         const b: ActiveBuild = { slug: data.slug, clientName, briefId, startedAt: new Date().toISOString() };
         setBuild(b);
-        localStorage.setItem("jarvis-build", JSON.stringify(b));
+        await saveBuildState(b);
         return b;
       }
     } catch { /* */ }
     return null;
-  }, []);
+  }, [saveBuildState]);
 
-  const completeBuild = useCallback((status: "complete" | "failed") => {
+  const completeBuild = useCallback(async (status: "complete" | "failed") => {
     if (!build) return;
-    // Add to history
-    const history: BuildHistoryEntry[] = JSON.parse(localStorage.getItem("jarvis-history") || "[]");
-    history.unshift({
-      slug: build.slug,
-      clientName: build.clientName,
-      briefId: build.briefId,
-      startedAt: build.startedAt,
-      completedAt: new Date().toISOString(),
-      status,
-      duration: Math.floor((Date.now() - new Date(build.startedAt).getTime()) / 1000),
-      deployUrl: status === "complete" ? `https://${build.slug}.vercel.app` : null,
-    });
-    localStorage.setItem("jarvis-history", JSON.stringify(history.slice(0, 20)));
+    // Add to history on server
+    await fetch("/api/dashboard/build-state", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        entry: {
+          slug: build.slug,
+          clientName: build.clientName,
+          briefId: build.briefId,
+          startedAt: build.startedAt,
+          completedAt: new Date().toISOString(),
+          status,
+          duration: Math.floor((Date.now() - new Date(build.startedAt).getTime()) / 1000),
+          deployUrl: status === "complete" ? `https://${build.slug}.vercel.app` : null,
+        },
+      }),
+    }).catch(() => {});
     // Clear active
     setBuild(null);
-    localStorage.removeItem("jarvis-build");
-  }, [build]);
+    await saveBuildState(null);
+  }, [build, saveBuildState]);
 
-  const clearBuild = useCallback(() => {
+  const clearBuild = useCallback(async () => {
     setBuild(null);
-    localStorage.removeItem("jarvis-build");
-  }, []);
+    await saveBuildState(null);
+  }, [saveBuildState]);
 
   return { build, startBuild, completeBuild, clearBuild };
 }
 
-/* ═══ Build History ═══ */
+/* ═══ Build History (server-persisted) ═══ */
 
 export function useBuildHistory() {
   const [history, setHistory] = useState<BuildHistoryEntry[]>([]);
 
   useEffect(() => {
-    const saved = localStorage.getItem("jarvis-history");
-    if (saved) {
-      try { setHistory(JSON.parse(saved)); } catch { /* */ }
-    }
+    fetch("/api/dashboard/build-state")
+      .then(res => res.ok ? res.json() : null)
+      .then(data => { if (data?.history) setHistory(data.history); })
+      .catch(() => {});
   }, []);
 
   return history;
