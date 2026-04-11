@@ -19,7 +19,7 @@ export default function Process() {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-text-primary tracking-[-0.02em] leading-[1.1]">
             From brief to launch
             <br />
-            <span className="font-[family-name:var(--font-display)] italic text-text-secondary pr-[0.15em]">in four steps.</span>
+            <span className="inline-block font-[family-name:var(--font-display)] italic text-text-secondary pr-[0.3em]">in four steps.</span>
           </h2>
         </ScrollReveal>
 
