@@ -224,10 +224,10 @@ export default function LiveTab() {
 
     return (
       <>
-        {/* Mobile: full-width bleed terminal */}
+        {/* Mobile: full-width bleed terminal — fixed height so page never scrolls */}
         <div
           className="md:hidden bg-[#050508] flex flex-col rounded-sm -mx-4 -mt-2"
-          style={{ minHeight: "calc(100vh - 120px)" }}
+          style={{ height: "calc(100vh - 120px)", overflow: "hidden" }}
         >
           <BuildTerminal {...terminalProps} />
         </div>
