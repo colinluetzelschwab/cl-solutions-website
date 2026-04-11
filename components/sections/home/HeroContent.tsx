@@ -55,7 +55,7 @@ export default function HeroContent() {
       {/* Full-width image at low opacity */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero/swiss-mountains.jpg"
+          src="/images/hero/swiss-mountains.jpeg"
           alt=""
           fill
           className="object-cover opacity-[0.70]"
