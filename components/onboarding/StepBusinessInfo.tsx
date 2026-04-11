@@ -17,56 +17,56 @@ export default function StepBusinessInfo({ data, onChange, errors }: Props) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-semibold text-text-primary mb-1">Tell us about your business</h2>
-        <p className="text-text-secondary">Basic information so we can understand who you are.</p>
+        <h2 className="text-xl font-light text-text-primary mb-1">Tell us about your business</h2>
+        <p className="text-sm text-text-muted">Basic information so we can understand who you are.</p>
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-text-primary mb-1.5">
-            Business name <span className="text-red-500">*</span>
+          <label className="block text-[11px] tracking-[0.1em] uppercase text-text-muted mb-2">
+            Business name <span className="text-accent-blue">*</span>
           </label>
           <Input
             value={data.name}
             onChange={(e) => update('name', e.target.value)}
             placeholder="e.g. Core Medical AG"
-            className="bg-background-surface border-border-default text-text-primary placeholder:text-text-muted"
+            className="bg-transparent border-0 border-b border-border-default rounded-none px-0 text-text-primary placeholder:text-text-muted/50 focus-visible:ring-0 focus-visible:border-text-primary transition-colors"
           />
-          {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-xs text-red-500 mt-1.5">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-primary mb-1.5">
-            Email <span className="text-red-500">*</span>
+          <label className="block text-[11px] tracking-[0.1em] uppercase text-text-muted mb-2">
+            Email <span className="text-accent-blue">*</span>
           </label>
           <Input
             type="email"
             value={data.email}
             onChange={(e) => update('email', e.target.value)}
             placeholder="you@company.ch"
-            className="bg-background-surface border-border-default text-text-primary placeholder:text-text-muted"
+            className="bg-transparent border-0 border-b border-border-default rounded-none px-0 text-text-primary placeholder:text-text-muted/50 focus-visible:ring-0 focus-visible:border-text-primary transition-colors"
           />
-          {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
+          {errors.email && <p className="text-xs text-red-500 mt-1.5">{errors.email}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-primary mb-1.5">
-            Phone <span className="text-text-muted">(optional)</span>
+          <label className="block text-[11px] tracking-[0.1em] uppercase text-text-muted mb-2">
+            Phone <span className="text-text-muted/50">(optional)</span>
           </label>
           <Input
             type="tel"
             value={data.phone}
             onChange={(e) => update('phone', e.target.value)}
             placeholder="+41 79 123 45 67"
-            className="bg-background-surface border-border-default text-text-primary placeholder:text-text-muted"
+            className="bg-transparent border-0 border-b border-border-default rounded-none px-0 text-text-primary placeholder:text-text-muted/50 focus-visible:ring-0 focus-visible:border-text-primary transition-colors"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-text-primary mb-1.5">
-            Business type <span className="text-red-500">*</span>
+          <label className="block text-[11px] tracking-[0.1em] uppercase text-text-muted mb-2">
+            Business type <span className="text-accent-blue">*</span>
           </label>
           <select
             value={data.businessType}
@@ -76,24 +76,24 @@ export default function StepBusinessInfo({ data, onChange, errors }: Props) {
                 onChange({ ...data, businessType: e.target.value, businessTypeOther: '' })
               }
             }}
-            className="w-full h-10 px-3 bg-background-surface border border-border-default text-text-primary text-sm rounded-none focus:outline-none focus:ring-2 focus:ring-accent-blue"
+            className="w-full h-10 px-0 bg-transparent border-0 border-b border-border-default text-text-primary text-sm rounded-none focus:outline-none focus:border-text-primary transition-colors"
           >
             <option value="">Select your industry</option>
             {BUSINESS_TYPES.map((bt) => (
               <option key={bt.value} value={bt.value}>{bt.label}</option>
             ))}
           </select>
-          {errors.businessType && <p className="text-sm text-red-500 mt-1">{errors.businessType}</p>}
+          {errors.businessType && <p className="text-xs text-red-500 mt-1.5">{errors.businessType}</p>}
 
           {data.businessType === 'other' && (
-            <div className="mt-3">
+            <div className="mt-4">
               <Input
                 value={data.businessTypeOther}
                 onChange={(e) => update('businessTypeOther', e.target.value)}
                 placeholder="Describe your business type..."
-                className="bg-background-surface border-border-default text-text-primary placeholder:text-text-muted"
+                className="bg-transparent border-0 border-b border-border-default rounded-none px-0 text-text-primary placeholder:text-text-muted/50 focus-visible:ring-0 focus-visible:border-text-primary transition-colors"
               />
-              {errors.businessTypeOther && <p className="text-sm text-red-500 mt-1">{errors.businessTypeOther}</p>}
+              {errors.businessTypeOther && <p className="text-xs text-red-500 mt-1.5">{errors.businessTypeOther}</p>}
             </div>
           )}
         </div>

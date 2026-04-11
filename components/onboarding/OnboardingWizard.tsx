@@ -150,7 +150,7 @@ export default function OnboardingWizard() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto">
+    <div>
       <StepIndicator currentStep={step} />
 
       <div className="min-h-[400px]">
@@ -173,33 +173,32 @@ export default function OnboardingWizard() {
       )}
 
       {/* Navigation */}
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-border-subtle">
-        <Button
+      <div className="flex items-center justify-between mt-10">
+        <button
           type="button"
-          variant="outline"
           onClick={prevStep}
           disabled={step === 0}
-          className="border-border-default text-text-secondary hover:text-text-primary rounded-none h-11 px-6"
+          className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none"
         >
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           Back
-        </Button>
+        </button>
 
         {step < 5 ? (
           <Button
             type="button"
             onClick={nextStep}
-            className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover rounded-none h-11 px-6"
+            className="bg-text-primary text-background-primary hover:bg-text-primary/90 rounded-none h-11 px-8 text-sm"
           >
             Next
-            <ArrowRight className="w-4 h-4 ml-2" />
+            <ArrowRight className="w-3.5 h-3.5 ml-2" />
           </Button>
         ) : (
           <Button
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="bg-accent-blue text-text-primary hover:bg-accent-blue-hover rounded-none h-11 px-8"
+            className="bg-text-primary text-background-primary hover:bg-text-primary/90 rounded-none h-11 px-8 text-sm"
           >
             {isSubmitting ? (
               <>
@@ -208,7 +207,7 @@ export default function OnboardingWizard() {
               </>
             ) : (
               <>
-                <Send className="w-4 h-4 mr-2" />
+                <Send className="w-3.5 h-3.5 mr-2" />
                 Submit Brief
               </>
             )}
