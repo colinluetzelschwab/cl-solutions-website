@@ -58,12 +58,15 @@ export default function HeroContent() {
           src="/images/hero/swiss-mountains.jpg"
           alt=""
           fill
-          className="object-cover opacity-[0.18]"
+          className="object-cover opacity-[0.70]"
+          style={{ objectPosition: 'center 55%' }}
           priority
           sizes="100vw"
         />
-        {/* Bottom fade to cream */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-transparent to-transparent" />
+        {/* Top: cream fades into sky */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background-primary via-transparent to-transparent" style={{ height: '45%' }} />
+        {/* Bottom: solid cream covering bottom rocks */}
+        <div className="absolute bottom-0 left-0 right-0 h-[40%] bg-gradient-to-t from-background-primary via-background-primary to-transparent" />
       </div>
 
       <motion.div initial="hidden" animate="visible" variants={container} className="relative z-10 min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 lg:px-16 pt-28 md:pt-32 pb-10 md:pb-14">
