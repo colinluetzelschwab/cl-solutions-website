@@ -66,7 +66,7 @@ export default function HeroContent() {
         {/* Top: cream fades into sky */}
         <div className="absolute top-0 left-0 right-0 h-[35%] bg-gradient-to-b from-background-primary to-transparent" />
         {/* Bottom: cream covers rocks completely */}
-        <div className="absolute bottom-0 left-0 right-0 h-[25%] bg-gradient-to-t from-background-primary via-background-primary/95 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-[12%] bg-gradient-to-t from-background-primary to-transparent" />
       </div>
 
       <motion.div initial="hidden" animate="visible" variants={container} className="relative z-10 min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 lg:px-16 pt-28 md:pt-32 pb-10 md:pb-14">
