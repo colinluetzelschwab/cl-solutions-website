@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import Logo from '@/components/ui/Logo'
 
 interface NavLink {
   label: string
@@ -55,13 +55,10 @@ export default function Navigation() {
             {/* Logo */}
             <div className="flex-shrink-0">
               <Link href="/" className="flex items-center">
-                <Image
-                  src={isScrolled ? "/images/cl-solutions-dark.png" : "/images/cl-solutions-light.png"}
-                  alt="CL Solutions"
+                <Logo
+                  variant={isScrolled ? 'dark' : 'dark'}
                   width={120}
-                  height={40}
                   className="h-8 md:h-10 w-auto"
-                  priority
                 />
               </Link>
             </div>

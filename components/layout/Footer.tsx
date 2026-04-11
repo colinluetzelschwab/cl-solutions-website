@@ -2,8 +2,8 @@
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { Mail } from 'lucide-react'
+import Logo from '@/components/ui/Logo'
 
 const navLinks = [
   { label: 'Services', href: '/services' },
@@ -30,13 +30,7 @@ export default function Footer() {
             <div className="flex items-center">
               <div>
                 <Link href="/">
-                  <Image
-                    src="/images/cl-solutions-dark.png"
-                    alt="CL Solutions"
-                    width={100}
-                    height={33}
-                    className="h-7 w-auto"
-                  />
+                  <Logo variant="dark" width={100} className="h-7 w-auto" />
                 </Link>
                 <p className="text-xs text-text-muted mt-2">Web Design Studio</p>
               </div>
