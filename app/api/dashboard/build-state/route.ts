@@ -111,6 +111,33 @@ export async function POST(request: NextRequest) {
       allowOverwrite: true,
     })
 
+    // Push ntfy notification on build completion or failure
+    if (entry.status === 'complete' || entry.status === 'failed') {
+      const ntfyTopic = process.env.NTFY_TOPIC || 'clsolutions-briefs'
+      const isComplete = entry.status === 'complete'
+      const durationStr = entry.duration != null
+        ? `${Math.round(entry.duration / 60)}m ${entry.duration % 60}s`
+        : null
+      try {
+        await fetch(`https://ntfy.sh/${ntfyTopic}`, {
+          method: 'POST',
+          headers: {
+            'Title': isComplete
+              ? `Build fertig: ${entry.clientName}`
+              : `Build fehlgeschlagen: ${entry.clientName}`,
+            'Tags': isComplete ? 'white_check_mark,rocket' : 'x,warning',
+            'Priority': isComplete ? '4' : '5',
+            'Click': 'https://clsolutions.dev/jarvis',
+          },
+          body: isComplete
+            ? [entry.deployUrl, durationStr].filter(Boolean).join(' · ')
+            : entry.slug,
+        })
+      } catch (ntfyErr) {
+        console.error('ntfy build notification error:', ntfyErr)
+      }
+    }
+
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('History save error:', error)
