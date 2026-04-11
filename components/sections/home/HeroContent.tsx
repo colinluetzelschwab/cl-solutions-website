@@ -52,25 +52,18 @@ export default function HeroContent() {
     <section className="relative min-h-[100svh] w-full overflow-hidden bg-background-primary">
       <Grain />
 
-      {/* Image — right side on desktop, behind text on mobile */}
+      {/* Full-width image at low opacity */}
       <div className="absolute inset-0 z-0">
-        {/* Image positioned right */}
-        <div className="absolute top-0 right-0 w-full md:w-[55%] h-full">
-          <Image
-            src="/images/hero/swiss-mountains.jpg"
-            alt=""
-            fill
-            className="object-cover"
-            priority
-            sizes="(max-width: 768px) 100vw, 55vw"
-          />
-          {/* Blend into cream bg — gradient from left */}
-          <div className="absolute inset-0 bg-gradient-to-r from-background-primary via-background-primary/90 md:via-background-primary/70 to-transparent" />
-          {/* Bottom blend */}
-          <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-transparent to-background-primary/30" />
-          {/* Desaturate + warm tint */}
-          <div className="absolute inset-0 bg-background-primary/20 mix-blend-color" />
-        </div>
+        <Image
+          src="/images/hero/swiss-mountains.jpg"
+          alt=""
+          fill
+          className="object-cover opacity-[0.18]"
+          priority
+          sizes="100vw"
+        />
+        {/* Bottom fade to cream */}
+        <div className="absolute inset-0 bg-gradient-to-t from-background-primary via-transparent to-transparent" />
       </div>
 
       <motion.div initial="hidden" animate="visible" variants={container} className="relative z-10 min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 lg:px-16 pt-28 md:pt-32 pb-10 md:pb-14">
