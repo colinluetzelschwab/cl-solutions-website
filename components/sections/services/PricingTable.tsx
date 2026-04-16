@@ -79,8 +79,8 @@ export default function PricingTable() {
             >
               {/* Popular Badge */}
               {tier.isPopular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-accent-blue text-white text-xs font-medium px-3 py-1 uppercase tracking-wide">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 z-10">
+                  <span className="inline-block whitespace-nowrap bg-accent-blue text-white text-[10px] md:text-xs font-medium px-3 py-1 uppercase tracking-wide">
                     Most Popular
                   </span>
                 </div>

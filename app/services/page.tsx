@@ -1,18 +1,22 @@
 import type { Metadata } from 'next'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
-import PageHero from '@/components/sections/shared/PageHero'
-import PricingTable from '@/components/sections/services/PricingTable'
-import PackageComparison from '@/components/sections/services/PackageComparison'
-import AddOnsList from '@/components/sections/services/AddOnsList'
-import MaintenanceCards from '@/components/sections/services/MaintenanceCards'
+import ServicesHero from '@/components/sections/services/ServicesHero'
+import PackageDetail from '@/components/sections/services/PackageDetail'
+import Extras from '@/components/sections/services/Extras'
 import FAQ from '@/components/sections/services/FAQ'
 import CTABanner from '@/components/sections/shared/CTABanner'
 
 export const metadata: Metadata = {
   title: 'Pricing & Packages',
   description:
-    'Simple fixed pricing. Starter CHF 1,500, Business CHF 3,500, Pro from CHF 7,500. Detailed side-by-side comparison of what each package includes.',
+    'Three packages. One standard. Starter CHF 1,500 · Business CHF 3,500 · Pro from CHF 7,500. Pages, process, design level and live references — priced upfront.',
+  openGraph: {
+    title: 'Pricing & Packages — CL Solutions',
+    description:
+      'Three packages. One standard. Priced up front, with live client references.',
+    type: 'article',
+  },
 }
 
 export default function ServicesPage() {
@@ -20,22 +24,19 @@ export default function ServicesPage() {
     <>
       <Navigation />
 
-      <PageHero
-        headline="Simple pricing. No surprises."
-        subtext="Three packages. Fixed scope. Fixed price. Pick what fits."
-      />
+      <main className="flex-1 bg-background-primary">
+        <ServicesHero />
 
-      <PricingTable />
+        <PackageDetail />
 
-      <PackageComparison />
+        <Extras />
 
-      <AddOnsList />
+        <FAQ />
 
-      <MaintenanceCards />
-
-      <FAQ />
-
-      <CTABanner />
+        <CTABanner
+          subtext="Fill out the brief wizard — we'll get back within 24 hours with a written proposal and Swiss Werkvertrag."
+        />
+      </main>
 
       <Footer />
     </>
