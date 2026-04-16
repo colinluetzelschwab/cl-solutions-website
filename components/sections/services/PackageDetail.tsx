@@ -207,12 +207,12 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
   return (
     <article
       id={`package-${pkg.id}`}
-      className={`scroll-mt-24 py-20 md:py-28 ${
+      className={`scroll-mt-24 py-16 md:py-24 ${
         isFirst ? '' : 'border-t border-border-default'
       }`}
     >
       {/* Chapter masthead */}
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 mb-12 md:mb-16">
+      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 mb-10 md:mb-14">
         <div className="flex items-baseline gap-4">
           <span
             className={`font-[family-name:var(--font-display)] italic text-5xl md:text-6xl lg:text-7xl leading-none ${
@@ -233,9 +233,9 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
       </div>
 
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
-          {/* LEFT — identity + price + CTA (sticky on desktop) */}
-          <div className="lg:col-span-4 lg:sticky lg:top-24 lg:self-start space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
+          {/* LEFT — identity + price + CTA (sticky on desktop, scrolls with right column on mobile) */}
+          <div className="lg:col-span-4 space-y-8 lg:sticky lg:top-24 lg:self-start">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-text-primary tracking-[-0.03em] leading-[0.95]">
               {pkg.name}
             </h2>
