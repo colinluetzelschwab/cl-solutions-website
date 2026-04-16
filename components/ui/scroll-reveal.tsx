@@ -38,8 +38,35 @@ function useIntersection(once = true) {
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+
+    // Safety fallback: under Lenis smooth scroll the observer can miss
+    // elements that enter and leave the viewport within a single animation
+    // frame, leaving them permanently invisible. Reveal anyway after 900ms.
+    const fallback = window.setTimeout(() => {
+      setIsVisible(true)
+      observer.disconnect()
+    }, 900)
+
+    return () => {
+      observer.disconnect()
+      window.clearTimeout(fallback)
+    }
   }, [once])
+
+  // After React commits the reveal, force a reflow. Chrome occasionally
+  // skips painting the opacity/transform transition when the element was
+  // not in the initial viewport at the moment the style changed, leaving
+  // it stuck at opacity:0 despite inline style saying opacity:1. Toggling
+  // display forces the compositor to recommit the new state.
+  useEffect(() => {
+    if (!isVisible) return
+    const el = ref.current
+    if (!el) return
+    const prev = el.style.display
+    el.style.display = 'none'
+    void el.offsetHeight
+    el.style.display = prev
+  }, [isVisible])
 
   return { ref, isVisible }
 }
