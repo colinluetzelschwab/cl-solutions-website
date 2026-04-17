@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer'
 import ProjectGrid from '@/components/work/ProjectGrid'
 import CTABanner from '@/components/sections/shared/CTABanner'
 import ScrollReveal from '@/components/ui/scroll-reveal'
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
   title: 'Our Work — CL Solutions',
@@ -14,6 +15,12 @@ export const metadata: Metadata = {
 export default function WorkPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        trail={[
+          { name: 'Home', url: 'https://clsolutions.dev' },
+          { name: 'Work', url: 'https://clsolutions.dev/work' },
+        ]}
+      />
       <Navigation />
 
       <section className="w-full bg-background-primary py-20 md:py-32 lg:py-40">

@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const VPS_URL = process.env.VPS_BUILD_URL || 'http://46.225.88.110:3333'
-const VPS_TOKEN = process.env.VPS_BUILD_TOKEN || 'cl-build-21cc7b7be633ce72a982f84efda7eee6'
-
 function isAuthed(request: NextRequest): boolean {
   return request.cookies.get('dashboard_auth')?.value === 'true'
+}
+
+function getVpsConfig(): { url: string; token: string } | NextResponse {
+  const url = process.env.VPS_BUILD_URL
+  const token = process.env.VPS_BUILD_TOKEN
+  if (!url || !token) {
+    return NextResponse.json(
+      { error: 'VPS build API not configured (VPS_BUILD_URL or VPS_BUILD_TOKEN missing)' },
+      { status: 500 }
+    )
+  }
+  return { url, token }
 }
 
 /**
@@ -16,6 +25,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const cfg = getVpsConfig()
+  if (cfg instanceof NextResponse) return cfg
+
   try {
     const body = await request.json()
     const { briefUrl, clientName } = body as { briefUrl: string; clientName: string }
@@ -24,11 +36,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'briefUrl and clientName required' }, { status: 400 })
     }
 
-    const res = await fetch(`${VPS_URL}/build`, {
+    const res = await fetch(`${cfg.url}/build`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VPS_TOKEN}`,
+        'Authorization': `Bearer ${cfg.token}`,
       },
       body: JSON.stringify({ briefUrl, clientName }),
     })
@@ -49,15 +61,18 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
+  const cfg = getVpsConfig()
+  if (cfg instanceof NextResponse) return cfg
+
   try {
     const body = await request.json()
     const { slug } = body as { slug: string }
 
-    const res = await fetch(`${VPS_URL}/status`, {
+    const res = await fetch(`${cfg.url}/status`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${VPS_TOKEN}`,
+        'Authorization': `Bearer ${cfg.token}`,
       },
       body: JSON.stringify({ slug }),
     })

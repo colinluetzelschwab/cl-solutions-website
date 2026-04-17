@@ -6,6 +6,7 @@ import PackageDetail from '@/components/sections/services/PackageDetail'
 import Extras from '@/components/sections/services/Extras'
 import FAQ from '@/components/sections/services/FAQ'
 import CTABanner from '@/components/sections/shared/CTABanner'
+import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
   title: 'Pricing & Packages',
@@ -22,6 +23,12 @@ export const metadata: Metadata = {
 export default function ServicesPage() {
   return (
     <>
+      <BreadcrumbJsonLd
+        trail={[
+          { name: 'Home', url: 'https://clsolutions.dev' },
+          { name: 'Services', url: 'https://clsolutions.dev/services' },
+        ]}
+      />
       <Navigation />
 
       <main className="flex-1 bg-background-primary">

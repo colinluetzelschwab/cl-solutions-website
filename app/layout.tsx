@@ -47,12 +47,21 @@ export const metadata: Metadata = {
     siteName: "CL Solutions",
     locale: "en_CH",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "CL Solutions — Premium Website Design in Switzerland",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "CL Solutions — Premium Website Design in Switzerland",
     description:
       "Fast, modern websites for Swiss businesses. Fixed pricing, 3–5 day delivery.",
+    images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
 };
