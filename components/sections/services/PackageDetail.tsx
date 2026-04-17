@@ -234,8 +234,10 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
 
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
-          {/* LEFT — identity + price + CTA (sticky on desktop, scrolls with right column on mobile) */}
-          <div className="lg:col-span-4 space-y-8 lg:sticky lg:top-24 lg:self-start">
+          {/* LEFT — identity + price + CTA. Natural flow: sticky created a
+              ~1250px "hanging" window where the left column froze while the
+              right column scrolled past, which felt like the page was stuck. */}
+          <div className="lg:col-span-4 space-y-8">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-text-primary tracking-[-0.03em] leading-[0.95]">
               {pkg.name}
             </h2>
