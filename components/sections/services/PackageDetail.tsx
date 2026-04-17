@@ -207,45 +207,45 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
   return (
     <article
       id={`package-${pkg.id}`}
-      className={`scroll-mt-24 py-16 md:py-24 ${
+      className={`scroll-mt-24 py-12 md:py-16 ${
         isFirst ? '' : 'border-t border-border-default'
       }`}
     >
-      {/* Chapter masthead */}
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 mb-10 md:mb-14">
-        <div className="flex items-baseline gap-4">
-          <span
-            className={`font-[family-name:var(--font-display)] italic text-5xl md:text-6xl lg:text-7xl leading-none ${
-              accent ? 'text-[#C8956C]' : 'text-text-primary/30'
-            }`}
-          >
-            {pkg.chapter}
-          </span>
-          <span className="flex-1 h-px bg-border-subtle" aria-hidden />
-          <span
-            className={`font-mono text-[11px] tracking-[0.3em] uppercase ${
-              accent ? 'text-[#C8956C]' : 'text-text-muted'
-            }`}
-          >
-            {accent ? 'Most popular' : `Tier · ${pkg.id}`}
-          </span>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 lg:items-start">
-          {/* LEFT — identity + price + CTA. Natural flow: sticky created a
-              ~1250px "hanging" window where the left column froze while the
-              right column scrolled past, which felt like the page was stuck. */}
-          <div className="lg:col-span-4 space-y-8">
+        {/* Chapter masthead */}
+        <div className="mb-8 md:mb-10">
+          <div className="flex items-baseline gap-4">
+            <span
+              className={`font-[family-name:var(--font-display)] italic text-5xl md:text-6xl lg:text-7xl leading-none ${
+                accent ? 'text-[#C8956C]' : 'text-text-primary/30'
+              }`}
+            >
+              {pkg.chapter}
+            </span>
+            <span className="flex-1 h-px bg-border-subtle" aria-hidden />
+            <span
+              className={`font-mono text-[11px] tracking-[0.3em] uppercase ${
+                accent ? 'text-[#C8956C]' : 'text-text-muted'
+              }`}
+            >
+              {accent ? 'Most popular' : `Tier · ${pkg.id}`}
+            </span>
+          </div>
+        </div>
+
+        {/* IDENTITY BAND — full-width, two balanced columns. No empty left
+            column trailing through the rest of the tier. */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
+          <div className="lg:col-span-7 flex flex-col justify-center">
             <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-text-primary tracking-[-0.03em] leading-[0.95]">
               {pkg.name}
             </h2>
-
-            <p className="text-lg md:text-xl text-text-secondary leading-[1.45] font-light max-w-sm">
+            <p className="mt-6 md:mt-8 text-lg md:text-xl text-text-secondary leading-[1.45] font-light max-w-xl">
               {pkg.bestForLong}
             </p>
+          </div>
 
+          <div className="lg:col-span-5 space-y-6">
             {/* Price panel — editorial ledger */}
             <div className="border-t border-b border-border-default py-6 space-y-4">
               <div>
@@ -289,9 +289,10 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
+        </div>
 
-          {/* RIGHT — detail */}
-          <div className="lg:col-span-8 space-y-14">
+        {/* DETAILS — full-width single flow, no left/right imbalance */}
+        <div className="space-y-12 md:space-y-14">
             {/* Typical pages */}
             <ScrollReveal>
               <div>
@@ -487,7 +488,6 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
             )}
           </div>
         </div>
-      </div>
     </article>
   )
 }
