@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer'
 import { ArrowRight, Mail } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Contact — CL Solutions',
+  title: 'Contact',
   description:
     'Get in touch with CL Solutions. Premium websites for Swiss businesses.',
 }

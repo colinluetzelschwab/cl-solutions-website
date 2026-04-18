@@ -7,7 +7,7 @@ import ScrollReveal from '@/components/ui/scroll-reveal'
 import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: 'Our Work — CL Solutions',
+  title: 'Our Work',
   description:
     'Recent website projects for Swiss businesses. Custom-built, never from a template.',
 }

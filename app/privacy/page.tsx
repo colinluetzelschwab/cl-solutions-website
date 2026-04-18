@@ -3,7 +3,7 @@ import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — CL Solutions',
+  title: 'Privacy Policy',
   description: 'Privacy policy for CL Solutions. Learn how we handle your data.',
 }
 

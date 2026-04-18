@@ -5,7 +5,7 @@ import Footer from '@/components/layout/Footer'
 import OnboardingWizard from '@/components/onboarding/OnboardingWizard'
 
 export const metadata: Metadata = {
-  title: 'Start a Project — CL Solutions',
+  title: 'Start a Project',
   description:
     'Tell us about your project. Fill in your brief and we respond within 24 hours with a plan.',
 }

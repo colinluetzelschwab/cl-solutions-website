@@ -3,7 +3,7 @@ import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'Imprint — CL Solutions',
+  title: 'Imprint',
   description: 'Legal information and imprint for CL Solutions.',
 }
 
