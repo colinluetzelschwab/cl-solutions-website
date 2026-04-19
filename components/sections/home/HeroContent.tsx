@@ -34,7 +34,7 @@ const tokens: Token[] = [
   { kind: 'word',      text: 'We' },
   { kind: 'word',      text: 'build' },
   { kind: 'word',      text: 'small,' },
-  { kind: 'italic',    text: 'slow,', color: 'soft' },
+  { kind: 'italic',    text: 'quiet,', color: 'soft' },
   { kind: 'br' },
   { kind: 'word',      text: 'deliberate' },
   { kind: 'word',      text: 'websites' },
