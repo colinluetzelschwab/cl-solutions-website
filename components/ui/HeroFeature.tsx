@@ -18,19 +18,19 @@ interface Feature {
 // rather than an awkwardly cropped slice of a desktop capture.
 const features: Feature[] = [
   {
-    image: '/work/core-medical-mobile.jpg',
+    image: '/work/core-medical-mobile.png',
     client: 'Core Medical',
     sector: 'Healthcare · Zürich',
     href: 'https://coremedical.ch',
   },
   {
-    image: '/work/lucasvision-mobile.jpg',
+    image: '/work/lucasvision-mobile.png',
     client: 'LucasVision',
     sector: 'Photo &amp; Film · CH',
     href: 'https://lucasvision.vercel.app',
   },
   {
-    image: '/work/aariviiva-mobile.jpg',
+    image: '/work/aariviiva-mobile.png',
     client: 'Ääriviiva',
     sector: 'Graphic Design · FI',
     href: 'https://aariviiva.vercel.app',
