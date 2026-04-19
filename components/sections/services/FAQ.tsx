@@ -6,10 +6,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-interface FAQItem {
-  question: string
-  answer: string
-}
+interface FAQItem { question: string; answer: string }
 
 const faqs: FAQItem[] = [
   {
@@ -46,28 +43,21 @@ const faqs: FAQItem[] = [
 
 export default function FAQ() {
   return (
-    <section className="w-full bg-background-surface py-16 md:py-24">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <p className="text-sm font-medium text-accent-blue tracking-[0.25em] uppercase text-center mb-4">
-          Common questions
-        </p>
-        <h2 className="text-3xl md:text-4xl font-semibold text-text-primary text-center mb-12">
-          Everything you need to know.
-        </h2>
+    <section className="relative w-full py-24 md:py-32 border-t border-[color:var(--border-subtle)]">
+      <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16">
+        <div className="mb-14 md:mb-20">
+          <p className="eyebrow mb-6">Chapter · V · Questions</p>
+          <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] text-[color:var(--ink)] leading-[1.02]">
+            Everything you{' '}
+            <span className="serif-italic text-[color:var(--accent)]">need to know.</span>
+          </h2>
+        </div>
 
-        <Accordion className="space-y-4">
+        <Accordion>
           {faqs.map((faq, index) => (
-            <AccordionItem
-              key={index}
-              value={`item-${index}`}
-              className="border border-border-default bg-background-primary px-6 py-2"
-            >
-              <AccordionTrigger className="text-left text-text-primary hover:text-accent-blue transition-colors">
-                {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-text-secondary pt-2">
-                {faq.answer}
-              </AccordionContent>
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger>{faq.question}</AccordionTrigger>
+              <AccordionContent>{faq.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>

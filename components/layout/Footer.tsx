@@ -2,41 +2,87 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 
 export default function Footer() {
   return (
-    <footer className="w-full border-t border-border-subtle bg-background-primary">
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16 py-10 md:py-14">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
-          {/* Left — Logo + tagline */}
-          <div>
-            <Link href="/">
-              <Logo variant="dark" />
+    <footer className="relative mt-24 md:mt-32 w-full">
+      {/* Top gradient divider */}
+      <div className="divider-gradient w-full" />
+
+      <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16 pt-16 pb-12">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8">
+          {/* Brand block */}
+          <div className="md:col-span-5 flex flex-col gap-5">
+            <Link href="/" aria-label="CL Solutions — Home">
+              <Logo />
             </Link>
-            <p className="text-xs text-text-muted mt-3">Web Design Studio · Switzerland</p>
+            <p className="measure text-sm text-[color:var(--ink-muted)] leading-relaxed">
+              A boutique web studio building fast, custom websites for Swiss businesses.
+              Fixed scope. Fixed pricing. Shipped in 3–5 days.
+            </p>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="dot-live" aria-hidden />
+              <span className="eyebrow">Booking Q3 · 2026</span>
+            </div>
           </div>
 
-          {/* Center — nav */}
-          <nav className="flex gap-6">
-            {['Services', 'Work', 'Contact'].map((l) => (
-              <Link key={l} href={`/${l.toLowerCase()}`} className="text-sm text-text-secondary hover:text-text-primary transition-colors">
-                {l}
-              </Link>
-            ))}
-          </nav>
+          {/* Explore */}
+          <div className="md:col-span-3">
+            <p className="eyebrow mb-4">Explore</p>
+            <ul className="flex flex-col gap-2.5">
+              {[
+                { label: 'Services', href: '/services' },
+                { label: 'Work', href: '/work' },
+                { label: 'Contact', href: '/contact' },
+                { label: 'Start a project', href: '/contact/start' },
+              ].map((l) => (
+                <li key={l.label}>
+                  <Link
+                    href={l.href}
+                    className="text-sm text-[color:var(--ink-muted)] hover:text-[color:var(--ink)] transition-colors inline-flex items-center gap-1.5 group"
+                  >
+                    {l.label}
+                    <ArrowUpRight className="h-3.5 w-3.5 opacity-0 -translate-x-0.5 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          {/* Right — email */}
-          <a href="mailto:colin@clsolutions.dev" className="text-sm text-text-secondary hover:text-text-primary transition-colors">
-            colin@clsolutions.dev
-          </a>
+          {/* Reach */}
+          <div className="md:col-span-4">
+            <p className="eyebrow mb-4">Reach</p>
+            <ul className="flex flex-col gap-2.5">
+              <li>
+                <a
+                  href="mailto:colin@clsolutions.dev"
+                  className="text-sm text-[color:var(--ink)] hover:text-[color:var(--accent-bright)] transition-colors inline-flex items-center gap-1.5 group"
+                >
+                  colin@clsolutions.dev
+                  <ArrowUpRight className="h-3.5 w-3.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </a>
+              </li>
+              <li className="text-sm text-[color:var(--ink-muted)]">Zurich · Switzerland</li>
+              <li className="text-sm text-[color:var(--ink-muted)]">Response ≤ 24 h</li>
+            </ul>
+          </div>
         </div>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mt-10 pt-6 border-t border-border-subtle">
-          <p className="text-xs text-text-muted">© 2026 CL Solutions</p>
+        {/* Base row — editorial sendoff */}
+        <div className="mt-14 pt-6 border-t border-[color:var(--border-subtle)] flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+          <p className="text-xs text-[color:var(--ink-faint)] tabular">
+            © 2026 CL Solutions · Designed &amp; built by{' '}
+            <span className="serif-italic text-[color:var(--ink-muted)]">Colin L&uuml;tzelschwab</span>
+          </p>
           <div className="flex gap-6">
-            <Link href="/privacy" className="text-xs text-text-muted hover:text-text-secondary transition-colors">Privacy</Link>
-            <Link href="/imprint" className="text-xs text-text-muted hover:text-text-secondary transition-colors">Imprint</Link>
+            <Link href="/privacy" className="text-xs text-[color:var(--ink-faint)] hover:text-[color:var(--ink-muted)] transition-colors">
+              Privacy
+            </Link>
+            <Link href="/imprint" className="text-xs text-[color:var(--ink-faint)] hover:text-[color:var(--ink-muted)] transition-colors">
+              Imprint
+            </Link>
           </div>
         </div>
       </div>

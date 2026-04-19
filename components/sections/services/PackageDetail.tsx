@@ -1,32 +1,20 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight, ArrowRight } from 'lucide-react'
-import ScrollReveal from '@/components/ui/scroll-reveal'
+import { ArrowUpRight, ArrowRight, Minus } from 'lucide-react'
 
-interface Page {
-  name: string
-  description: string
-}
-
-interface IncludedExtra {
-  text: string
-}
-
-interface ProcessStep {
-  n: string
-  label: string
-}
-
+interface Page { name: string; description: string }
+interface IncludedExtra { text: string }
+interface ProcessStep { n: string; label: string }
 interface Reference {
   client: string
   sector: string
   note: string
   href: string
   image?: string
+  imageSwap?: string
   external?: boolean
 }
-
 interface Package {
   id: 'starter' | 'business' | 'pro'
   chapter: string
@@ -38,10 +26,7 @@ interface Package {
   bestForLong: string
   pages: Page[]
   pageNote: string
-  design: {
-    label: string
-    description: string
-  }
+  design: { label: string; description: string }
   extras?: IncludedExtra[]
   notIncluded: string[]
   process: ProcessStep[]
@@ -52,7 +37,7 @@ interface Package {
 const packages: Package[] = [
   {
     id: 'starter',
-    chapter: 'II',
+    chapter: 'I',
     name: 'Starter',
     price: 'CHF 1,500',
     delivery: '3–5 business days',
@@ -61,10 +46,10 @@ const packages: Package[] = [
     bestForLong:
       'A focused brochure site that converts — one well-crafted funnel, nothing that looks cheap, nothing you don’t need.',
     pages: [
-      { name: 'Home', description: 'Hero · services snapshot · contact prompt' },
-      { name: 'About', description: 'Story · approach · why you' },
+      { name: 'Home',     description: 'Hero · services snapshot · contact prompt' },
+      { name: 'About',    description: 'Story · approach · why you' },
       { name: 'Services', description: 'What you offer, one clear block each' },
-      { name: 'Contact', description: 'Form · email · location · legal' },
+      { name: 'Contact',  description: 'Form · email · location · legal' },
     ],
     pageNote: 'Up to 4 pages. Add more for CHF 150 each.',
     design: {
@@ -88,7 +73,7 @@ const packages: Package[] = [
   },
   {
     id: 'business',
-    chapter: 'III',
+    chapter: 'II',
     name: 'Business',
     price: 'CHF 3,500',
     delivery: '5–7 business days',
@@ -97,12 +82,12 @@ const packages: Package[] = [
     bestForLong:
       'The sweet spot for most Swiss SMEs. A real brand system, editable content, SEO that ranks, animation that carries meaning — not decoration.',
     pages: [
-      { name: 'Home', description: 'Hero · services · proof · team · contact' },
-      { name: 'About', description: 'Story · values · team' },
-      { name: 'Services', description: 'Detailed offering with sub-services' },
-      { name: 'Team', description: 'CMS-managed bios + photos' },
-      { name: 'Blog / News', description: 'CMS-managed, SEO-ready' },
-      { name: 'Contact', description: 'Form · email · map · legal' },
+      { name: 'Home',       description: 'Hero · services · proof · team · contact' },
+      { name: 'About',      description: 'Story · values · team' },
+      { name: 'Services',   description: 'Detailed offering with sub-services' },
+      { name: 'Team',       description: 'CMS-managed bios + photos' },
+      { name: 'Blog / News',description: 'CMS-managed, SEO-ready' },
+      { name: 'Contact',    description: 'Form · email · map · legal' },
     ],
     pageNote: 'Up to 6 pages. Structure tuned to your business.',
     design: {
@@ -138,13 +123,14 @@ const packages: Package[] = [
       note: 'Single-page with anchor nav, Sanity CMS, founders module, Resend contact, bilingual-ready.',
       href: 'https://coremedical.ch',
       image: '/work/core-medical.jpg',
+      imageSwap: '/work/lucasvision.jpg',
       external: true,
     },
     isHighlight: true,
   },
   {
     id: 'pro',
-    chapter: 'IV',
+    chapter: 'III',
     name: 'Pro',
     price: 'From CHF 7,500',
     delivery: 'Scoped per project',
@@ -153,10 +139,10 @@ const packages: Package[] = [
     bestForLong:
       'When off-the-shelf stops scaling. Custom design direction, multi-language, real integrations (Supabase, Stripe, booking, CRM), production e-commerce, retainer-ready.',
     pages: [
-      { name: 'Custom page count', description: 'No artificial cap' },
-      { name: 'Multilingual', description: 'DE + EN standard, more as add-on' },
-      { name: 'Product / booking', description: 'Stripe · calendar · reservations' },
-      { name: 'Protected areas', description: 'Member logins, dashboards, admin' },
+      { name: 'Custom page count',  description: 'No artificial cap' },
+      { name: 'Multilingual',       description: 'DE + EN standard, more as add-on' },
+      { name: 'Product / booking',  description: 'Stripe · calendar · reservations' },
+      { name: 'Protected areas',    description: 'Member logins, dashboards, admin' },
     ],
     pageNote: 'Scope defined during the discovery phase.',
     design: {
@@ -194,11 +180,21 @@ const packages: Package[] = [
       sector: 'Swiss cycling marketplace',
       note: 'Supabase auth + Stripe Connect escrow, preview gate, listings CRUD, transactional email, cron payout webhook, Pro-Shop industrial design.',
       href: 'https://www.veloscout.ch',
-      image: '/work/core-medical.jpg', // placeholder; no veloscout image yet
+      image: '/work/aariviiva.jpg',
+      imageSwap: '/work/lucasvision.jpg',
       external: true,
     },
   },
 ]
+
+function Row({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-10 border-t border-[color:var(--border-subtle)] pt-10">
+      <p className="eyebrow">{label}</p>
+      <div>{children}</div>
+    </div>
+  )
+}
 
 function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
   const accent = pkg.isHighlight
@@ -207,297 +203,184 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
   return (
     <article
       id={`package-${pkg.id}`}
-      className={`scroll-mt-24 py-12 md:py-16 ${
-        isFirst ? '' : 'border-t border-border-default'
-      }`}
+      className={`scroll-mt-28 py-14 md:py-20 ${isFirst ? '' : 'border-t border-[color:var(--border-subtle)]'}`}
     >
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
+      <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
         {/* Chapter masthead */}
-        <div className="mb-8 md:mb-10">
-          <div className="flex items-baseline gap-4">
-            <span
-              className={`font-[family-name:var(--font-display)] italic text-5xl md:text-6xl lg:text-7xl leading-none ${
-                accent ? 'text-[#C8956C]' : 'text-text-primary/30'
-              }`}
-            >
-              {pkg.chapter}
-            </span>
-            <span className="flex-1 h-px bg-border-subtle" aria-hidden />
-            <span
-              className={`font-mono text-[11px] tracking-[0.3em] uppercase ${
-                accent ? 'text-[#C8956C]' : 'text-text-muted'
-              }`}
-            >
-              {accent ? 'Most popular' : `Tier · ${pkg.id}`}
-            </span>
-          </div>
+        <div className="mb-10 md:mb-14 flex items-baseline gap-5">
+          <span
+            className={`serif-italic text-5xl md:text-6xl lg:text-7xl leading-none ${
+              accent ? 'text-[color:var(--accent)]' : 'text-[color:var(--ink-faint)]/70'
+            }`}
+          >
+            {pkg.chapter}
+          </span>
+          <span className="flex-1 divider-gradient" aria-hidden />
+          <span className={`eyebrow ${accent ? 'text-[color:var(--accent)]' : ''}`}>
+            {accent ? 'Most picked' : `Tier · ${pkg.id}`}
+          </span>
         </div>
 
-        {/* IDENTITY BAND — full-width, two balanced columns. No empty left
-            column trailing through the rest of the tier. */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12 md:mb-16">
+        {/* Identity band — editorial two-col */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-14">
           <div className="lg:col-span-7 flex flex-col justify-center">
-            <h2 className="text-5xl md:text-6xl lg:text-7xl font-light text-text-primary tracking-[-0.03em] leading-[0.95]">
+            <h2 className="display text-5xl md:text-6xl lg:text-7xl text-[color:var(--ink)]">
               {pkg.name}
             </h2>
-            <p className="mt-6 md:mt-8 text-lg md:text-xl text-text-secondary leading-[1.45] font-light max-w-xl">
+            <p className="mt-6 md:mt-8 text-lg md:text-xl text-[color:var(--ink-muted)] leading-[1.5] max-w-xl">
               {pkg.bestForLong}
             </p>
           </div>
 
-          <div className="lg:col-span-5 space-y-6">
-            {/* Price panel — editorial ledger */}
-            <div className="border-t border-b border-border-default py-6 space-y-4">
-              <div>
-                <p className="font-mono text-[10px] text-text-muted tracking-[0.3em] uppercase mb-1.5">
-                  Investment
-                </p>
-                <p className="text-4xl md:text-5xl font-light text-text-primary tracking-[-0.025em]">
-                  {pkg.price}
-                </p>
-              </div>
-              <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1.5 text-sm border-t border-border-subtle pt-4">
-                <dt className="font-mono text-[10px] text-text-muted tracking-[0.2em] uppercase self-center">
-                  Delivery
-                </dt>
-                <dd className="text-text-secondary text-sm">{pkg.delivery}</dd>
-                <dt className="font-mono text-[10px] text-text-muted tracking-[0.2em] uppercase self-center">
-                  Revisions
-                </dt>
-                <dd className="text-text-secondary text-sm">{pkg.revisions}</dd>
-                <dt className="font-mono text-[10px] text-text-muted tracking-[0.2em] uppercase self-center">
-                  Best for
-                </dt>
-                <dd className="text-text-secondary text-sm leading-snug">
-                  {pkg.bestFor}
-                </dd>
+          <div className="lg:col-span-5">
+            <div className="border-y border-[color:var(--border-default)] py-6">
+              <p className="eyebrow mb-2">Investment</p>
+              <p className="display text-4xl md:text-5xl text-[color:var(--ink)]">
+                {pkg.price}
+              </p>
+
+              <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-sm border-t border-[color:var(--border-subtle)] pt-5">
+                <dt className="eyebrow self-center">Delivery</dt>
+                <dd className="text-[color:var(--ink-muted)]">{pkg.delivery}</dd>
+                <dt className="eyebrow self-center">Revisions</dt>
+                <dd className="text-[color:var(--ink-muted)]">{pkg.revisions}</dd>
+                <dt className="eyebrow self-center">Best for</dt>
+                <dd className="text-[color:var(--ink-muted)] leading-snug">{pkg.bestFor}</dd>
               </dl>
             </div>
 
-            {/* CTA */}
             <Link
               href={`/contact/start?package=${pkg.id}`}
-              className={`group inline-flex w-full items-center justify-between gap-3 px-6 py-5 transition-all duration-200 ${
-                accent
-                  ? 'bg-accent-blue text-white hover:bg-accent-blue-hover'
-                  : 'bg-text-primary text-background-primary hover:bg-text-primary/90'
-              }`}
+              className="mt-7 btn btn-primary w-full justify-between"
             >
-              <span className="text-sm font-medium tracking-wide">
-                Start {pkg.name} brief
-              </span>
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              Start {pkg.name} brief
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
 
-        {/* DETAILS — full-width single flow, no left/right imbalance */}
-        <div className="space-y-12 md:space-y-14">
-            {/* Typical pages */}
-            <ScrollReveal>
-              <div>
-                <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase mb-6">
-                  Typical pages
-                </p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-                  {pkg.pages.map((p, i) => (
-                    <li
-                      key={p.name}
-                      className="flex items-baseline gap-4 py-4 border-t border-border-subtle"
-                    >
-                      <span className="font-mono text-[11px] text-text-muted tabular-nums shrink-0 mt-0.5">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base md:text-lg text-text-primary font-medium">
-                          {p.name}
-                        </p>
-                        <p className="text-sm text-text-secondary mt-1 leading-relaxed">
-                          {p.description}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-                <p className="mt-5 text-xs text-text-muted italic">
-                  {pkg.pageNote}
-                </p>
-              </div>
-            </ScrollReveal>
+        <div className="space-y-10 md:space-y-12">
+          <Row label="Typical pages">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
+              {pkg.pages.map((p, i) => (
+                <li key={p.name} className="flex items-baseline gap-4 py-4 border-t border-[color:var(--border-subtle)]">
+                  <span className="eyebrow !tracking-[0.18em] text-[color:var(--accent)] tabular shrink-0 mt-0.5">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-base md:text-lg text-[color:var(--ink)] font-medium">{p.name}</p>
+                    <p className="text-sm text-[color:var(--ink-muted)] mt-1 leading-relaxed">{p.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 text-xs text-[color:var(--ink-faint)] italic">{pkg.pageNote}</p>
+          </Row>
 
-            {/* Design level */}
-            <ScrollReveal>
-              <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 md:gap-10 border-t border-border-subtle pt-10">
-                <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase">
-                  Design level
-                </p>
-                <div>
-                  <p className="text-xl md:text-2xl font-light text-text-primary tracking-[-0.01em] mb-3">
-                    <span className="font-[family-name:var(--font-display)] italic text-[#C8956C]">
-                      {pkg.design.label}
-                    </span>
-                  </p>
-                  <p className="text-base text-text-secondary leading-[1.65] max-w-2xl">
-                    {pkg.design.description}
-                  </p>
-                </div>
-              </div>
-            </ScrollReveal>
+          <Row label="Design level">
+            <p className="display text-xl md:text-2xl text-[color:var(--ink)] mb-3">
+              <span className="serif-italic text-[color:var(--accent)]">{pkg.design.label}</span>
+            </p>
+            <p className="text-base text-[color:var(--ink-muted)] leading-[1.65] measure">
+              {pkg.design.description}
+            </p>
+          </Row>
 
-            {/* Beyond previous tier */}
-            {pkg.extras && pkg.extras.length > 0 && (
-              <ScrollReveal>
-                <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 md:gap-10 border-t border-border-subtle pt-10">
-                  <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase">
-                    {pkg.id === 'pro' ? 'Beyond Business' : 'Beyond Starter'}
-                  </p>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5">
-                    {pkg.extras.map((e) => (
-                      <li
-                        key={e.text}
-                        className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed"
-                      >
-                        <span
-                          className="mt-2 inline-block w-3 h-[1px] bg-[#C8956C] shrink-0"
-                          aria-hidden
-                        />
-                        <span>{e.text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </ScrollReveal>
-            )}
+          {pkg.extras && pkg.extras.length > 0 && (
+            <Row label={pkg.id === 'pro' ? 'Beyond Business' : 'Beyond Starter'}>
+              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+                {pkg.extras.map((e) => (
+                  <li key={e.text} className="flex items-start gap-3 text-sm text-[color:var(--ink-muted)] leading-relaxed">
+                    <span className="mt-2 inline-block w-3 h-[2px] bg-[color:var(--accent)] shrink-0" aria-hidden />
+                    <span>{e.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </Row>
+          )}
 
-            {/* Not included */}
-            <ScrollReveal>
-              <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 md:gap-10 border-t border-border-subtle pt-10">
-                <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase">
-                  Not included
-                </p>
-                <ul className="space-y-2.5">
-                  {pkg.notIncluded.map((n) => (
-                    <li
-                      key={n}
-                      className="flex items-start gap-3 text-sm text-text-muted leading-relaxed"
-                    >
-                      <span
-                        className="mt-2 inline-block w-2 h-[1px] bg-text-muted/60 shrink-0"
+          <Row label="Not included">
+            <ul className="space-y-2.5">
+              {pkg.notIncluded.map((n) => (
+                <li key={n} className="flex items-start gap-3 text-sm text-[color:var(--ink-faint)] leading-relaxed">
+                  <Minus className="mt-1 h-3 w-3 text-[color:var(--ink-faint)]/60 shrink-0" aria-hidden />
+                  <span>{n}</span>
+                </li>
+              ))}
+            </ul>
+          </Row>
+
+          <Row label="Process">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+              {pkg.process.map((step, i) => (
+                <React.Fragment key={step.n}>
+                  <div className="flex items-baseline gap-2">
+                    <span className="eyebrow !tracking-[0.18em] text-[color:var(--accent)] tabular">{step.n}</span>
+                    <span className="text-sm md:text-base text-[color:var(--ink)]">{step.label}</span>
+                  </div>
+                  {i < pkg.process.length - 1 && (
+                    <span className="text-[color:var(--ink-faint)]/40 text-xs" aria-hidden>→</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </Row>
+
+          {pkg.reference && (
+            <Row label="Live reference">
+              <a
+                href={pkg.reference.href}
+                target={pkg.reference.external ? '_blank' : undefined}
+                rel={pkg.reference.external ? 'noopener noreferrer' : undefined}
+                className="group block"
+              >
+                {pkg.reference.image && (
+                  <div className="dual-img relative aspect-[16/9] mb-6 border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]">
+                    <Image
+                      src={pkg.reference.image}
+                      alt={pkg.reference.client}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 66vw"
+                      className="dual-img__base object-cover"
+                    />
+                    {pkg.reference.imageSwap && (
+                      <Image
+                        src={pkg.reference.imageSwap}
+                        alt=""
+                        fill
+                        sizes="(max-width: 1024px) 100vw, 66vw"
+                        className="dual-img__swap object-cover"
                         aria-hidden
+                        loading="lazy"
                       />
-                      <span>{n}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ScrollReveal>
-
-            {/* Process */}
-            <ScrollReveal>
-              <div className="grid grid-cols-1 md:grid-cols-[160px_1fr] gap-4 md:gap-10 border-t border-border-subtle pt-10">
-                <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase">
-                  Process
-                </p>
-                <div className="flex flex-wrap items-baseline gap-x-5 gap-y-3">
-                  {pkg.process.map((step, i) => (
-                    <React.Fragment key={step.n}>
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-mono text-[11px] text-[#C8956C] tabular-nums">
-                          {step.n}
-                        </span>
-                        <span className="text-sm md:text-base text-text-primary">
-                          {step.label}
-                        </span>
-                      </div>
-                      {i < pkg.process.length - 1 && (
-                        <span
-                          className="text-text-muted/40 text-xs"
-                          aria-hidden
-                        >
-                          →
-                        </span>
-                      )}
-                    </React.Fragment>
-                  ))}
-                </div>
-              </div>
-            </ScrollReveal>
-
-            {/* Live reference — with image */}
-            {pkg.reference && (
-              <ScrollReveal>
-                <div className="border-t border-border-subtle pt-10">
-                  <p className="font-mono text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase mb-6">
-                    Live reference · In production
-                  </p>
-                  <a
-                    href={pkg.reference.href}
-                    target={pkg.reference.external ? '_blank' : undefined}
-                    rel={
-                      pkg.reference.external
-                        ? 'noopener noreferrer'
-                        : undefined
-                    }
-                    className="group block"
-                  >
-                    {pkg.reference.image && (
-                      <div className="relative aspect-[16/9] overflow-hidden bg-background-elevated mb-5 border border-border-default">
-                        <Image
-                          src={pkg.reference.image}
-                          alt={pkg.reference.client}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 66vw"
-                          className="object-cover transition-transform duration-[800ms] ease-out group-hover:scale-[1.03]"
-                        />
-                        {/* Corner tick */}
-                        <span
-                          className="absolute top-0 right-0 w-8 h-[2px] bg-[#C8956C] origin-right scale-x-0 group-hover:scale-x-100 transition-transform duration-500"
-                          aria-hidden
-                        />
-                        <span
-                          className="absolute top-0 right-0 h-8 w-[2px] bg-[#C8956C] origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-500"
-                          aria-hidden
-                        />
-                      </div>
                     )}
-                    <div className="flex items-start justify-between gap-6">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-2xl md:text-3xl font-light text-text-primary tracking-[-0.02em] leading-tight">
-                          {pkg.reference.client}
-                        </p>
-                        <p className="mt-1 font-mono text-[11px] md:text-xs text-text-muted tracking-[0.15em] uppercase">
-                          {pkg.reference.sector}
-                        </p>
-                        <p className="mt-4 text-sm md:text-base text-text-secondary leading-relaxed max-w-xl">
-                          {pkg.reference.note}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-text-primary shrink-0">
-                        <span className="text-xs md:text-sm font-mono uppercase tracking-wider transition-transform duration-200 group-hover:-translate-y-0.5">
-                          Visit
-                        </span>
-                        <ArrowUpRight
-                          className="w-5 h-5 md:w-6 md:h-6 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                          strokeWidth={1.25}
-                        />
-                      </div>
-                    </div>
-                  </a>
+                  </div>
+                )}
+                <div className="flex items-start justify-between gap-6">
+                  <div className="min-w-0 flex-1">
+                    <p className="display text-2xl md:text-3xl text-[color:var(--ink)] leading-tight">{pkg.reference.client}</p>
+                    <p className="mt-1 eyebrow">{pkg.reference.sector}</p>
+                    <p className="mt-4 text-sm md:text-base text-[color:var(--ink-muted)] leading-relaxed max-w-xl">
+                      {pkg.reference.note}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-1 text-[color:var(--ink)] shrink-0 pt-2">
+                    <span className="eyebrow group-hover:text-[color:var(--accent)] transition-colors">Visit</span>
+                    <ArrowUpRight className="h-5 w-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
+                  </div>
                 </div>
-              </ScrollReveal>
-            )}
-          </div>
+              </a>
+            </Row>
+          )}
         </div>
+      </div>
     </article>
   )
 }
 
 export default function PackageDetail() {
   return (
-    <section
-      id="package-detail"
-      className="w-full bg-background-primary"
-    >
+    <section id="package-detail" className="relative w-full">
       {packages.map((pkg, i) => (
         <DetailBlock key={pkg.id} pkg={pkg} index={i} />
       ))}

@@ -1,27 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
-import Lenis from 'lenis'
+// SmoothScroll — no-op.
+//
+// Previously used Lenis for inertial scrolling. Lenis's wheel-capture
+// behaviour on pages with heavy backdrop-filter/gradient-mesh sections
+// felt like scroll was stalling past mid-page. Native scrolling with
+// `scroll-behavior: smooth` (set in globals) is responsive enough
+// without the quirks. Keeping this component as an import anchor so
+// layout.tsx doesn't need to change.
 
 export default function SmoothScroll() {
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.1,
-      wheelMultiplier: 1.2,
-      touchMultiplier: 1.5,
-    })
-
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
-    return () => {
-      lenis.destroy()
-    }
-  }, [])
-
   return null
 }

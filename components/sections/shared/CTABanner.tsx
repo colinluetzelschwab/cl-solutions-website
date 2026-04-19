@@ -1,35 +1,42 @@
-'use client'
-
 import React from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import ScrollReveal from '@/components/ui/scroll-reveal'
+import { ArrowUpRight } from 'lucide-react'
 
 interface CTABannerProps {
-  headline?: string
+  headline?: React.ReactNode
   subtext?: string
 }
 
 export default function CTABanner({ headline, subtext }: CTABannerProps) {
   return (
-    <section className="w-full bg-background-primary py-28 md:py-40">
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
-        <ScrollReveal>
-          <p className="text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase mb-4">Ready?</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-text-primary tracking-[-0.02em] leading-[1.05] mb-6 md:mb-8">
-            {headline ? headline : (<>Let&apos;s build something<br /><span className="inline-block font-[family-name:var(--font-display)] italic text-[#C8956C] pr-[0.3em]">great.</span></>)}
-          </h2>
-          <p className="text-base md:text-lg text-text-secondary max-w-md leading-relaxed mb-10 md:mb-14">
-            {subtext ?? "Fill out our brief — we'll get back to you within 24 hours with a proposal."}
-          </p>
-          <Link
-            href="/contact/start"
-            className="inline-flex items-center gap-2 px-8 py-4 text-sm font-medium bg-text-primary text-background-primary hover:bg-text-primary/90 transition-colors group"
-          >
+    <section className="relative w-full py-28 md:py-40 border-t border-[color:var(--border-subtle)] overflow-hidden">
+      <div aria-hidden className="absolute inset-0 gradient-mesh-subtle" />
+      <div aria-hidden className="grid-noise" />
+
+      <div className="relative mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center">
+        <p className="eyebrow mb-8">Ready when you are</p>
+        <h2 className="display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.02]">
+          {headline ? (
+            headline
+          ) : (
+            <>
+              Let’s build something{' '}
+              <span className="serif-italic text-[color:var(--accent)]">worth keeping.</span>
+            </>
+          )}
+        </h2>
+        <p className="mt-8 md:mt-10 measure mx-auto text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed">
+          {subtext ?? "Fill out our brief — we'll get back within 24 hours with a written proposal."}
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
+          <Link href="/contact/start" className="btn btn-primary">
             Start your project
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            <ArrowUpRight className="h-4 w-4" />
           </Link>
-        </ScrollReveal>
+          <Link href="/services" className="btn btn-ghost">
+            Browse packages
+          </Link>
+        </div>
       </div>
     </section>
   )

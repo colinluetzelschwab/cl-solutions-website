@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { RotateCcw, ArrowUpRight } from 'lucide-react'
 
 export default function Error({
   error,
@@ -16,29 +16,26 @@ export default function Error({
   }, [error])
 
   return (
-    <main className="flex-1 flex items-center justify-center min-h-screen bg-background-primary">
-      <div className="text-center px-4">
-        <p className="text-accent-blue font-mono text-sm font-medium mb-4">Error</p>
-        <h1 className="text-4xl md:text-5xl font-bold text-text-primary mb-4">
-          Something went wrong
+    <main className="relative flex-1 flex items-center justify-center min-h-screen overflow-hidden">
+      <div aria-hidden className="absolute inset-0 gradient-mesh-subtle" />
+      <div aria-hidden className="grid-noise" />
+
+      <div className="relative text-center px-6 max-w-lg">
+        <span className="chip chip-accent mb-6 inline-flex">Error</span>
+        <h1 className="display text-5xl md:text-6xl text-[color:var(--ink)] mb-5">
+          Something <span className="italic text-gradient">went wrong.</span>
         </h1>
-        <p className="text-text-secondary text-lg mb-8 max-w-md mx-auto">
+        <p className="text-base md:text-lg text-[color:var(--ink-muted)] mb-10 measure mx-auto">
           An unexpected error occurred. Please try again.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <Button
-            onClick={reset}
-            className="bg-accent-blue text-white hover:bg-accent-blue-hover font-medium px-8 h-11 rounded-none"
-          >
-            Try Again
-          </Button>
-          <Link href="/">
-            <Button
-              variant="outline"
-              className="border-border-default text-text-secondary hover:text-text-primary font-medium px-8 h-11 rounded-none"
-            >
-              Back to Home
-            </Button>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <button onClick={reset} className="btn btn-primary">
+            <RotateCcw className="h-4 w-4" />
+            Try again
+          </button>
+          <Link href="/" className="btn btn-ghost">
+            Back to Home
+            <ArrowUpRight className="h-4 w-4" />
           </Link>
         </div>
       </div>

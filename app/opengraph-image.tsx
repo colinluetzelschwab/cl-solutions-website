@@ -15,25 +15,20 @@ export default async function Image() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#F5F1EC',
+          background:
+            'radial-gradient(ellipse 80% 60% at 20% 10%, rgba(167,113,255,0.35), transparent 60%), ' +
+            'radial-gradient(ellipse 60% 50% at 85% 30%, rgba(80,160,220,0.28), transparent 65%), ' +
+            'radial-gradient(ellipse 70% 50% at 50% 95%, rgba(180,70,220,0.25), transparent 60%), ' +
+            '#0A0B10',
           padding: '72px 80px',
           fontFamily: 'sans-serif',
+          color: '#F5F5FA',
         }}
       >
         {/* Top row: logo */}
         <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-          <span style={{ fontSize: 36, fontWeight: 700, color: '#1A1A1A', letterSpacing: '-0.02em' }}>
-            CL
-          </span>
-          <span
-            style={{
-              fontSize: 32,
-              fontStyle: 'italic',
-              color: '#1A1A1A',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            Solutions
+          <span style={{ fontSize: 36, fontWeight: 600, color: '#F5F5FA', letterSpacing: '-0.02em' }}>
+            cls.
           </span>
         </div>
 
@@ -42,8 +37,8 @@ export default async function Image() {
           <p
             style={{
               fontSize: 14,
-              color: '#1A1A1A',
-              letterSpacing: '0.25em',
+              color: 'rgba(245,245,250,0.7)',
+              letterSpacing: '0.28em',
               textTransform: 'uppercase',
               margin: 0,
             }}
@@ -53,19 +48,19 @@ export default async function Image() {
           <h1
             style={{
               fontSize: 88,
-              color: '#1A1A1A',
-              fontWeight: 300,
+              color: '#F5F5FA',
+              fontWeight: 500,
               letterSpacing: '-0.03em',
-              lineHeight: 1.05,
+              lineHeight: 1.02,
               margin: 0,
             }}
           >
-            Designed to <span style={{ fontStyle: 'italic', color: '#C8956C' }}>grow.</span>
+            Designed to <span style={{ fontStyle: 'italic', color: '#C6A0FF' }}>grow.</span>
           </h1>
           <p
             style={{
               fontSize: 26,
-              color: '#4A4A47',
+              color: 'rgba(245,245,250,0.72)',
               fontWeight: 300,
               lineHeight: 1.4,
               margin: 0,
@@ -82,14 +77,14 @@ export default async function Image() {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '1px solid #1A1A1A22',
+            borderTop: '1px solid rgba(245,245,250,0.15)',
             paddingTop: '24px',
           }}
         >
-          <span style={{ fontSize: 18, color: '#4A4A47', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: 18, color: 'rgba(245,245,250,0.7)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
             clsolutions.dev
           </span>
-          <span style={{ fontSize: 18, color: '#4A4A47', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: 18, color: 'rgba(245,245,250,0.7)', letterSpacing: '0.2em', textTransform: 'uppercase' }}>
             Zurich · Switzerland
           </span>
         </div>

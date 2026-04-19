@@ -1,8 +1,6 @@
-'use client'
-
 import React from 'react'
+import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
-import ScrollReveal from '@/components/ui/scroll-reveal'
 
 interface ProjectCardProps {
   title: string
@@ -11,8 +9,12 @@ interface ProjectCardProps {
   scope: string[]
   url?: string
   image: string
+  imageSwap?: string
   featured?: boolean
 }
+
+// Editorial project card with Ravi's dual-image hover swap.
+// No overlays, no card borders — just hairline frame + crossfade.
 
 export default function ProjectCard({
   title,
@@ -21,56 +23,68 @@ export default function ProjectCard({
   scope,
   url,
   image,
+  imageSwap,
   featured,
 }: ProjectCardProps) {
+  const swap = imageSwap ?? image
   return (
-    <ScrollReveal>
-      <a
-        href={url || '#'}
-        target={url ? '_blank' : undefined}
-        rel={url ? 'noopener noreferrer' : undefined}
-        className="group block"
+    <a
+      href={url || '#'}
+      target={url ? '_blank' : undefined}
+      rel={url ? 'noopener noreferrer' : undefined}
+      className="group block"
+    >
+      {/* Dual-image panel */}
+      <div
+        className={`dual-img relative border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)] ${
+          featured ? 'aspect-[16/9]' : 'aspect-[4/5]'
+        }`}
       >
-        {/* Image */}
-        <div className="relative overflow-hidden mb-6">
-          <div
-            className={`w-full bg-cover bg-center bg-background-surface transition-transform duration-700 group-hover:scale-[1.02] ${
-              featured ? 'aspect-[16/9]' : 'aspect-[4/3]'
-            }`}
-            style={{ backgroundImage: `url(${image})` }}
+        <Image
+          src={image}
+          alt={title}
+          fill
+          sizes={featured ? '(max-width: 1024px) 100vw, 80vw' : '(max-width: 768px) 100vw, 40vw'}
+          className="dual-img__base object-cover"
+          priority={featured}
+        />
+        {imageSwap && (
+          <Image
+            src={swap}
+            alt=""
+            fill
+            sizes={featured ? '(max-width: 1024px) 100vw, 80vw' : '(max-width: 768px) 100vw, 40vw'}
+            className="dual-img__swap object-cover"
+            aria-hidden
+            loading="lazy"
           />
-          {url && (
-            <div className="absolute top-4 right-4 w-10 h-10 rounded-full bg-text-primary/0 group-hover:bg-text-primary flex items-center justify-center transition-all duration-300">
-              <ArrowUpRight className="w-4 h-4 text-transparent group-hover:text-background-primary transition-colors duration-300" />
-            </div>
-          )}
-        </div>
+        )}
+        {url && (
+          <div className="absolute top-4 right-4 inline-flex items-center justify-center h-9 w-9 rounded-full bg-[color:var(--paper-dark)]/85 border border-[color:var(--border-subtle)] backdrop-blur-md text-[color:var(--ink)] opacity-0 group-hover:opacity-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all duration-300">
+            <ArrowUpRight className="h-4 w-4" />
+          </div>
+        )}
+      </div>
 
-        {/* Info */}
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-[10px] text-text-muted tracking-[0.25em] uppercase mb-2">
-              {category}
-            </p>
-            <h3 className="text-xl md:text-2xl font-light text-text-primary tracking-tight mb-1">
-              {title}
-            </h3>
-            <p className="text-sm text-text-secondary">
-              {subtitle}
-            </p>
-          </div>
-          <div className="hidden md:flex flex-wrap gap-2 mt-1">
-            {scope.map((item) => (
-              <span
-                key={item}
-                className="text-[10px] text-text-muted tracking-[0.15em] uppercase border border-border-default px-3 py-1"
-              >
-                {item}
-              </span>
-            ))}
-          </div>
+      {/* Editorial caption — Lolo minimal metadata */}
+      <div className="mt-5 flex items-start justify-between gap-6">
+        <div className="min-w-0 flex-1">
+          <p className="eyebrow mb-2">{category}</p>
+          <h3 className="display text-xl md:text-2xl text-[color:var(--ink)] leading-tight group-hover:text-[color:var(--accent)] transition-colors">
+            {title}
+          </h3>
+          <p className="mt-1.5 text-sm text-[color:var(--ink-muted)] leading-relaxed">
+            {subtitle}
+          </p>
         </div>
-      </a>
-    </ScrollReveal>
+        <div className="hidden md:flex flex-wrap gap-1.5 pt-5 justify-end">
+          {scope.slice(0, 3).map((item) => (
+            <span key={item} className="chip chip-quiet !text-[10px] !tracking-[0.16em]">
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
+    </a>
   )
 }

@@ -1,11 +1,16 @@
-'use client'
-
 import React from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import ScrollReveal, { StaggerContainer, StaggerItem } from '@/components/ui/scroll-reveal'
+import { ArrowUpRight } from 'lucide-react'
 
-const packages = [
+interface Pkg {
+  name: string
+  price: string
+  description: string
+  features: string[]
+  popular?: boolean
+}
+
+const packages: Pkg[] = [
   {
     name: 'Starter',
     price: '1,500',
@@ -29,56 +34,83 @@ const packages = [
 
 export default function ServicesOverview() {
   return (
-    <section className="w-full bg-background-primary py-28 md:py-40">
-      <div className="max-w-6xl mx-auto px-6 sm:px-10 lg:px-16">
-        <ScrollReveal className="mb-16 md:mb-24">
-          <p className="text-[10px] md:text-[11px] text-text-muted tracking-[0.3em] uppercase mb-4">Packages</p>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-light text-text-primary tracking-[-0.02em] leading-[1.1]">
-            Three options.
-            <br />
-            <span className="inline-block font-[family-name:var(--font-display)] italic text-text-secondary pr-[0.3em]">Zero surprises.</span>
-          </h2>
-        </ScrollReveal>
+    <section id="packages" className="relative w-full py-24 md:py-32 border-t border-[color:var(--border-subtle)]">
+      <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-16 md:mb-20">
+          <div className="lg:col-span-7">
+            <p className="eyebrow mb-6">Chapter I · Packages</p>
+            <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.02]">
+              Three options.{' '}
+              <span className="serif-italic text-[color:var(--accent)]">Zero surprises.</span>
+            </h2>
+          </div>
+          <div className="lg:col-span-4 lg:col-start-9 self-end">
+            <p className="measure text-[color:var(--ink-muted)] text-base leading-relaxed">
+              Fixed scope, fixed pricing, fixed timeline. You know exactly what you’re
+              getting before we write a single line of code.
+            </p>
+          </div>
+        </div>
 
-        <StaggerContainer className="grid grid-cols-1 md:grid-cols-3 gap-px bg-border-subtle" staggerDelay={0.1}>
-          {packages.map((pkg) => (
-            <StaggerItem key={pkg.name}>
-              <div className="bg-background-primary p-8 lg:p-10 flex flex-col h-full group">
+        {/* Editorial ledger cards — flat, typographic, minimal ornament */}
+        <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[color:var(--border-default)]">
+          {packages.map((pkg, i) => (
+            <article
+              key={pkg.name}
+              className={`group flex flex-col px-6 md:px-8 py-10 md:py-12 ${
+                i < packages.length - 1 ? 'md:border-r border-[color:var(--border-subtle)]' : ''
+              } ${i < packages.length - 1 ? 'border-b md:border-b-0' : ''} border-[color:var(--border-subtle)] ${
+                pkg.popular ? 'bg-[color:var(--surface-1)]' : ''
+              }`}
+            >
+              <div className="flex items-baseline gap-3 mb-6">
+                <span className="eyebrow text-[color:var(--accent)] tabular">
+                  {`0${i + 1}`}
+                </span>
+                <span className="eyebrow">{pkg.name}</span>
                 {pkg.popular && (
-                  <span className="text-[9px] tracking-[0.2em] uppercase text-[#C8956C] font-medium mb-4">Most popular</span>
+                  <span className="ml-auto chip chip-accent !px-2 !py-0.5 !text-[9px]">
+                    <span className="dot-live" aria-hidden /> Most picked
+                  </span>
                 )}
-                {!pkg.popular && <div className="mb-4" />}
-
-                <p className="text-[10px] text-text-muted tracking-[0.2em] uppercase mb-3">{pkg.name}</p>
-
-                <p className="text-3xl md:text-4xl font-light text-text-primary tracking-tight mb-4">
-                  CHF {pkg.price}
-                </p>
-
-                <p className="text-sm text-text-secondary leading-relaxed mb-8">{pkg.description}</p>
-
-                <div className="h-px bg-border-subtle mb-6" />
-
-                <div className="space-y-2.5 mb-8 flex-1">
-                  {pkg.features.map((f) => (
-                    <p key={f} className="text-sm text-text-secondary flex items-center gap-2.5">
-                      <span className="w-1 h-1 bg-text-muted rounded-full shrink-0" />
-                      {f}
-                    </p>
-                  ))}
-                </div>
-
-                <Link
-                  href="/contact/start"
-                  className="inline-flex items-center text-sm text-text-muted hover:text-text-primary transition-colors group/link"
-                >
-                  Get started
-                  <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover/link:translate-x-1 transition-transform" />
-                </Link>
               </div>
-            </StaggerItem>
+
+              <p className="display text-[clamp(2.2rem,4vw,3rem)] leading-none text-[color:var(--ink)] tabular">
+                <span className="text-[color:var(--ink-faint)] text-base mr-2 align-top mt-2 inline-block font-[var(--font-inter)] tracking-wide">
+                  CHF
+                </span>
+                {pkg.price}
+              </p>
+
+              <p className="mt-6 measure text-[15px] leading-relaxed text-[color:var(--ink-muted)]">
+                {pkg.description}
+              </p>
+
+              <ul className="mt-8 flex flex-col gap-2.5 border-t border-[color:var(--border-subtle)] pt-6 flex-1">
+                {pkg.features.map((f) => (
+                  <li key={f} className="flex items-baseline gap-3 text-sm text-[color:var(--ink-muted)]">
+                    <span className="inline-block w-3 h-[1px] bg-[color:var(--accent)] mt-[9px] shrink-0" aria-hidden />
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href="/contact/start"
+                className="mt-10 inline-flex items-center gap-1.5 text-sm text-[color:var(--ink)] hover:text-[color:var(--accent)] transition-colors group/link"
+              >
+                Start {pkg.name}
+                <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
+              </Link>
+            </article>
           ))}
-        </StaggerContainer>
+        </div>
+
+        <div className="mt-12 flex items-center justify-center">
+          <Link href="/services" className="link-ghost eyebrow">
+            Compare all packages →
+          </Link>
+        </div>
       </div>
     </section>
   )

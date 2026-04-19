@@ -2,8 +2,7 @@
 
 import React, { useState, useCallback } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react'
+import { ArrowLeft, ArrowRight, Send, Loader2, Check } from 'lucide-react'
 import StepIndicator from './StepIndicator'
 import StepBusinessInfo from './StepBusinessInfo'
 import StepPackage from './StepPackage'
@@ -131,26 +130,32 @@ export default function OnboardingWizard() {
 
   if (submitResult?.success) {
     return (
-      <div className="max-w-2xl mx-auto text-center py-16">
-        <div className="w-16 h-16 bg-green-500/20 flex items-center justify-center mx-auto mb-6">
-          <Send className="w-8 h-8 text-green-500" />
+      <div className="max-w-2xl mx-auto text-center py-20">
+        <div className="relative mx-auto mb-8 inline-flex items-center justify-center h-16 w-16 rounded-full bg-[color:var(--surface-1)] border border-[color:var(--accent)]/40">
+          <span className="absolute inset-0 rounded-full bg-[color:var(--accent)]/10 blur-md" aria-hidden />
+          <Check className="relative h-7 w-7 text-[color:var(--accent-bright)]" strokeWidth={2.4} />
         </div>
-        <h2 className="text-3xl font-bold text-text-primary mb-4">Brief submitted!</h2>
-        <p className="text-lg text-text-secondary mb-2">
+        <h2 className="display text-3xl md:text-4xl text-[color:var(--ink)] mb-4">
+          Brief <span className="italic text-gradient">submitted.</span>
+        </h2>
+        <p className="text-lg text-[color:var(--ink-muted)] mb-2">
           Thank you, {businessInfo.name}. We&apos;ve received your project brief.
         </p>
-        <p className="text-text-muted mb-8">
+        <p className="text-[color:var(--ink-muted)] mb-10 measure mx-auto">
           We&apos;ll review everything and get back to you within 24 hours with a plan.
         </p>
-        <p className="text-sm text-text-muted">
-          Brief ID: <code className="bg-background-surface px-2 py-1">{submitResult.briefId}</code>
+        <p className="text-sm text-[color:var(--ink-faint)]">
+          Brief ID:{' '}
+          <code className="bg-[color:var(--surface-2)] text-[color:var(--ink)] px-2 py-1 rounded-[6px] border border-[color:var(--border-subtle)] font-mono text-xs">
+            {submitResult.briefId}
+          </code>
         </p>
       </div>
     )
   }
 
   return (
-    <div>
+    <div className="card-surface p-6 md:p-10">
       <StepIndicator currentStep={step} />
 
       <div className="min-h-[400px]">
@@ -169,49 +174,45 @@ export default function OnboardingWizard() {
       </div>
 
       {errors.submit && (
-        <p className="text-red-500 text-sm mt-4">{errors.submit}</p>
+        <p className="mt-4 text-sm text-[color:var(--destructive)]">{errors.submit}</p>
       )}
 
       {/* Navigation */}
-      <div className="flex items-center justify-between mt-10">
+      <div className="flex items-center justify-between mt-10 pt-6 border-t border-[color:var(--border-subtle)]">
         <button
           type="button"
           onClick={prevStep}
           disabled={step === 0}
-          className="flex items-center gap-2 text-sm text-text-muted hover:text-text-primary transition-colors disabled:opacity-0 disabled:pointer-events-none"
+          className="inline-flex items-center gap-2 text-sm text-[color:var(--ink-muted)] hover:text-[color:var(--ink)] transition-colors disabled:opacity-0 disabled:pointer-events-none"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back
         </button>
 
         {step < 5 ? (
-          <Button
-            type="button"
-            onClick={nextStep}
-            className="bg-text-primary text-background-primary hover:bg-text-primary/90 rounded-none h-11 px-8 text-sm"
-          >
+          <button type="button" onClick={nextStep} className="btn btn-primary">
             Next
-            <ArrowRight className="w-3.5 h-3.5 ml-2" />
-          </Button>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         ) : (
-          <Button
+          <button
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="bg-text-primary text-background-primary hover:bg-text-primary/90 rounded-none h-11 px-8 text-sm"
+            className="btn btn-primary btn-glow disabled:opacity-60"
           >
             {isSubmitting ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Submitting...
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Submitting…
               </>
             ) : (
               <>
-                <Send className="w-3.5 h-3.5 mr-2" />
+                <Send className="w-3.5 h-3.5" />
                 Submit Brief
               </>
             )}
-          </Button>
+          </button>
         )}
       </div>
     </div>

@@ -31,7 +31,7 @@ export default function ServicesPage() {
       />
       <Navigation />
 
-      <main className="flex-1 bg-background-primary">
+      <main className="flex-1">
         <ServicesHero />
 
         <PackageDetail />
