@@ -13,21 +13,24 @@ interface Feature {
   href: string
 }
 
+// Mobile-format captures — true 390×844 viewport shots of each live site,
+// so the portrait 3:4 feature card shows each site's full hero as intended
+// rather than an awkwardly cropped slice of a desktop capture.
 const features: Feature[] = [
   {
-    image: '/work/core-medical.jpg',
+    image: '/work/core-medical-mobile.jpg',
     client: 'Core Medical',
     sector: 'Healthcare · Zürich',
     href: 'https://coremedical.ch',
   },
   {
-    image: '/work/lucasvision.jpg',
+    image: '/work/lucasvision-mobile.jpg',
     client: 'LucasVision',
     sector: 'Photo &amp; Film · CH',
     href: 'https://lucasvision.vercel.app',
   },
   {
-    image: '/work/aariviiva.jpg',
+    image: '/work/aariviiva-mobile.jpg',
     client: 'Ääriviiva',
     sector: 'Graphic Design · FI',
     href: 'https://aariviiva.vercel.app',
