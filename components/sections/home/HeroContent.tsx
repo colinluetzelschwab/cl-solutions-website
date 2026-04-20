@@ -1,301 +1,267 @@
 'use client'
 
-import React, { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowUpRight } from 'lucide-react'
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion'
-import HeroFeature from '@/components/ui/HeroFeature'
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useSpring,
+  useReducedMotion,
+} from 'framer-motion'
+import { Warp } from '@paper-design/shaders-react'
 
-// Editorial cinematic hero — Ravi × Lolo × Tom Carder.
-// Signature moves:
-//   · Word-by-word stagger reveal on the display headline
-//   · Hand-drawn burgundy SVG underline on the italic phrase
-//   · Scroll-linked parallax (headline, supporting, grid-noise all at different speeds)
-//   · Italic phrase subtly scales as it moves through the viewport
-//   · Right-column rotating client feature (Tom Carder signature)
-//   · Ambient floating burgundy/honey shapes drifting slowly in the background
-//   · Auto-looping client strip at the bottom
+// Hero composition — 21st.dev shadway/wrap-shader (Warp) repainted in our
+// warm editorial palette, layered under the existing Ravi-style editorial
+// overlay: Instrument Serif display, rotating italic moment on line 2,
+// corner live-clock, Ch. I marker. The hero is always visually dark
+// (the shader is its own cinematic room) — the rest of the page still
+// adapts to system light/dark via prefers-color-scheme.
 
-const clients = [
-  { name: 'Core Medical', img: '/work/core-medical.jpg' },
-  { name: 'LucasVision',  img: '/work/lucasvision.jpg' },
-  { name: 'Ääriviiva',    img: '/work/aariviiva.jpg' },
-  { name: 'Veloscout',    img: '/work/core-medical.jpg' },
-]
+const ROTATING_WORDS = ['intent', 'care', 'craft', 'precision'] as const
 
-type Token =
-  | { kind: 'word';   text: string }
-  | { kind: 'italic'; text: string; color?: 'soft' | 'accent' }
-  | { kind: 'underline'; text: string }
-  | { kind: 'br' }
-
-const tokens: Token[] = [
-  { kind: 'word',      text: 'We' },
-  { kind: 'word',      text: 'build' },
-  { kind: 'word',      text: 'small,' },
-  { kind: 'italic',    text: 'quiet,', color: 'soft' },
-  { kind: 'br' },
-  { kind: 'word',      text: 'deliberate' },
-  { kind: 'word',      text: 'websites' },
-  { kind: 'br' },
-  { kind: 'underline', text: 'built to last.' },
-]
-
-// Ambient floating shape — large blurred radial, drifts slowly, restrained opacity
-function AmbientShape({
-  className,
-  width,
-  height,
-  color,
-  delay = 0,
-  driftY = 20,
-  rotate = 0,
+function RotatingWord({
+  words,
+  suffix = '.',
 }: {
-  className: string
-  width: number
-  height: number
-  color: string
-  delay?: number
-  driftY?: number
-  rotate?: number
+  words: readonly string[]
+  suffix?: string
 }) {
   const reduce = useReducedMotion()
-  return (
-    <motion.div
-      aria-hidden
-      className={`pointer-events-none absolute rounded-full ${className}`}
-      style={{
-        width,
-        height,
-        background: `radial-gradient(ellipse at center, ${color}, transparent 70%)`,
-        filter: 'blur(46px)',
-      }}
-      initial={{ opacity: 0, y: 0, rotate }}
-      animate={
-        reduce
-          ? { opacity: 0.8, y: 0, rotate }
-          : {
-              opacity: [0.55, 0.85, 0.55],
-              y: [0, driftY, 0],
-              rotate: [rotate, rotate + 6, rotate],
-            }
-      }
-      transition={{
-        duration: 18,
-        repeat: reduce ? 0 : Infinity,
-        ease: 'easeInOut',
-        delay,
-      }}
-    />
+  const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    if (reduce) return
+    const id = setTimeout(() => {
+      setActive((i) => (i + 1) % words.length)
+    }, 2400)
+    return () => clearTimeout(id)
+  }, [active, reduce, words.length])
+
+  if (reduce) {
+    return (
+      <span className="serif-italic text-[color:var(--ink-soft)]">
+        {words[0]}
+        {suffix}
+      </span>
+    )
+  }
+
+  const longest = words.reduce(
+    (a, b) => (b.length > a.length ? b : a),
+    words[0] ?? '',
   )
+
+  return (
+    <span
+      className="relative inline-block overflow-hidden align-baseline leading-[inherit]"
+      aria-live="polite"
+      aria-atomic="true"
+    >
+      <span className="invisible serif-italic whitespace-nowrap" aria-hidden>
+        {longest}
+        {suffix}
+      </span>
+      {words.map((w, i) => (
+        <motion.span
+          key={w}
+          className="absolute inset-0 serif-italic text-[color:var(--ink-soft)] whitespace-nowrap leading-[inherit]"
+          initial={{ y: '100%', opacity: 0 }}
+          animate={
+            active === i
+              ? { y: '0%', opacity: 1 }
+              : { y: active > i ? '-100%' : '100%', opacity: 0 }
+          }
+          transition={{ type: 'spring', stiffness: 55, damping: 14 }}
+          aria-hidden={active !== i}
+        >
+          {w}
+          <span className="not-italic" aria-hidden>
+            {suffix}
+          </span>
+        </motion.span>
+      ))}
+    </span>
+  )
+}
+
+function useClock() {
+  const [time, setTime] = useState<string>('')
+  useEffect(() => {
+    const fmt = () =>
+      new Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        timeZone: 'Europe/Zurich',
+        hour12: false,
+      }).format(new Date())
+    setTime(fmt())
+    const id = setInterval(() => setTime(fmt()), 1000)
+    return () => clearInterval(id)
+  }, [])
+  return time
 }
 
 export default function HeroContent() {
   const sectionRef = useRef<HTMLElement | null>(null)
   const reduce = useReducedMotion()
+  const time = useClock()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
   })
-  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.3 })
-
-  const headlineY   = useTransform(progress, [0, 1], [0, -80])
-  const supportY    = useTransform(progress, [0, 1], [0, -40])
-  const gridY       = useTransform(progress, [0, 1], [0, 70])
-  const italicScale = useTransform(progress, [0, 0.6], [1, 1.04])
-  const stripX      = useTransform(progress, [0, 1], [0, -60])
-  const featureY    = useTransform(progress, [0, 1], [0, -30])
-
-  const wordStride = 0.075
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 30,
+    mass: 0.3,
+  })
+  const headlineY = useTransform(progress, [0, 1], [0, -60])
 
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden">
-      {/* Grid-noise backdrop (parallax) */}
-      <motion.div
-        aria-hidden
-        className="grid-noise"
-        style={reduce ? undefined : { y: gridY }}
-      />
-
-      {/* Ambient floating shapes — burgundy + honey, very subtle */}
-      <AmbientShape
-        className="-left-[10%] top-[18%]"
-        width={640}
-        height={200}
-        color="oklch(0.48 0.16 25 / 0.14)"
-        rotate={-8}
-        driftY={16}
-        delay={0}
-      />
-      <AmbientShape
-        className="right-[-8%] top-[10%]"
-        width={520}
-        height={160}
-        color="oklch(0.65 0.10 75 / 0.18)"
-        rotate={10}
-        driftY={-14}
-        delay={1.2}
-      />
-      <AmbientShape
-        className="left-[30%] bottom-[8%]"
-        width={420}
-        height={140}
-        color="oklch(0.50 0.12 25 / 0.10)"
-        rotate={-4}
-        driftY={12}
-        delay={2.4}
-      />
-
-      <div className="relative mx-auto max-w-[1400px] px-6 sm:px-10 lg:px-16 pt-36 md:pt-44 pb-14 md:pb-20">
-        <div
-          className="fade-up mb-10 md:mb-14"
-          style={{ ['--fade-delay' as string]: '0s' }}
-        >
-          <span className="eyebrow">Swiss studio · Est. 2024</span>
-        </div>
-
-        {/* Split grid: text left, rotating feature right */}
-        <div className="grid grid-cols-12 gap-8 lg:gap-12 items-start">
-          {/* LEFT column — headline + philosophical + CTAs */}
-          <div className="col-span-12 lg:col-span-7 xl:col-span-7">
-            <motion.div style={reduce ? undefined : { y: headlineY }}>
-              <h1 className="display text-[clamp(2.4rem,6vw,5.6rem)] leading-[0.98]">
-                {tokens.map((tok, i) => {
-                  const delay = `${0.25 + i * wordStride}s`
-                  if (tok.kind === 'br') return <br key={i} />
-
-                  if (tok.kind === 'italic') {
-                    const color =
-                      tok.color === 'accent'
-                        ? 'text-[color:var(--accent)]'
-                        : 'text-[color:var(--ink-soft)]'
-                    return (
-                      <React.Fragment key={i}>
-                        <span
-                          className={`word-reveal serif-italic ${color}`}
-                          style={{ ['--word-delay' as string]: delay }}
-                        >
-                          {tok.text}
-                        </span>{' '}
-                      </React.Fragment>
-                    )
-                  }
-
-                  if (tok.kind === 'underline') {
-                    return (
-                      <motion.span
-                        key={i}
-                        className="word-reveal serif-italic text-[color:var(--accent)] relative inline-block origin-left"
-                        style={{
-                          ['--word-delay' as string]: delay,
-                          ...(reduce ? {} : { scale: italicScale }),
-                        } as React.CSSProperties}
-                      >
-                        {tok.text}
-                        <svg
-                          className="draw-underline"
-                          viewBox="0 0 600 14"
-                          preserveAspectRatio="none"
-                          aria-hidden
-                        >
-                          <path d="M 6 9 C 90 3, 180 13, 280 7 S 480 3, 594 8" />
-                        </svg>
-                      </motion.span>
-                    )
-                  }
-
-                  return (
-                    <React.Fragment key={i}>
-                      <span
-                        className="word-reveal"
-                        style={{ ['--word-delay' as string]: delay }}
-                      >
-                        {tok.text}
-                      </span>{' '}
-                    </React.Fragment>
-                  )
-                })}
-              </h1>
-            </motion.div>
-
-            <motion.div style={reduce ? undefined : { y: supportY }}>
-              <p
-                className="fade-up mt-10 md:mt-14 measure text-lg md:text-xl leading-[1.55] text-[color:var(--ink-muted)]"
-                style={{ ['--fade-delay' as string]: '1.4s' }}
-              >
-                For teams who would rather be{' '}
-                <span className="serif-italic text-[color:var(--ink)]">understood</span>{' '}
-                than loud.
-              </p>
-
-              <div
-                className="fade-up mt-10 md:mt-12 flex flex-wrap items-center gap-3"
-                style={{ ['--fade-delay' as string]: '1.7s' }}
-              >
-                <Link href="/contact/start" className="btn btn-primary">
-                  Start a project
-                  <ArrowUpRight className="h-4 w-4" />
-                </Link>
-                <Link href="/work" className="btn btn-ghost">
-                  See the work
-                </Link>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* RIGHT column — rotating cinematic feature */}
-          <motion.div
-            className="col-span-12 lg:col-span-5 xl:col-span-5 fade-up"
+    <section
+      ref={sectionRef}
+      data-theme="dark"
+      className="relative isolate w-full overflow-hidden h-[100svh] min-h-[640px] flex flex-col"
+    >
+      {/* Warp shader backdrop — warm rust/ember palette, slow cinematic swirl */}
+      <div aria-hidden className="absolute inset-0 -z-10">
+        {!reduce && (
+          <Warp
+            style={{ height: '100%', width: '100%' }}
+            proportion={0.45}
+            softness={1}
+            distortion={0.28}
+            swirl={0.6}
+            swirlIterations={10}
+            shape="checks"
+            shapeScale={0.08}
+            scale={1.1}
+            rotation={0}
+            speed={0.35}
+            colors={[
+              'hsl(22, 45%, 5%)',   // near-black warm undertone
+              'hsl(18, 55%, 16%)',  // deep espresso
+              'hsl(14, 65%, 32%)',  // rich rust
+              'hsl(10, 80%, 52%)',  // ember highlight
+            ]}
+          />
+        )}
+        {/* Reduced-motion fallback — static gradient, same palette */}
+        {reduce && (
+          <div
+            className="absolute inset-0"
             style={{
-              ['--fade-delay' as string]: '0.9s',
-              ...(reduce ? {} : { y: featureY }),
-            } as React.CSSProperties}
-          >
-            <HeroFeature />
-          </motion.div>
-        </div>
+              background:
+                'radial-gradient(ellipse 70% 50% at 30% 20%, hsl(14 65% 32% / 0.5), transparent 60%),\
+                 radial-gradient(ellipse 60% 50% at 80% 70%, hsl(10 80% 52% / 0.35), transparent 65%),\
+                 hsl(22 45% 5%)',
+            }}
+          />
+        )}
+        {/* Top vignette — protects nav-pill legibility */}
+        <div
+          className="absolute inset-x-0 top-0 h-40 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(180deg, hsl(22 45% 3% / 0.55) 0%, transparent 100%)',
+          }}
+        />
+        {/* Bottom fade — merges into paper below */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
+          style={{
+            background:
+              'linear-gradient(180deg, transparent 0%, var(--paper-dark) 100%)',
+          }}
+        />
       </div>
 
-      {/* Auto-looping client strip with scroll-linked push */}
-      <motion.div
-        className="fade-up relative mt-8 md:mt-12 border-y border-[color:var(--border-subtle)] overflow-hidden"
-        style={{
-          ['--fade-delay' as string]: '1.9s',
-          ...(reduce ? {} : { x: stripX }),
-        } as React.CSSProperties}
+      {/* Quiet corner meta — right upper, Ravi signature. Hidden on mobile. */}
+      <div
+        className="fade-up hidden sm:flex absolute sm:top-8 sm:right-10 lg:right-16 z-10 items-center gap-3 text-[11px] font-[var(--font-plex-mono)] tracking-[0.18em] uppercase text-[color:var(--ink-faint)] tabular"
+        style={{ ['--fade-delay' as string]: '0.2s' }}
       >
-        <div
-          className="flex w-max items-center gap-6 md:gap-7 py-4 md:py-5 whitespace-nowrap will-change-transform animate-ticker"
-          style={
-            {
-              WebkitMaskImage:
-                'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
-              maskImage:
-                'linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent)',
-            } as React.CSSProperties
-          }
+        <span
+          className="inline-flex h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"
+          aria-hidden
+        />
+        <span>Zurich</span>
+        <span className="opacity-40">·</span>
+        <span suppressHydrationWarning>{time || '— — : — — : — —'}</span>
+      </div>
+
+      <div className="relative mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16 flex-1 flex flex-col">
+        <motion.div
+          className="mt-auto mb-auto pt-40 md:pt-44"
+          style={reduce ? undefined : { y: headlineY }}
         >
-          {[...clients, ...clients].map((c, i) => (
-            <div key={`${c.name}-${i}`} className="flex items-center gap-3 md:gap-4 shrink-0">
-              <div className="relative h-9 w-14 md:h-10 md:w-16 overflow-hidden rounded-[4px] border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]">
-                <Image
-                  src={c.img}
-                  alt={c.name}
-                  fill
-                  sizes="(max-width: 768px) 56px, 64px"
-                  className="object-cover"
+          <h1 className="display text-[clamp(3rem,8.4vw,8rem)] leading-[1.02] text-[color:var(--ink)] max-w-[14ch]">
+            <span
+              className="word-reveal whitespace-nowrap"
+              style={{ ['--word-delay' as string]: '0.15s' }}
+            >
+              Built with
+            </span>
+            <br />
+            <span
+              className="word-reveal"
+              style={{ ['--word-delay' as string]: '0.40s' }}
+            >
+              <RotatingWord words={ROTATING_WORDS} />
+            </span>
+          </h1>
+
+          <div
+            className="fade-up mt-12 md:mt-16"
+            style={{ ['--fade-delay' as string]: '1.1s' }}
+          >
+            <Link
+              href="/contact/start"
+              className="group inline-flex items-center gap-3 text-[color:var(--ink)] text-[15px] md:text-base font-medium"
+            >
+              <span className="relative">
+                Start a project
+                <span
+                  aria-hidden
+                  className="absolute left-0 right-0 -bottom-1 h-px bg-[color:var(--ink)] origin-left scale-x-100 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-0"
                 />
-              </div>
-              <span className="display text-lg md:text-xl text-[color:var(--ink-muted)]">
-                {c.name}
+                <span
+                  aria-hidden
+                  className="absolute left-0 right-0 -bottom-1 h-px bg-[color:var(--accent)] origin-right scale-x-0 transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-x-100 delay-[60ms]"
+                />
               </span>
-              <span className="text-[color:var(--accent-muted)]/60 text-lg md:text-xl">·</span>
-            </div>
-          ))}
+              <span
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[color:var(--border-default)] text-[color:var(--ink)] transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:border-[color:var(--accent)]"
+                aria-hidden
+              >
+                <svg
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  className="h-[9px] w-[9px] text-current"
+                >
+                  <path
+                    d="M2.5 9.5L9.5 2.5M9.5 2.5H4M9.5 2.5V8"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Ch. I marker — single quiet line at the very bottom left */}
+        <div
+          className="fade-up pb-6 md:pb-8 text-[11px] font-[var(--font-plex-mono)] tracking-[0.22em] uppercase text-[color:var(--ink-faint)]"
+          style={{ ['--fade-delay' as string]: '1.4s' }}
+        >
+          Ch. I — who we are
         </div>
-      </motion.div>
+      </div>
     </section>
   )
 }

@@ -1,7 +1,7 @@
 /**
  * JSON-LD structured data for schema.org Organization + Service catalogue.
  * Rendered once at the root layout so every page ships it.
- * Helps Google surface rich results (logo, site links, price range).
+ * International positioning: Zurich + Helsinki base, serves founders globally.
  */
 export default function OrganizationJsonLd() {
   const data = {
@@ -15,13 +15,20 @@ export default function OrganizationJsonLd() {
         logo: 'https://clsolutions.dev/icon.png',
         email: 'colin@clsolutions.dev',
         description:
-          'Premium custom websites for Swiss businesses. Fixed pricing, 3–5 day delivery.',
-        address: {
-          '@type': 'PostalAddress',
-          addressCountry: 'CH',
-          addressLocality: 'Zurich',
-        },
-        areaServed: { '@type': 'Country', name: 'Switzerland' },
+          'An independent boutique studio building fast, custom websites for founders anywhere. Fixed pricing, one-week delivery.',
+        address: [
+          {
+            '@type': 'PostalAddress',
+            addressCountry: 'CH',
+            addressLocality: 'Zurich',
+          },
+          {
+            '@type': 'PostalAddress',
+            addressCountry: 'FI',
+            addressLocality: 'Helsinki',
+          },
+        ],
+        areaServed: { '@type': 'Place', name: 'Worldwide' },
         sameAs: [],
       },
       {
@@ -30,14 +37,14 @@ export default function OrganizationJsonLd() {
         url: 'https://clsolutions.dev',
         name: 'CL Solutions',
         publisher: { '@id': 'https://clsolutions.dev/#organization' },
-        inLanguage: 'en-CH',
+        inLanguage: 'en',
       },
       {
         '@type': 'ProfessionalService',
         '@id': 'https://clsolutions.dev/#service',
         name: 'Website Design & Development',
         provider: { '@id': 'https://clsolutions.dev/#organization' },
-        areaServed: { '@type': 'Country', name: 'Switzerland' },
+        areaServed: { '@type': 'Place', name: 'Worldwide' },
         priceRange: 'CHF 1,500 – CHF 7,500+',
         hasOfferCatalog: {
           '@type': 'OfferCatalog',

@@ -19,8 +19,8 @@ export default function Footer() {
               <Logo />
             </Link>
             <p className="measure text-sm text-[color:var(--ink-muted)] leading-relaxed">
-              A boutique web studio building fast, custom websites for Swiss businesses.
-              Fixed scope. Fixed pricing. Shipped in 3–5 days.
+              An independent boutique studio building fast, custom websites for
+              founders anywhere. Fixed scope. Fixed pricing. Shipped in a week.
             </p>
             <div className="flex items-center gap-2 mt-1">
               <span className="dot-live" aria-hidden />
@@ -64,7 +64,7 @@ export default function Footer() {
                   <ArrowUpRight className="h-3.5 w-3.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                 </a>
               </li>
-              <li className="text-sm text-[color:var(--ink-muted)]">Zurich · Switzerland</li>
+              <li className="text-sm text-[color:var(--ink-muted)]">Zurich · Helsinki</li>
               <li className="text-sm text-[color:var(--ink-muted)]">Response ≤ 24 h</li>
             </ul>
           </div>

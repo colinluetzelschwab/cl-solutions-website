@@ -9,7 +9,7 @@ import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 export const metadata: Metadata = {
   title: 'Our Work',
   description:
-    'Recent website projects for Swiss businesses. Custom-built, never from a template.',
+    'Recent website projects for founders across Europe. Custom-built, never from a template.',
 }
 
 type Token =

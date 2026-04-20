@@ -5,123 +5,159 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ═══════════════════════════════════════════════════════════════
- * CL Solutions — Cinematic Editorial
- * Ravi Klaassens × Lolo × Tom Carder reference · Porcelain + burgundy
- * Sibling-DNA avoided vs. v0-portfolio (Fraunces + rust/moss) &
- * veloscout (Barlow Condensed + racing red)
+ * CL Solutions — B&W Editorial (Tom Carder × Lolo × Ravi) v2026-04-20
+ * Warm paper + warm near-black ink, ZERO chromatic UI accent.
+ * One tiny rust-red moment reserved for hover underlines only.
+ * Serif italic for emphasis (one moment per section maximum).
+ * Sibling-DNA divergent from: lucasvision (yellow accent),
+ * veloscout (racing-red), aariviiva (cold B&W + Instrument),
+ * v0-portfolio (Fraunces + rust/moss), obsidian-cyan draft (removed).
  * ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Surfaces — porcelain cream, warm yellow cast ── */
-  --paper-dark:  oklch(0.96 0.012 75);   /* porcelain */
-  --surface-1:   oklch(0.94 0.014 75);   /* warm ivory */
-  --surface-2:   oklch(0.91 0.016 75);   /* warm stone */
-  --surface-3:   oklch(0.87 0.018 75);
+  /* ── Paper surfaces (warm concrete) ── */
+  --paper-dark:  oklch(0.960 0.008 85);   /* page */
+  --surface-1:   oklch(0.940 0.010 85);   /* card / slight lift */
+  --surface-2:   oklch(0.910 0.012 85);   /* hover / elevated */
+  --surface-3:   oklch(0.870 0.014 85);
 
-  /* ── Ink — warm charcoal ── */
-  --ink:         oklch(0.20 0.014 50);
-  --ink-soft:    oklch(0.28 0.014 50);   /* for italic emphasis */
-  --ink-muted:   oklch(0.44 0.016 50);
-  --ink-faint:   oklch(0.62 0.014 50);
+  /* ── Ink (warm near-black, olive undertone) ── */
+  --ink:         oklch(0.160 0.008 80);
+  --ink-soft:    oklch(0.240 0.010 80);
+  --ink-muted:   oklch(0.460 0.012 80);
+  --ink-faint:   oklch(0.620 0.010 80);
 
   /* ── Borders ── */
-  --border-subtle:  oklch(0.20 0.010 50 / 0.08);
-  --border-default: oklch(0.20 0.010 50 / 0.16);
-  --border-strong:  oklch(0.20 0.010 50 / 0.30);
+  --border-subtle:  oklch(0.160 0.008 80 / 0.08);
+  --border-default: oklch(0.160 0.008 80 / 0.14);
+  --border-strong:  oklch(0.160 0.008 80 / 0.28);
 
-  /* ── Accent — deep burgundy clay ── */
-  --accent:        oklch(0.44 0.14 25);
-  --accent-bright: oklch(0.52 0.16 25);
-  --accent-muted:  oklch(0.36 0.10 25);
-  --accent-glow:   oklch(0.44 0.14 25 / 0.18);
-  --accent-2:      oklch(0.60 0.09 85);  /* honey secondary */
+  /* ── Accent (rust red) — reserved for hover underlines + live dot ── */
+  --accent:        oklch(0.46 0.16 30);
+  --accent-bright: oklch(0.54 0.17 30);
+  --accent-muted:  oklch(0.40 0.12 30);
+  --accent-glow:   oklch(0.46 0.16 30 / 0.22);
+  --accent-2:      oklch(0.46 0.16 30);   /* same — no second accent */
 
   /* ── Shadows ── */
-  --shadow-sm:   0 1px 2px rgba(20, 20, 30, 0.04);
-  --shadow-md:   0 4px 20px rgba(20, 20, 30, 0.07);
-  --shadow-lg:   0 20px 60px rgba(20, 20, 30, 0.10);
-  --shadow-glow: 0 0 40px rgba(128, 30, 40, 0.12);
+  --shadow-sm:   0 1px 2px rgba(20,18,14, 0.04);
+  --shadow-md:   0 4px 20px rgba(20,18,14, 0.07);
+  --shadow-lg:   0 20px 60px rgba(20,18,14, 0.10);
+  --shadow-glow: 0 0 36px oklch(0.46 0.16 30 / 0.18);
 
-  /* ── Soft paper gradient stops (replaces violet mesh) ── */
-  --mesh-stop-1:        oklch(0.88 0.09 55 / 0.30);
-  --mesh-stop-2:        oklch(0.85 0.06 85 / 0.28);
-  --mesh-stop-3:        oklch(0.82 0.10 25 / 0.22);
-  --mesh-stop-1-subtle: oklch(0.88 0.07 55 / 0.20);
-  --mesh-stop-2-subtle: oklch(0.85 0.04 85 / 0.18);
+  /* ── Mesh stops — near-invisible cream wash (replaces violet mesh) ── */
+  --mesh-stop-1:        oklch(0.90 0.020 85 / 0.24);
+  --mesh-stop-2:        oklch(0.88 0.025 80 / 0.20);
+  --mesh-stop-3:        oklch(0.92 0.015 90 / 0.16);
+  --mesh-stop-1-subtle: oklch(0.92 0.012 85 / 0.14);
+  --mesh-stop-2-subtle: oklch(0.90 0.018 85 / 0.10);
 
-  /* ── Nav pill (glass over porcelain) ── */
-  --nav-pill-bg:    oklch(0.98 0.006 75 / 0.75);
-  --nav-pill-sheen: rgba(255, 255, 255, 0.6);
+  /* ── Nav pill ── */
+  --nav-pill-bg:    oklch(0.98 0.006 85 / 0.78);
+  --nav-pill-sheen: rgba(255, 255, 255, 0.55);
 
-  /* ── Radius — pills + soft cards, no hard-zero ── */
+  /* ── Radius — soft editorial, not sharp tech ── */
   --radius:        12px;
   --radius-sm:     8px;
   --radius-md:     12px;
   --radius-lg:     20px;
   --radius-pill:   999px;
 
-  /* ── shadcn aliases so /ui primitives inherit ── */
-  --background:         var(--paper-dark);
-  --foreground:         var(--ink);
-  --card:               var(--surface-1);
-  --card-foreground:    var(--ink);
-  --popover:            var(--surface-1);
-  --popover-foreground: var(--ink);
-  --primary:            var(--accent);
-  --primary-foreground: oklch(0.98 0.006 75);
-  --secondary:          var(--surface-2);
+  /* ── shadcn aliases ── */
+  --background:           var(--paper-dark);
+  --foreground:           var(--ink);
+  --card:                 var(--surface-1);
+  --card-foreground:      var(--ink);
+  --popover:              var(--surface-1);
+  --popover-foreground:   var(--ink);
+  --primary:              var(--ink);
+  --primary-foreground:   var(--paper-dark);
+  --secondary:            var(--surface-2);
   --secondary-foreground: var(--ink);
-  --muted:              var(--surface-2);
-  --muted-foreground:   var(--ink-muted);
-  --accent-foreground:  oklch(0.98 0.006 75);
-  --destructive:        oklch(0.55 0.22 27);
-  --border:             var(--border-default);
-  --input:              var(--border-default);
-  --ring:               var(--accent);
+  --muted:                var(--surface-2);
+  --muted-foreground:     var(--ink-muted);
+  --accent-foreground:    var(--paper-dark);
+  --destructive:          oklch(0.55 0.22 27);
+  --border:               var(--border-default);
+  --input:                var(--border-default);
+  --ring:                 var(--ink);
 
   color-scheme: light;
 }
 
-/* ── Dark alternative — same violet SaaS as before, for toggle users ── */
-html.dark {
-  --paper-dark:  oklch(0.14 0.012 275);
-  --surface-1:   oklch(0.18 0.014 275);
-  --surface-2:   oklch(0.22 0.016 275);
-  --surface-3:   oklch(0.26 0.018 275);
+/* ═══════════════════════════════════════════════════════════════
+ * Dark mode — system-preference driven. Warm charcoal (Ravi path).
+ * Keeps the warm olive undertone; NOT cold obsidian.
+ * ═══════════════════════════════════════════════════════════════ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper-dark:  oklch(0.135 0.008 80);
+    --surface-1:   oklch(0.170 0.009 80);
+    --surface-2:   oklch(0.210 0.010 80);
+    --surface-3:   oklch(0.260 0.012 80);
 
-  --ink:         oklch(0.97 0.005 275);
-  --ink-soft:    oklch(0.89 0.008 275);
-  --ink-muted:   oklch(0.72 0.012 275);
-  --ink-faint:   oklch(0.52 0.014 275);
+    --ink:         oklch(0.950 0.010 85);
+    --ink-soft:    oklch(0.880 0.012 85);
+    --ink-muted:   oklch(0.680 0.014 85);
+    --ink-faint:   oklch(0.480 0.012 85);
 
-  --border-subtle:  oklch(0.30 0.015 275 / 0.35);
-  --border-default: oklch(0.36 0.020 275 / 0.55);
-  --border-strong:  oklch(0.45 0.025 275 / 0.70);
+    --border-subtle:  oklch(1 0 0 / 0.06);
+    --border-default: oklch(1 0 0 / 0.12);
+    --border-strong:  oklch(1 0 0 / 0.22);
 
-  --accent:        oklch(0.68 0.24 295);
-  --accent-bright: oklch(0.78 0.22 295);
-  --accent-muted:  oklch(0.55 0.18 295);
-  --accent-glow:   oklch(0.68 0.24 295 / 0.35);
-  --accent-2:      oklch(0.74 0.18 210);
+    --accent:        oklch(0.66 0.19 30);
+    --accent-bright: oklch(0.72 0.20 30);
+    --accent-muted:  oklch(0.54 0.14 30);
+    --accent-glow:   oklch(0.66 0.19 30 / 0.30);
+    --accent-2:      oklch(0.66 0.19 30);
 
-  --shadow-sm:   0 1px 2px rgba(0,0,0,0.4);
-  --shadow-md:   0 4px 20px rgba(0,0,0,0.5);
-  --shadow-lg:   0 20px 60px rgba(0,0,0,0.6);
-  --shadow-glow: 0 0 40px rgba(167,113,255,0.25);
+    --shadow-sm:   0 1px 2px rgba(0,0,0,0.45);
+    --shadow-md:   0 8px 28px rgba(0,0,0,0.55);
+    --shadow-lg:   0 30px 80px rgba(0,0,0,0.70);
 
-  --mesh-stop-1:        oklch(0.35 0.22 295 / 0.40);
-  --mesh-stop-2:        oklch(0.40 0.18 210 / 0.32);
-  --mesh-stop-3:        oklch(0.30 0.22 320 / 0.30);
-  --mesh-stop-1-subtle: oklch(0.35 0.18 295 / 0.22);
-  --mesh-stop-2-subtle: oklch(0.40 0.15 210 / 0.16);
+    --mesh-stop-1:        oklch(0.35 0.04 80 / 0.28);
+    --mesh-stop-2:        oklch(0.32 0.05 80 / 0.22);
+    --mesh-stop-3:        oklch(0.30 0.03 85 / 0.18);
+    --mesh-stop-1-subtle: oklch(0.35 0.03 80 / 0.16);
+    --mesh-stop-2-subtle: oklch(0.32 0.04 80 / 0.12);
 
-  --nav-pill-bg:    oklch(0.16 0.014 275 / 0.55);
-  --nav-pill-sheen: rgba(255, 255, 255, 0.04);
+    --nav-pill-bg:    oklch(0.170 0.009 80 / 0.62);
+    --nav-pill-sheen: rgba(255, 255, 255, 0.04);
 
-  --primary-foreground: var(--paper-dark);
-  --accent-foreground:  var(--paper-dark);
+    --primary-foreground: var(--paper-dark);
+    --accent-foreground:  var(--paper-dark);
+
+    color-scheme: dark;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+ * data-theme="dark" — forces dark tokens on a specific section even
+ * when the user's system preference is light. Used on the Warp-shader
+ * hero so the editorial overlay stays readable over the cinematic
+ * rust-ember backdrop regardless of system preference.
+ * ═══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --paper-dark:  oklch(0.135 0.008 80);
+  --surface-1:   oklch(0.170 0.009 80);
+  --surface-2:   oklch(0.210 0.010 80);
+  --surface-3:   oklch(0.260 0.012 80);
+
+  --ink:         oklch(0.970 0.010 85);
+  --ink-soft:    oklch(0.900 0.012 85);
+  --ink-muted:   oklch(0.720 0.014 85);
+  --ink-faint:   oklch(0.560 0.012 85);
+
+  --border-subtle:  oklch(1 0 0 / 0.08);
+  --border-default: oklch(1 0 0 / 0.16);
+  --border-strong:  oklch(1 0 0 / 0.28);
+
+  --accent:        oklch(0.74 0.19 30);
+  --accent-bright: oklch(0.80 0.20 30);
+  --accent-glow:   oklch(0.74 0.19 30 / 0.35);
 
   color-scheme: dark;
+  color: var(--ink);
 }
 
 @theme inline {
@@ -144,13 +180,14 @@ html.dark {
   --color-accent-muted:    var(--accent-muted);
   --color-accent-2:        var(--accent-2);
 
-  /* Fonts */
+  /* Fonts — display returns to serif, sans for UI/body */
   --font-sans:    var(--font-inter);
   --font-mono:    var(--font-plex-mono);
   --font-display: var(--font-instrument);
   --font-heading: var(--font-instrument);
+  --font-serif:   var(--font-instrument);
 
-  /* Back-compat with old token names */
+  /* Back-compat aliases */
   --color-text-primary:       var(--ink);
   --color-text-secondary:     var(--ink-muted);
   --color-text-muted:         var(--ink-faint);
@@ -182,7 +219,7 @@ html.dark {
 
 /* ─── Base ─── */
 @layer base {
-  * { @apply border-[color:var(--border-default)] outline-[color:var(--ring)]/50; }
+  * { @apply border-[color:var(--border-default)] outline-[color:var(--ring)]/40; }
 
   html {
     @apply antialiased;
@@ -194,13 +231,14 @@ html.dark {
     background: var(--paper-dark);
     color: var(--ink);
     font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-feature-settings: "ss01", "cv11";
+    font-feature-settings: "ss01", "cv11", "cv04";
   }
 
-  /* Display type always serif with tight tracking */
+  /* Display type — serif returns. Tight tracking. */
   h1, h2, h3 {
     font-family: var(--font-instrument), Georgia, serif;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.018em;
+    font-weight: 400;
   }
 
   ::selection { background: var(--accent-glow); color: var(--ink); }
@@ -229,10 +267,17 @@ html.dark {
     font-weight: 500;
     color: var(--ink-faint);
   }
+  /* Display — SERIF. This is the signature voice. */
   .display {
     font-family: var(--font-instrument), Georgia, serif;
     font-weight: 400;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.018em;
+    line-height: 1.02;
+  }
+  .display-sans {
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 500;
+    letter-spacing: -0.03em;
     line-height: 1.02;
   }
   .serif-italic {
@@ -244,46 +289,50 @@ html.dark {
   .measure-wide { max-width: 76ch; }
   .tabular      { font-variant-numeric: tabular-nums; }
 
-  /* Burgundy ink accent (replaces violet gradient) */
   .text-accent      { color: var(--accent); }
   .text-accent-soft { color: var(--accent-bright); }
 
-  /* Editorial gradient — burgundy → honey, used on italicized philosophical fragments */
+  /* No more gradient text. Editorial. */
   .text-gradient {
-    background: linear-gradient(100deg, var(--accent) 0%, var(--accent-bright) 45%, var(--accent-2) 100%);
-    -webkit-background-clip: text;
-            background-clip: text;
-    -webkit-text-fill-color: transparent;
-            color: transparent;
+    color: var(--ink);
   }
 
-  /* Inline image in prose — Tom Carder signature */
+  /* Inline image in prose — Tom Carder signature move */
   .inline-img {
     display: inline-block;
-    height: 1.1em;
+    height: 1.05em;
     width: auto;
     max-width: 3em;
     vertical-align: baseline;
-    margin: 0 0.18em -0.12em;
+    margin: 0 0.2em -0.12em;
     border-radius: 4px;
     object-fit: cover;
-    box-shadow: 0 1px 2px rgba(20,20,30,0.08);
+    box-shadow: 0 1px 2px rgba(20,18,14,0.12);
   }
   .inline-img-lg {
-    height: 2.2em;
-    max-width: 5.2em;
+    height: 2.4em;
+    max-width: 6em;
+    border-radius: 8px;
+    margin: 0 0.26em -0.34em;
+    box-shadow: 0 4px 16px rgba(20,18,14,0.12);
+  }
+  .inline-img-xl {
+    height: 0.9em;
+    max-width: 5em;
     border-radius: 6px;
-    margin: 0 0.24em -0.28em;
+    margin: 0 0.22em -0.06em;
+    box-shadow: 0 2px 8px rgba(20,18,14,0.10);
+    vertical-align: middle;
   }
 
   /* Nav pill — glass */
   .nav-pill {
     background: var(--nav-pill-bg);
-    backdrop-filter: blur(14px) saturate(1.2);
-    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    backdrop-filter: blur(16px) saturate(1.2);
+    -webkit-backdrop-filter: blur(16px) saturate(1.2);
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-pill);
-    box-shadow: var(--shadow-md), inset 0 1px 0 var(--nav-pill-sheen);
+    box-shadow: var(--shadow-sm), inset 0 1px 0 var(--nav-pill-sheen);
   }
 
   /* Chips */
@@ -308,44 +357,43 @@ html.dark {
   .chip:hover  { color: var(--ink); border-color: var(--border-default); }
   .chip-accent {
     color: var(--accent);
-    background: oklch(0.55 0.16 25 / 0.08);
-    border-color: oklch(0.55 0.16 25 / 0.35);
+    background: oklch(0.46 0.16 30 / 0.08);
+    border-color: oklch(0.46 0.16 30 / 0.30);
   }
   .chip-quiet { background: transparent; border-color: transparent; color: var(--ink-faint); }
 
-  /* Buttons */
+  /* ═══════ Buttons — editorial, no gradients, no shine ═══════ */
   .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.85rem 1.25rem;
+    padding: 0.85rem 1.3rem;
     font-family: var(--font-inter), sans-serif;
     font-size: 0.9rem;
     font-weight: 500;
     letter-spacing: -0.005em;
     border-radius: var(--radius-md);
-    transition: transform .15s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
+    transition: transform .18s ease, opacity .2s ease, background .2s ease, border-color .2s ease, color .2s ease;
     white-space: nowrap;
     cursor: pointer;
   }
-  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
+  /* Primary — ink slab, paper text. Firm editorial. */
   .btn-primary {
-    /* Token-driven inversion — flips correctly in both light and dark.
-       Light: dark ink button with cream text.
-       Dark : cream-white button with near-black text. */
     color: var(--paper-dark);
     background: var(--ink);
-    box-shadow: 0 1px 2px rgba(20,20,30,0.12), 0 6px 20px rgba(20,20,30,0.14);
+    box-shadow: 0 1px 2px rgba(20,18,14,0.10), 0 6px 16px rgba(20,18,14,0.12);
   }
   .btn-primary:hover {
     transform: translateY(-1px);
     opacity: 0.92;
-    box-shadow: 0 2px 4px rgba(20,20,30,0.14), 0 12px 28px rgba(20,20,30,0.18);
+    box-shadow: 0 2px 4px rgba(20,18,14,0.12), 0 10px 24px rgba(20,18,14,0.16);
   }
   .btn-primary:active { transform: translateY(0); opacity: 1; }
 
+  /* Ghost — transparent with fine border */
   .btn-ghost {
     color: var(--ink);
     background: transparent;
@@ -356,6 +404,7 @@ html.dark {
     border-color: var(--border-strong);
   }
 
+  /* Accent button — used only for destructive/rare contexts */
   .btn-accent {
     color: var(--paper-dark);
     background: var(--accent);
@@ -364,7 +413,7 @@ html.dark {
 
   .btn-glow { box-shadow: var(--shadow-glow); }
 
-  /* Card surface — subtle paper with pseudo gradient border */
+  /* Card surface — subtle paper lift, no chromatic ring */
   .card-surface {
     position: relative;
     background: var(--surface-1);
@@ -378,20 +427,20 @@ html.dark {
     border-radius: inherit;
     padding: 1px;
     background: linear-gradient(135deg,
-      oklch(0.55 0.14 25 / 0.28),
-      oklch(0.40 0.02 50 / 0.10) 40%,
-      oklch(0.40 0.02 50 / 0.06));
+      oklch(0.160 0.008 80 / 0.18),
+      oklch(0.160 0.008 80 / 0.04) 40%,
+      oklch(0.160 0.008 80 / 0.02));
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
       linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.4;
     transition: opacity .3s ease;
   }
-  .card-surface:hover::before { opacity: 0.85; }
-  .card-surface-glow::before  { opacity: 0.9; }
+  .card-surface:hover::before { opacity: 0.75; }
+  .card-surface-glow::before  { opacity: 0.75; }
   .card-surface-flat { border: 1px solid var(--border-default); }
   .card-surface-flat::before { display: none; }
 
@@ -414,7 +463,7 @@ html.dark {
   .dual-img:hover .dual-img__base { opacity: 0; }
   .dual-img:hover .dual-img__swap { opacity: 1; }
 
-  /* Live indicator */
+  /* Live indicator — rust red */
   .dot-live {
     display: inline-block;
     width: 0.4rem;
@@ -425,16 +474,16 @@ html.dark {
     animation: live-pulse 2.4s ease-in-out infinite;
   }
 
-  /* Paper gradient backdrop — subtle cream wash */
+  /* Cream wash backdrop — near-invisible */
   .gradient-mesh {
     position: relative;
     background:
-      radial-gradient(ellipse 75% 55% at 22% 12%, var(--mesh-stop-1), transparent 60%),
+      radial-gradient(ellipse 70% 50% at 22% 12%, var(--mesh-stop-1), transparent 60%),
       radial-gradient(ellipse 55% 45% at 85% 28%, var(--mesh-stop-2), transparent 65%),
       radial-gradient(ellipse 65% 45% at 48% 92%, var(--mesh-stop-3), transparent 60%),
       var(--paper-dark);
     background-size: 180% 180%, 160% 160%, 180% 180%, 100% 100%;
-    animation: mesh-drift 26s ease-in-out infinite alternate;
+    animation: mesh-drift 30s ease-in-out infinite alternate;
   }
   .gradient-mesh-subtle {
     background:
@@ -442,7 +491,7 @@ html.dark {
       radial-gradient(ellipse 60% 50% at 85% 80%, var(--mesh-stop-2-subtle), transparent 65%),
       var(--paper-dark);
     background-size: 180% 180%, 160% 160%, 100% 100%;
-    animation: mesh-drift 32s ease-in-out infinite alternate;
+    animation: mesh-drift 36s ease-in-out infinite alternate;
   }
 
   .divider-gradient {
@@ -450,6 +499,7 @@ html.dark {
     background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
   }
 
+  /* Ghost link — underline on hover in rust red (the one accent moment) */
   .link-ghost {
     position: relative;
     color: inherit;
@@ -460,22 +510,41 @@ html.dark {
     left: 0; right: 0; bottom: -3px;
     height: 1px;
     background: currentColor;
-    opacity: 0.3;
-    transition: opacity .25s ease;
+    opacity: 0.25;
+    transition: opacity .25s ease, background .25s ease;
   }
-  .link-ghost:hover::after { opacity: 1; }
+  .link-ghost:hover::after {
+    opacity: 1;
+    background: var(--accent);
+  }
 
-  /* Grid noise — gentle paper grid */
+  /* Fine editorial grid — near-invisible paper texture */
   .grid-noise {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(to right, var(--border-subtle) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--border-subtle) 1px, transparent 1px);
-    background-size: 64px 64px;
-    opacity: 0.5;
+      linear-gradient(to right, oklch(0.16 0.008 80 / 0.025) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.16 0.008 80 / 0.025) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: 0.6;
     pointer-events: none;
-    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  }
+  @media (prefers-color-scheme: dark) {
+    .grid-noise {
+      background-image:
+        linear-gradient(to right, oklch(1 0 0 / 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, oklch(1 0 0 / 0.03) 1px, transparent 1px);
+    }
+  }
+
+  /* Number tag — mono, tabular, MUTED (not accent-colored) */
+  .num-tag {
+    font-family: var(--font-plex-mono), monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
   }
 }
 
@@ -490,7 +559,7 @@ html.dark {
 
 @keyframes live-pulse {
   0%, 100% { opacity: 1;    transform: scale(1); }
-  50%      { opacity: 0.55; transform: scale(0.9); }
+  50%      { opacity: 0.45; transform: scale(0.85); }
 }
 
 @keyframes ticker {
@@ -513,7 +582,7 @@ html.dark {
   }
 }
 
-/* ── Word-by-word hero reveal ── */
+/* Word-by-word hero reveal */
 @keyframes word-rise {
   from { opacity: 0; transform: translate3d(0, 0.55em, 0); }
   to   { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -526,14 +595,13 @@ html.dark {
   }
 }
 
-/* ── Hand-drawn burgundy underline ── */
+/* Hand-drawn rust underline — ONE decorative moment on hero italic */
 @keyframes draw-in {
   to { stroke-dashoffset: 0; }
 }
 .draw-underline {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 0; right: 0;
   bottom: -0.18em;
   width: 100%;
   height: 0.22em;
@@ -543,7 +611,7 @@ html.dark {
 .draw-underline path {
   fill: none;
   stroke: var(--accent);
-  stroke-width: 2.2;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 620;
@@ -553,12 +621,6 @@ html.dark {
 @media (prefers-reduced-motion: reduce) {
   .draw-underline path { stroke-dashoffset: 0; animation: none; }
   .word-reveal { opacity: 1; transform: none; animation: none; }
-}
-
-@keyframes aurora {
-  0%   { transform: translate3d(-8%, -4%, 0) rotate(0deg);   opacity: 0.8; }
-  50%  { transform: translate3d( 6%,  4%, 0) rotate(180deg); opacity: 1; }
-  100% { transform: translate3d(-8%, -4%, 0) rotate(360deg); opacity: 0.8; }
 }
 
 /* ═══════════════════════════════════════════════════════════════

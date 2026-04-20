@@ -27,48 +27,46 @@ const plexMono = IBM_Plex_Mono({
   weight: ["400", "500"],
 });
 
-// Pre-hydration theme apply — dark is now the ALTERNATE (light is default).
-const themeInitScript = `(function(){try{var t=localStorage.getItem('cls-theme');if(t==='dark'){document.documentElement.classList.add('dark');}}catch(e){}})();`;
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://clsolutions.dev"),
   title: {
-    default: "CL Solutions — Websites for Swiss businesses",
+    default: "CL Solutions — Fast custom websites for serious founders",
     template: "%s — CL Solutions",
   },
   description:
-    "A boutique Swiss studio building fast, custom websites. Fixed scope. Fixed pricing. Shipped in 3–5 days.",
+    "An independent boutique studio building fast, custom websites for founders anywhere. Fixed scope. Fixed pricing. Shipped in a week.",
   keywords: [
-    "website design Switzerland",
-    "Webdesign Schweiz",
+    "custom website design",
+    "boutique web studio",
+    "founder websites",
     "Next.js agency",
-    "Zurich web agency",
     "fixed price website",
-    "Swiss web design",
+    "Zurich Helsinki web studio",
+    "international web design",
   ],
   authors: [{ name: "CL Solutions" }],
   openGraph: {
-    title: "CL Solutions — Websites for Swiss businesses",
+    title: "CL Solutions — Fast custom websites for serious founders",
     description:
-      "Fast, modern websites for Swiss businesses. Fixed pricing, 3–5 day delivery.",
+      "Premium sites for founders anywhere. Fixed pricing, one-week delivery. Zurich · Helsinki base, remote-first.",
     url: "https://clsolutions.dev",
     siteName: "CL Solutions",
-    locale: "en_CH",
+    locale: "en",
     type: "website",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "CL Solutions — Websites for Swiss businesses",
+        alt: "CL Solutions — Fast custom websites for serious founders",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CL Solutions — Websites for Swiss businesses",
+    title: "CL Solutions — Fast custom websites for serious founders",
     description:
-      "Fast, modern websites for Swiss businesses. Fixed pricing, 3–5 day delivery.",
+      "Premium sites for founders anywhere. Fixed pricing, one-week delivery.",
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
@@ -86,7 +84,6 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[color:var(--paper-dark)] text-[color:var(--ink)]">
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <SmoothScroll />
         <ScrollProgress />
         {children}

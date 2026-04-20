@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
-import ThemeToggle from '@/components/ui/ThemeToggle'
 
 interface NavLink {
   label: string
@@ -90,14 +89,13 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* CTA + theme toggle + mobile toggle */}
+          {/* CTA + mobile toggle */}
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             <Link
               href="/contact/start"
-              className="hidden md:inline-flex btn btn-primary !py-1.5 !px-3.5 text-[12px]"
+              className="hidden md:inline-flex items-center gap-1 text-[12px] font-medium tracking-tight text-[color:var(--ink)] px-3 py-1.5 link-ghost"
             >
-              Start a Project
+              Start a project
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
             <button

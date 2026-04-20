@@ -15,13 +15,13 @@ export default function CTABanner({ headline, subtext }: CTABannerProps) {
 
       <div className="relative mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center">
         <p className="eyebrow mb-8">Ready when you are</p>
-        <h2 className="display text-[clamp(2.4rem,5.4vw,4.6rem)] leading-[1.02]">
+        <h2 className="display text-[clamp(2.2rem,5vw,4.2rem)] leading-[1.04]">
           {headline ? (
             headline
           ) : (
             <>
               Let’s build something{' '}
-              <span className="serif-italic text-[color:var(--accent)]">worth keeping.</span>
+              <span className="serif-italic">worth keeping.</span>
             </>
           )}
         </h2>

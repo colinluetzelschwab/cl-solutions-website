@@ -46,7 +46,7 @@ export default function ImprintPage() {
             <section>
               <h2 className="display text-xl md:text-2xl text-[color:var(--ink)] mb-3">Services</h2>
               <p>
-                Web design and development for Swiss businesses.
+                Web design and development for founders anywhere.
                 Fixed-scope projects with transparent pricing.
               </p>
             </section>

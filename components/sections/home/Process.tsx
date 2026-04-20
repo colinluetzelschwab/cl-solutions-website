@@ -20,35 +20,37 @@ export default function Process() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-16 md:mb-20">
           <div className="lg:col-span-7">
-            <p className="eyebrow mb-6">Chapter II · Process</p>
+            <p className="eyebrow mb-6">Chapter II — Process</p>
             <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.02]">
               From brief to launch,{' '}
-              <span className="serif-italic text-[color:var(--accent)]">in four moves.</span>
+              <span className="serif-italic text-[color:var(--ink-soft)]">in four moves.</span>
             </h2>
           </div>
         </div>
 
-        {/* Editorial timeline — typographic, flat, ledger-style */}
+        {/* Ledger timeline — giant cyan tabular numbers, tight rows */}
         <ol className="border-t border-[color:var(--border-default)]">
           {steps.map((step, i) => (
             <li
               key={step.n}
-              className={`grid grid-cols-[56px_1fr_auto] gap-6 md:gap-10 items-start py-9 md:py-11 ${
+              className={`group grid grid-cols-[auto_1fr_auto] gap-6 md:gap-12 items-baseline py-10 md:py-12 ${
                 i < steps.length - 1 ? 'border-b border-[color:var(--border-subtle)]' : ''
-              }`}
+              } transition-colors hover:bg-[oklch(1_0_0/0.015)]`}
             >
-              <span className="eyebrow text-[color:var(--accent)] tabular pt-1">
+              <span
+                className="display-sans tabular text-[clamp(2rem,4vw,3.2rem)] leading-none text-[color:var(--ink-faint)] w-[2ch]"
+              >
                 {step.n}
               </span>
               <div>
-                <h3 className="display text-2xl md:text-[2rem] leading-tight text-[color:var(--ink)] mb-2">
+                <h3 className="display text-2xl md:text-[2.1rem] leading-tight text-[color:var(--ink)] mb-3">
                   {step.title}
                 </h3>
                 <p className="measure text-[15px] md:text-base text-[color:var(--ink-muted)] leading-relaxed">
                   {step.text}
                 </p>
               </div>
-              <span className="eyebrow shrink-0 pt-2">{step.marker}</span>
+              <span className="eyebrow shrink-0">{step.marker}</span>
             </li>
           ))}
         </ol>

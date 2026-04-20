@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with CL Solutions. Premium websites for Swiss businesses.',
+  description: 'Get in touch with CL Solutions. Premium websites for founders anywhere.',
 }
 
 type Token =
@@ -25,7 +25,7 @@ export default function ContactPage() {
 
   const rows: Array<{ label: string; value: string; href?: string; icon: typeof Mail }> = [
     { label: 'Email',    value: 'colin@clsolutions.dev', href: 'mailto:colin@clsolutions.dev', icon: Mail },
-    { label: 'Studio',   value: 'Zurich · Switzerland', icon: MapPin },
+    { label: 'Studio',   value: 'Zurich · Helsinki', icon: MapPin },
     { label: 'Response', value: 'Within 24 hours', icon: Clock },
   ]
 
