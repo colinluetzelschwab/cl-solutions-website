@@ -27,18 +27,28 @@ jobs:
             exit 1
           fi
           echo "Triggering scan for project $CHECKVIBE_PROJECT_ID"
-          RESP=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" -X POST \
-            https://checkvibe.dev/api/scan \
-            -H "Authorization: Bearer $CHECKVIBE_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d "{\"projectId\":\"$CHECKVIBE_PROJECT_ID\"}" \
-            --max-time 120)
-          STATUS=$(echo "$RESP" | tail -n1 | sed 's/HTTP_STATUS://')
-          BODY=$(echo "$RESP" | sed '$d')
-          echo "Status: $STATUS"
+          # Retry up to 4 times on 429 (CheckVibe enforces ~15s between scans,
+          # so when multiple repos push together some must wait).
+          for ATTEMPT in 1 2 3 4; do
+            RESP=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" -X POST \
+              https://checkvibe.dev/api/scan \
+              -H "Authorization: Bearer $CHECKVIBE_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d "{\"projectId\":\"$CHECKVIBE_PROJECT_ID\"}" \
+              --max-time 120)
+            STATUS=$(echo "$RESP" | tail -n1 | sed 's/HTTP_STATUS://')
+            BODY=$(echo "$RESP" | sed '$d')
+            echo "Attempt $ATTEMPT — status $STATUS"
+            if [ "$STATUS" != "429" ]; then
+              break
+            fi
+            WAIT=$((ATTEMPT * 20))
+            echo "  rate-limited, sleeping ${WAIT}s before retry"
+            sleep "$WAIT"
+          done
           echo "$BODY" | head -c 2000
           if [ "$STATUS" -ge 400 ]; then
-            echo "::error::CheckVibe returned HTTP $STATUS"
+            echo "::error::CheckVibe returned HTTP $STATUS after retries"
             exit 1
           fi
           # Extract overall score if present and surface as summary
