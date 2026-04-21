@@ -1,0 +1,51 @@
+name: Security Audit (CheckVibe)
+# Runs on every push to main AND weekly on Monday 06:00 UTC.
+# Requires repo secrets:
+#   CHECKVIBE_API_KEY  — single agency-wide key (set via _agency/scripts/install-checkvibe-ci.sh)
+#   CHECKVIBE_PROJECT_ID — per-repo CheckVibe project UUID (set by installer)
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger CheckVibe scan
+        env:
+          CHECKVIBE_API_KEY: ${{ secrets.CHECKVIBE_API_KEY }}
+          CHECKVIBE_PROJECT_ID: ${{ secrets.CHECKVIBE_PROJECT_ID }}
+        run: |
+          set -e
+          if [ -z "$CHECKVIBE_PROJECT_ID" ]; then
+            echo "::error::CHECKVIBE_PROJECT_ID secret is not set in this repo"
+            exit 1
+          fi
+          echo "Triggering scan for project $CHECKVIBE_PROJECT_ID"
+          RESP=$(curl -sS -w "\nHTTP_STATUS:%{http_code}" -X POST \
+            https://checkvibe.dev/api/scan \
+            -H "Authorization: Bearer $CHECKVIBE_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d "{\"projectId\":\"$CHECKVIBE_PROJECT_ID\"}" \
+            --max-time 120)
+          STATUS=$(echo "$RESP" | tail -n1 | sed 's/HTTP_STATUS://')
+          BODY=$(echo "$RESP" | sed '$d')
+          echo "Status: $STATUS"
+          echo "$BODY" | head -c 2000
+          if [ "$STATUS" -ge 400 ]; then
+            echo "::error::CheckVibe returned HTTP $STATUS"
+            exit 1
+          fi
+          # Extract overall score if present and surface as summary
+          SCORE=$(echo "$BODY" | grep -o '"overallScore":[0-9]*' | head -n1 | cut -d: -f2 || true)
+          if [ -n "$SCORE" ]; then
+            echo "### CheckVibe score: $SCORE/100" >> "$GITHUB_STEP_SUMMARY"
+            if [ "$SCORE" -lt 50 ]; then
+              echo "::warning::CheckVibe score below 50 — review findings at https://checkvibe.dev/dashboard"
+            fi
+          fi
