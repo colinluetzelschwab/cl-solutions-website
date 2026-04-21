@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# direnv config is committed — contains only Keychain lookup names, no secret values
+!.envrc
 
 # vercel
 .vercel
