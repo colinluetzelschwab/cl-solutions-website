@@ -130,8 +130,8 @@ export const FILE_LIMITS = {
 } as const
 
 export const STEPS = [
-  'Business Info',
   'Package',
+  'Business Info',
   'Design',
   'Pages & Features',
   'Upload Assets',

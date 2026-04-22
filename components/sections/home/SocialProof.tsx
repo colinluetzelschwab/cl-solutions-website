@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowUpRight, Quote } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 // Testimonial — quiet confidence. Left: quote block with hanging mono opener.
 // Right: 3-row stats ledger with tabular numbers and micro-rules between rows.
@@ -19,23 +19,12 @@ export default function SocialProof() {
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-14 lg:gap-24 items-start">
           {/* Testimonial */}
           <div className="relative">
-            <p className="eyebrow mb-8 flex items-center gap-3">
-              <span className="inline-flex h-2 w-2 rounded-full bg-[color:var(--ink)] opacity-50" aria-hidden />
-              Recent work — Core Medical
-            </p>
-
-            <Quote
-              className="absolute -left-1 -top-2 h-10 w-10 text-[color:var(--ink)] opacity-12 rotate-180"
-              aria-hidden
-            />
-
             <blockquote className="display text-[clamp(1.7rem,3vw,2.6rem)] leading-[1.22] text-[color:var(--ink)] max-w-[32ch] pl-0">
-              “A premium website that actually feels like our practice —
+              A premium website that actually feels like our practice —
               delivered in a week, with a{' '}
               <span className="serif-italic text-[color:var(--ink-soft)]">
                 CMS we can run ourselves.
               </span>
-              ”
             </blockquote>
 
             <figure className="mt-12 flex items-center gap-5">

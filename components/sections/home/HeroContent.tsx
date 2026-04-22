@@ -54,18 +54,22 @@ function RotatingWord({
 
   return (
     <span
-      className="relative inline-block overflow-hidden align-baseline leading-[inherit]"
+      className="relative inline-grid overflow-hidden align-baseline leading-[inherit]"
       aria-live="polite"
       aria-atomic="true"
     >
-      <span className="invisible serif-italic whitespace-nowrap" aria-hidden>
+      {/* Invisible spacer — reserves width/height + sets the baseline */}
+      <span
+        className="col-start-1 row-start-1 invisible serif-italic whitespace-nowrap leading-[inherit]"
+        aria-hidden
+      >
         {longest}
         {suffix}
       </span>
       {words.map((w, i) => (
         <motion.span
           key={w}
-          className="absolute inset-0 serif-italic text-[color:var(--ink-soft)] whitespace-nowrap leading-[inherit]"
+          className="col-start-1 row-start-1 serif-italic text-[color:var(--ink-soft)] whitespace-nowrap leading-[inherit]"
           initial={{ y: '100%', opacity: 0 }}
           animate={
             active === i
@@ -85,28 +89,9 @@ function RotatingWord({
   )
 }
 
-function useClock() {
-  const [time, setTime] = useState<string>('')
-  useEffect(() => {
-    const fmt = () =>
-      new Intl.DateTimeFormat('en-GB', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        timeZone: 'Europe/Zurich',
-        hour12: false,
-      }).format(new Date())
-    setTime(fmt())
-    const id = setInterval(() => setTime(fmt()), 1000)
-    return () => clearInterval(id)
-  }, [])
-  return time
-}
-
 export default function HeroContent() {
   const sectionRef = useRef<HTMLElement | null>(null)
   const reduce = useReducedMotion()
-  const time = useClock()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -178,33 +163,18 @@ export default function HeroContent() {
         />
       </div>
 
-      {/* Quiet corner meta — right upper, Ravi signature. Hidden on mobile. */}
-      <div
-        className="fade-up hidden sm:flex absolute sm:top-8 sm:right-10 lg:right-16 z-10 items-center gap-3 text-[11px] font-[var(--font-plex-mono)] tracking-[0.18em] uppercase text-[color:var(--ink-faint)] tabular"
-        style={{ ['--fade-delay' as string]: '0.2s' }}
-      >
-        <span
-          className="inline-flex h-1.5 w-1.5 rounded-full bg-[color:var(--accent)]"
-          aria-hidden
-        />
-        <span>Zurich</span>
-        <span className="opacity-40">·</span>
-        <span suppressHydrationWarning>{time || '— — : — — : — —'}</span>
-      </div>
-
-      <div className="relative mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16 flex-1 flex flex-col">
+      <div className="relative mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16 flex-1 flex flex-col justify-center">
         <motion.div
-          className="mt-auto mb-auto pt-40 md:pt-44"
           style={reduce ? undefined : { y: headlineY }}
         >
-          <h1 className="display text-[clamp(3rem,8.4vw,8rem)] leading-[1.02] text-[color:var(--ink)] max-w-[14ch]">
+          <h1 className="display text-[clamp(2.6rem,7.6vw,7rem)] leading-[1.02] text-[color:var(--ink)] whitespace-nowrap">
             <span
-              className="word-reveal whitespace-nowrap"
+              className="word-reveal"
               style={{ ['--word-delay' as string]: '0.15s' }}
             >
               Built with
             </span>
-            <br />
+            <span aria-hidden>&nbsp;</span>
             <span
               className="word-reveal"
               style={{ ['--word-delay' as string]: '0.40s' }}
@@ -253,14 +223,6 @@ export default function HeroContent() {
             </Link>
           </div>
         </motion.div>
-
-        {/* Ch. I marker — single quiet line at the very bottom left */}
-        <div
-          className="fade-up pb-6 md:pb-8 text-[11px] font-[var(--font-plex-mono)] tracking-[0.22em] uppercase text-[color:var(--ink-faint)]"
-          style={{ ['--fade-delay' as string]: '1.4s' }}
-        >
-          Ch. I — who we are
-        </div>
       </div>
     </section>
   )

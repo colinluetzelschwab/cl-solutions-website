@@ -22,10 +22,6 @@ export default function Footer() {
               An independent boutique studio building fast, custom websites for
               founders anywhere. Fixed scope. Fixed pricing. Shipped in a week.
             </p>
-            <div className="flex items-center gap-2 mt-1">
-              <span className="dot-live" aria-hidden />
-              <span className="eyebrow">Booking Q3 · 2026</span>
-            </div>
           </div>
 
           {/* Explore */}

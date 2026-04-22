@@ -9,7 +9,6 @@ const projects = [
     scope: ['Design', 'Development', 'CMS', 'Hosting'],
     url: 'https://coremedical.ch',
     image: '/work/core-medical.jpg',
-    imageSwap: '/work/lucasvision.jpg',
     featured: true,
   },
   {
@@ -18,8 +17,7 @@ const projects = [
     category: 'Photography & Film',
     scope: ['Design', 'Development', 'CMS', 'Video'],
     url: 'https://lucasvision.vercel.app',
-    image: '/work/lucasvision.jpg',
-    imageSwap: '/work/core-medical.jpg',
+    image: '/work/lucasvision-mobile.png',
     featured: false,
   },
   {
@@ -28,8 +26,7 @@ const projects = [
     category: 'Graphic Design',
     scope: ['Design', 'Development', 'CMS', 'Bilingual'],
     url: 'https://aariviiva.vercel.app',
-    image: '/work/aariviiva.jpg',
-    imageSwap: '/work/core-medical.jpg',
+    image: '/work/aariviiva-mobile.png',
     featured: false,
   },
 ]

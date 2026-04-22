@@ -59,6 +59,10 @@ export default function OnboardingWizard() {
     const newErrors: Record<string, string> = {}
 
     if (step === 0) {
+      if (!packageData.selectedPackage) newErrors.selectedPackage = 'Please select a package'
+    }
+
+    if (step === 1) {
       if (!businessInfo.name.trim()) newErrors.name = 'Business name is required'
       if (!businessInfo.email.trim()) newErrors.email = 'Email is required'
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(businessInfo.email)) newErrors.email = 'Invalid email'
@@ -66,10 +70,6 @@ export default function OnboardingWizard() {
       if (businessInfo.businessType === 'other' && !businessInfo.businessTypeOther.trim()) {
         newErrors.businessTypeOther = 'Please describe your business type'
       }
-    }
-
-    if (step === 1) {
-      if (!packageData.selectedPackage) newErrors.selectedPackage = 'Please select a package'
     }
 
     if (step === 2) {
@@ -159,8 +159,8 @@ export default function OnboardingWizard() {
       <StepIndicator currentStep={step} />
 
       <div className="min-h-[400px]">
-        {step === 0 && <StepBusinessInfo data={businessInfo} onChange={setBusinessInfo} errors={errors} />}
-        {step === 1 && <StepPackage data={packageData} onChange={setPackageData} errors={errors} />}
+        {step === 0 && <StepPackage data={packageData} onChange={setPackageData} errors={errors} />}
+        {step === 1 && <StepBusinessInfo data={businessInfo} onChange={setBusinessInfo} errors={errors} />}
         {step === 2 && <StepDesign data={design} onChange={setDesign} errors={errors} />}
         {step === 3 && <StepPagesFeatures data={pagesFeatures} onChange={setPagesFeatures} businessType={businessInfo.businessType} />}
         {step === 4 && <StepUpload data={uploads} onChange={setUploads} errors={errors} />}

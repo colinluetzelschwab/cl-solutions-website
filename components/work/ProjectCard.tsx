@@ -34,9 +34,9 @@ export default function ProjectCard({
       rel={url ? 'noopener noreferrer' : undefined}
       className="group block"
     >
-      {/* Dual-image panel */}
+      {/* Image panel — dual-image hover only when a swap is provided */}
       <div
-        className={`dual-img relative border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)] ${
+        className={`${imageSwap ? 'dual-img ' : ''}relative overflow-hidden border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)] ${
           featured ? 'aspect-[16/9]' : 'aspect-[4/5]'
         }`}
       >
@@ -45,7 +45,7 @@ export default function ProjectCard({
           alt={title}
           fill
           sizes={featured ? '(max-width: 1024px) 100vw, 80vw' : '(max-width: 768px) 100vw, 40vw'}
-          className="dual-img__base object-cover"
+          className={`${imageSwap ? 'dual-img__base ' : ''}object-cover object-top`}
           priority={featured}
         />
         {imageSwap && (

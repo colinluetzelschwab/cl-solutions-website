@@ -123,7 +123,6 @@ const packages: Package[] = [
       note: 'Single-page with anchor nav, Sanity CMS, founders module, Resend contact, bilingual-ready.',
       href: 'https://coremedical.ch',
       image: '/work/core-medical.jpg',
-      imageSwap: '/work/lucasvision.jpg',
       external: true,
     },
     isHighlight: true,
@@ -180,8 +179,7 @@ const packages: Package[] = [
       sector: 'Swiss cycling marketplace',
       note: 'Supabase auth + Stripe Connect escrow, preview gate, listings CRUD, transactional email, cron payout webhook, Pro-Shop industrial design.',
       href: 'https://www.veloscout.ch',
-      image: '/work/aariviiva.jpg',
-      imageSwap: '/work/lucasvision.jpg',
+      image: '/work/veloscout.png',
       external: true,
     },
   },
@@ -335,13 +333,13 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
                 className="group block"
               >
                 {pkg.reference.image && (
-                  <div className="dual-img relative aspect-[16/9] mb-6 border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]">
+                  <div className={`${pkg.reference.imageSwap ? 'dual-img ' : ''}relative aspect-[16/9] mb-6 overflow-hidden border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]`}>
                     <Image
                       src={pkg.reference.image}
                       alt={pkg.reference.client}
                       fill
                       sizes="(max-width: 1024px) 100vw, 66vw"
-                      className="dual-img__base object-cover"
+                      className={`${pkg.reference.imageSwap ? 'dual-img__base ' : ''}object-cover`}
                     />
                     {pkg.reference.imageSwap && (
                       <Image
