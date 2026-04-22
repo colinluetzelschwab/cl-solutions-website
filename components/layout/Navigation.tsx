@@ -116,8 +116,19 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* Mobile toggle */}
+          {/* CTA + mobile toggle — CTA hidden during homepage hero mode */}
           <div className="flex items-center gap-2">
+            <Link
+              href="/contact/start"
+              aria-hidden={heroMode}
+              tabIndex={heroMode ? -1 : 0}
+              className={`hidden md:inline-flex items-center gap-1 text-[12px] font-medium tracking-tight text-[color:var(--ink)] px-3 py-1.5 link-ghost transition-all duration-300 ${
+                heroMode ? 'opacity-0 pointer-events-none translate-x-1' : 'opacity-100'
+              }`}
+            >
+              Start a project
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
             <button
               onClick={() => setIsMobileMenuOpen((v) => !v)}
               className="lg:hidden inline-flex items-center justify-center h-9 w-9 rounded-full border border-[color:var(--border-subtle)] text-[color:var(--ink)] hover:bg-[color:var(--surface-2)]/70 transition-colors"
