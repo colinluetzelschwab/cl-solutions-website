@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
+  animate,
   motion,
   useScroll,
   useTransform,
@@ -10,6 +11,9 @@ import {
   useReducedMotion,
 } from 'framer-motion'
 import { Warp } from '@paper-design/shaders-react'
+
+const HERO_SPEED_SETTLED = 0.35
+const HERO_SPEED_PEAK = 2.0
 
 // Hero composition — 21st.dev shadway/wrap-shader (Warp) repainted in our
 // warm editorial palette, layered under the existing Ravi-style editorial
@@ -92,6 +96,22 @@ function RotatingWord({
 export default function HeroContent() {
   const sectionRef = useRef<HTMLElement | null>(null)
   const reduce = useReducedMotion()
+  const [heroSpeed, setHeroSpeed] = useState(HERO_SPEED_SETTLED)
+
+  useEffect(() => {
+    if (reduce) return
+    const controls = animate(
+      HERO_SPEED_SETTLED,
+      [HERO_SPEED_SETTLED, HERO_SPEED_PEAK, HERO_SPEED_SETTLED],
+      {
+        duration: 5,
+        times: [0, 0.2, 1],
+        ease: ['easeOut', 'easeInOut'],
+        onUpdate: (v) => setHeroSpeed(v),
+      },
+    )
+    return () => controls.stop()
+  }, [reduce])
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -124,7 +144,7 @@ export default function HeroContent() {
             shapeScale={0.08}
             scale={1.1}
             rotation={0}
-            speed={0.35}
+            speed={heroSpeed}
             colors={[
               'hsl(22, 45%, 5%)',   // near-black warm undertone
               'hsl(18, 55%, 16%)',  // deep espresso
