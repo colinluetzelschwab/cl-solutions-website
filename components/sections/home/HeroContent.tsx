@@ -134,13 +134,14 @@ export default function HeroContent() {
     mass: 0.3,
   })
 
-  // CURTAIN CLOSE — paper closes in from left + right via clip-path inset.
-  // Card never moves and never scales; only the visible window narrows.
-  // Inset reaches 50% (fully closed) by progress 0.95, leaving a touch of
-  // settled stillness before the pin releases.
-  const insetX = useTransform(progress, [0, 0.95], [0, 50])
+  // CURTAIN CLOSE — paper closes in from all four sides at the same rate
+  // (uniform iris) via clip-path inset. The visible window keeps the
+  // viewport's aspect ratio as it shrinks toward the centre. Card never
+  // moves and never scales. Inset reaches 50% (fully closed) by progress
+  // 0.95, leaving a touch of settled stillness before the pin releases.
+  const inset = useTransform(progress, [0, 0.95], [0, 50])
   const cardRadius = useTransform(progress, [0, 0.55], [0, 20])
-  const clipPath = useMotionTemplate`inset(0% ${insetX}% 0% ${insetX}% round ${cardRadius}px)`
+  const clipPath = useMotionTemplate`inset(${inset}% ${inset}% ${inset}% ${inset}% round ${cardRadius}px)`
 
   // Hero content (headline + CTA) — fades out early so the curtain reads clean.
   const contentOpacity = useTransform(progress, [0, 0.2], [1, 0])
