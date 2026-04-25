@@ -1,16 +1,28 @@
 import React from 'react'
 import { Link } from '@/i18n/navigation'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
-interface AddOn { name: string; description: string; price: string }
+interface AddOn {
+  name: string
+  description: string
+  price?: string
+  href?: string
+  hrefLabel?: string
+}
 
 const addOns: AddOn[] = [
   { name: 'Copywriting',          description: 'One page of copy — research, draft, two revisions.', price: 'CHF 150' },
   { name: 'Extra page',           description: 'Add a page to Starter or Business — designed, built, in style.', price: 'CHF 150' },
   { name: 'Extra revision round', description: 'A full batch of feedback, implemented in one pass.', price: 'CHF 200' },
-  { name: 'Logo design · basic',  description: 'Typographic mark + monogram. Three directions, final vector.', price: 'CHF 300' },
+  // Logo design — links out to the sister studio (aariviiva.fi when live,
+  // aariviiva.vercel.app for now). No price shown here.
+  {
+    name: 'Logo design · basic',
+    description: 'Typographic mark + monogram by our sister studio Aariviiva.',
+    href: 'https://aariviiva.vercel.app',
+    hrefLabel: 'aariviiva.fi',
+  },
   { name: 'Multilingual',         description: 'Translation setup + routing. Starting at DE + EN.', price: 'from CHF 400' },
-  { name: 'Photoshoot direction', description: 'We direct · external photographer bills separately.', price: 'from CHF 600' },
 ]
 
 interface MaintenanceTier {
@@ -56,20 +68,36 @@ export default function Extras() {
           {addOns.map((a) => (
             <li
               key={a.name}
-              className="grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] items-baseline gap-x-10 gap-y-2 py-7 md:py-8 border-b border-[color:var(--border-subtle)] group transition-colors hover:bg-[color:var(--surface-1)]/50"
+              className="relative grid grid-cols-1 md:grid-cols-[1fr_2fr_auto] items-baseline gap-x-10 gap-y-2 py-7 md:py-8 border-b border-[color:var(--border-subtle)] group transition-colors hover:bg-[color:var(--surface-1)]/50"
             >
+              {a.href && (
+                <a
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${a.name} — ${a.hrefLabel ?? 'visit'}`}
+                  className="absolute inset-0 z-[1]"
+                />
+              )}
               <p className="display text-xl md:text-2xl text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors">
                 {a.name}
               </p>
               <p className="text-base text-[color:var(--ink-muted)] leading-relaxed">
                 {a.description}
               </p>
-              <p
-                className="text-base md:text-lg text-[color:var(--ink)] whitespace-nowrap"
-                style={{ fontVariantNumeric: 'tabular-nums' }}
-              >
-                {a.price}
-              </p>
+              {a.href ? (
+                <p className="inline-flex items-center gap-1.5 text-base md:text-lg text-[color:var(--ink)] whitespace-nowrap group-hover:text-[color:var(--accent)] transition-colors">
+                  {a.hrefLabel ?? a.href}
+                  <ArrowUpRight className="h-4 w-4" />
+                </p>
+              ) : (
+                <p
+                  className="text-base md:text-lg text-[color:var(--ink)] whitespace-nowrap"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >
+                  {a.price}
+                </p>
+              )}
             </li>
           ))}
         </ul>
