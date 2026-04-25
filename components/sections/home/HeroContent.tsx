@@ -147,6 +147,45 @@ export default function HeroContent() {
   const contentOpacity = useTransform(progress, [0, 0.07], [1, 0])
   const contentY = useTransform(progress, [0, 0.33], [0, -60])
 
+  // SCROLL COMMIT — once the curtain is past the halfway mark (image at
+  // ~50% of viewport), commit the rest of the slide automatically so the
+  // user lands cleanly on Services without scrolling all the way through
+  // the static curtain phase. One-shot per visit; re-arms once the user
+  // scrolls back to the top.
+  // Implemented as a native scroll listener (rather than via framer-motion's
+  // useMotionValueEvent) so it fires reliably under Lenis-driven scroll.
+  useEffect(() => {
+    if (reduce) return
+    let committed = false
+    const COMMIT_PROGRESS = 0.165 // curtain image at ~50% of viewport
+    const RESET_PROGRESS = 0.04
+
+    const onScroll = () => {
+      const section = sectionRef.current
+      if (!section) return
+      const heroOuterHeight = section.offsetHeight
+      const progress = window.scrollY / heroOuterHeight
+
+      if (!committed && progress > COMMIT_PROGRESS) {
+        committed = true
+        const targetY = window.innerHeight * 2 // 200svh — Services top
+        const lenis = (window as unknown as {
+          __lenis?: { scrollTo: (y: number, opts?: { duration?: number; lock?: boolean }) => void }
+        }).__lenis
+        if (lenis) {
+          lenis.scrollTo(targetY, { duration: 1.2, lock: true })
+        } else {
+          window.scrollTo({ top: targetY, behavior: 'smooth' })
+        }
+      } else if (committed && progress < RESET_PROGRESS) {
+        committed = false
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [reduce])
+
   return (
     <section
       ref={sectionRef}

@@ -32,6 +32,11 @@ export default function SmoothScroll() {
       smoothWheel: true,
     })
 
+    // Expose the instance so scroll-commit triggers (e.g. HeroContent's
+    // curtain-close auto-scroll) can drive smooth jumps without each
+    // consumer instantiating its own Lenis.
+    ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
+
     let rafId = 0
     const raf = (time: number) => {
       lenis.raf(time)
@@ -42,6 +47,7 @@ export default function SmoothScroll() {
     return () => {
       cancelAnimationFrame(rafId)
       lenis.destroy()
+      delete (window as unknown as { __lenis?: Lenis }).__lenis
     }
   }, [])
 
