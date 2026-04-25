@@ -12,6 +12,15 @@ const projects = [
     featured: true,
   },
   {
+    title: 'Veloscout',
+    subtitle: 'Curated bike marketplace — Switzerland · Pre-launch Spring 2026',
+    category: 'Marketplace',
+    scope: ['Design', 'Development', 'CMS', 'Marketplace'],
+    url: 'https://www.veloscout.ch',
+    image: '/work/veloscout.png',
+    featured: true,
+  },
+  {
     title: 'LucasVision',
     subtitle: 'Cinematic photo & video studio — Switzerland',
     category: 'Photography & Film',

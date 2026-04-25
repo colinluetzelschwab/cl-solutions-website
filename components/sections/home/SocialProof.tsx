@@ -1,10 +1,15 @@
-import React from 'react'
+'use client'
+
+import React, { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
 
 // Testimonial — quiet confidence. Left: quote block with hanging mono opener.
 // Right: 3-row stats ledger with tabular numbers and micro-rules between rows.
+//
+// Scroll behaviour: blockquote enters from the left, stats enter from the
+// right with a stagger. IO-driven (one-shot, no opacity-stuck regression).
 
 const stats = [
   { value: '3–5',   label: 'day delivery',   sub: 'average ship time' },
@@ -12,13 +17,50 @@ const stats = [
   { value: '24 h',  label: 'reply window',   sub: 'first written proposal' },
 ]
 
+function useInView<T extends HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T | null>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const node = ref.current
+    if (!node) return
+    if (typeof IntersectionObserver === 'undefined') {
+      setInView(true)
+      return
+    }
+    const obs = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setInView(true)
+            obs.disconnect()
+            break
+          }
+        }
+      },
+      { threshold, rootMargin: '0px 0px -10% 0px' },
+    )
+    obs.observe(node)
+    return () => obs.disconnect()
+  }, [threshold])
+
+  return [ref, inView] as const
+}
+
 export default function SocialProof() {
+  const [quoteRef, quoteIn] = useInView<HTMLDivElement>(0.18)
+  const [statsRef, statsIn] = useInView<HTMLUListElement>(0.18)
+
   return (
     <section className="relative w-full py-28 md:py-40 border-t border-[color:var(--border-subtle)]">
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
         <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] gap-14 lg:gap-24 items-start">
-          {/* Testimonial */}
-          <div className="relative">
+          {/* Testimonial — slides in from the left */}
+          <div
+            ref={quoteRef}
+            data-in={quoteIn ? 'true' : 'false'}
+            className="proof-quote relative"
+          >
             <blockquote className="display text-[clamp(1.7rem,3vw,2.6rem)] leading-[1.22] text-[color:var(--ink)] max-w-[32ch] pl-0">
               A premium website that actually feels like our practice —
               delivered in a week, with a{' '}
@@ -31,7 +73,7 @@ export default function SocialProof() {
               <div className="relative h-14 w-14 shrink-0 rounded-full overflow-hidden border border-[color:var(--border-default)] bg-[color:var(--surface-2)]">
                 <Image
                   src="/work/core-medical.jpg"
-                  alt="Kreetta Lützelschwab portrait"
+                  alt="Kreetta L., founder of Core Medical, portrait"
                   fill
                   sizes="56px"
                   className="object-cover"
@@ -39,7 +81,7 @@ export default function SocialProof() {
               </div>
               <figcaption>
                 <p className="text-[15px] text-[color:var(--ink)] font-medium">
-                  Kreetta Lützelschwab
+                  Kreetta L.
                 </p>
                 <p className="eyebrow mt-1">Founder · Core Medical · Zurich</p>
               </figcaption>
@@ -54,13 +96,18 @@ export default function SocialProof() {
             </Link>
           </div>
 
-          {/* Stats ledger */}
+          {/* Stats ledger — each row slides in from the right with stagger */}
           <div className="lg:pt-3">
-            <ul className="flex flex-col">
+            <ul
+              ref={statsRef}
+              data-in={statsIn ? 'true' : 'false'}
+              className="proof-stats flex flex-col"
+            >
               {stats.map((s, i) => (
                 <li
                   key={s.label}
-                  className={`group grid grid-cols-[auto_1fr] items-baseline gap-6 py-7 ${
+                  style={{ ['--stat-delay' as string]: `${i * 110}ms` } as CSSProperties}
+                  className={`stat-row group grid grid-cols-[auto_1fr] items-baseline gap-6 py-7 ${
                     i < stats.length - 1
                       ? 'border-b border-[color:var(--border-subtle)]'
                       : ''

@@ -40,7 +40,7 @@ export default function WorkPage() {
           <div className="fade-up flex items-center gap-4 mb-10 md:mb-14">
             <span className="eyebrow">Portfolio · Live</span>
             <span className="flex-1 divider-gradient" aria-hidden />
-            <span className="hidden sm:inline eyebrow">3 case studies</span>
+            <span className="hidden sm:inline eyebrow">4 case studies</span>
           </div>
 
           <h1 className="display text-[clamp(2.8rem,7vw,5.4rem)] text-[color:var(--ink)] leading-[0.98]">
