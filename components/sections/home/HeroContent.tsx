@@ -3,24 +3,25 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
-  animate,
   motion,
   useScroll,
   useTransform,
   useSpring,
   useReducedMotion,
 } from 'framer-motion'
-import { Warp } from '@paper-design/shaders-react'
 
-const HERO_SPEED_SETTLED = 0.35
-const HERO_SPEED_PEAK = 2.0
-
-// Hero composition — 21st.dev shadway/wrap-shader (Warp) repainted in our
-// warm editorial palette, layered under the existing Ravi-style editorial
-// overlay: Instrument Serif display, rotating italic moment on line 2,
-// corner live-clock, Ch. I marker. The hero is always visually dark
-// (the shader is its own cinematic room) — the rest of the page still
-// adapts to system light/dark via prefers-color-scheme.
+// Hero composition — galdu.fi register: dark macro lake-water surface as a
+// 5.4s seamless loop video (DoP first-last-frame, same image both ends).
+// Layered under the existing Ravi-style editorial overlay: Instrument Serif
+// display, rotating italic moment on line 2, "Start a project" CTA. Hero
+// stays dark-locked (data-theme="dark"); rest of page adapts to system
+// light/dark via prefers-color-scheme.
+//
+// Assets (committed under public/):
+//   - /videos/hero/water-loop.mp4   (H.264 1.3 Mbps, ~870 KB, 1280×720, 30fps)
+//   - /videos/hero/water-loop.webm  (VP9, ~710 KB, fallback)
+//   - /images/hero/water-hero.png   (still poster for instant first paint
+//                                    + reduced-motion / video-fail fallback)
 
 const ROTATING_WORDS = ['intent', 'care', 'craft', 'precision'] as const
 
@@ -95,22 +96,21 @@ function RotatingWord({
 
 export default function HeroContent() {
   const sectionRef = useRef<HTMLElement | null>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
   const reduce = useReducedMotion()
-  const [heroSpeed, setHeroSpeed] = useState(HERO_SPEED_SETTLED)
+  const [videoFailed, setVideoFailed] = useState(false)
 
+  // Pause loop when tab/window is hidden — saves battery on mobile.
   useEffect(() => {
     if (reduce) return
-    const controls = animate(
-      HERO_SPEED_SETTLED,
-      [HERO_SPEED_SETTLED, HERO_SPEED_PEAK, HERO_SPEED_SETTLED],
-      {
-        duration: 5,
-        times: [0, 0.2, 1],
-        ease: ['easeOut', 'easeInOut'],
-        onUpdate: (v) => setHeroSpeed(v),
-      },
-    )
-    return () => controls.stop()
+    const v = videoRef.current
+    if (!v) return
+    const onVis = () => {
+      if (document.hidden) v.pause()
+      else v.play().catch(() => {})
+    }
+    document.addEventListener('visibilitychange', onVis)
+    return () => document.removeEventListener('visibilitychange', onVis)
   }, [reduce])
 
   const { scrollYProgress } = useScroll({
@@ -130,39 +130,31 @@ export default function HeroContent() {
       data-theme="dark"
       className="relative isolate w-full overflow-hidden h-[100svh] min-h-[640px] flex flex-col"
     >
-      {/* Warp shader backdrop — warm rust/ember palette, slow cinematic swirl */}
-      <div aria-hidden className="absolute inset-0 -z-10">
-        {!reduce && (
-          <Warp
-            style={{ height: '100%', width: '100%' }}
-            proportion={0.45}
-            softness={1}
-            distortion={0.28}
-            swirl={0.6}
-            swirlIterations={10}
-            shape="checks"
-            shapeScale={0.08}
-            scale={1.1}
-            rotation={0}
-            speed={heroSpeed}
-            colors={[
-              'hsl(22, 45%, 5%)',   // near-black warm undertone
-              'hsl(18, 55%, 16%)',  // deep espresso
-              'hsl(14, 65%, 32%)',  // rich rust
-              'hsl(10, 80%, 52%)',  // ember highlight
-            ]}
-          />
+      {/* Galdu-water backdrop — dark macro lake surface, 5.4s seamless loop.
+          Reduced-motion users (and any video failure) see the still poster. */}
+      <div aria-hidden className="absolute inset-0 -z-10 bg-black">
+        {!reduce && !videoFailed && (
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            poster="/images/hero/water-hero.png"
+            onError={() => setVideoFailed(true)}
+            className="absolute inset-0 h-full w-full object-cover"
+          >
+            <source src="/videos/hero/water-loop.webm" type="video/webm" />
+            <source src="/videos/hero/water-loop.mp4" type="video/mp4" />
+          </video>
         )}
-        {/* Reduced-motion fallback — static gradient, same palette */}
-        {reduce && (
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(ellipse 70% 50% at 30% 20%, hsl(14 65% 32% / 0.5), transparent 60%),\
-                 radial-gradient(ellipse 60% 50% at 80% 70%, hsl(10 80% 52% / 0.35), transparent 65%),\
-                 hsl(22 45% 5%)',
-            }}
+        {(reduce || videoFailed) && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src="/images/hero/water-hero.png"
+            alt=""
+            className="absolute inset-0 h-full w-full object-cover"
           />
         )}
         {/* Top vignette — protects nav-pill legibility */}
@@ -170,7 +162,7 @@ export default function HeroContent() {
           className="absolute inset-x-0 top-0 h-40 pointer-events-none"
           style={{
             background:
-              'linear-gradient(180deg, hsl(22 45% 3% / 0.55) 0%, transparent 100%)',
+              'linear-gradient(180deg, rgb(0 0 0 / 0.55) 0%, transparent 100%)',
           }}
         />
         {/* Bottom fade — merges into paper below */}
