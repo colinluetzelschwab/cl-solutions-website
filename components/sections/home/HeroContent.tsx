@@ -7,6 +7,7 @@ import {
   motion,
   useScroll,
   useTransform,
+  useMotionTemplate,
   useSpring,
   useReducedMotion,
 } from 'framer-motion'
@@ -14,15 +15,17 @@ import {
 // Hero composition — galdu.fi register: dark macro lake-water surface as a
 // 5.4s seamless loop video. Layered under the Ravi-style editorial overlay.
 //
-// SCROLL CHOREOGRAPHY ("The Zoom-Out") — landonorris.com pattern:
-//   On desktop (md+), the section is 200svh tall with a sticky inner that
+// SCROLL CHOREOGRAPHY ("The Curtain Close") — sticky-pin + horizontal reveal:
+//   The section is 200svh tall (170svh on mobile) with a sticky inner that
 //   pins the hero for 100svh of scroll. As scrollYProgress goes 0 → 1:
-//     · The water rectangle SHRINKS from full-bleed to ~42% of viewport,
-//       border-radius animates in, the page paper colour is revealed
-//       around it.
-//     · The "Built with intent." headline + CTA fade out early so the
-//       shrinking card reads as a quiet image card by mid-pin.
-//   On mobile, no pin, no zoom-out — just the original headline parallax.
+//     · The water card stays FULL-BLEED — it does not shrink and does not
+//       move. Paper-coloured curtains close in from the LEFT and RIGHT
+//       (`clip-path: inset(0 X% 0 X%)`, X going 0 → 50). By the end of the
+//       pin the video is fully covered by the page paper.
+//     · The "Built with intent." headline + CTA fade out within the first
+//       ~20% of scroll so the close reads as a clean reveal, not a fight.
+//   When the pin releases, the next section is already at the top of the
+//   viewport — services "appears" rather than scrolling up from below.
 //   `prefers-reduced-motion` disables all scroll-driven motion entirely.
 
 
@@ -101,25 +104,12 @@ export default function HeroContent() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const reduce = useReducedMotion()
   const [videoFailed, setVideoFailed] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const rotatingWords = [
     t('wordIntent'),
     t('wordCare'),
     t('wordCraft'),
     t('wordPrecision'),
   ] as const
-
-  // Track mobile breakpoint so the zoom-out endpoint can be gentler
-  // (the card stays larger / more readable on a phone) while desktop
-  // keeps the dramatic shrink.
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const mq = window.matchMedia('(max-width: 767px)')
-    const update = () => setIsMobile(mq.matches)
-    update()
-    mq.addEventListener('change', update)
-    return () => mq.removeEventListener('change', update)
-  }, [])
 
   // Pause loop when tab/window is hidden — saves battery on mobile.
   useEffect(() => {
@@ -144,16 +134,16 @@ export default function HeroContent() {
     mass: 0.3,
   })
 
-  // ZOOM-OUT — water card scales 1 → endpoint, corners round, lifts slightly.
-  // Mobile uses a gentler endpoint (0.66) so the shrunken card still reads
-  // at small viewport widths; desktop keeps the dramatic 0.42 shrink.
-  const scaleEnd = isMobile ? 0.66 : 0.42
-  const cardScale = useTransform(progress, [0, 1], [1, scaleEnd])
-  const cardRadius = useTransform(progress, [0, 0.55], ['0px', '20px'])
-  const cardLift = useTransform(progress, [0, 1], ['0%', '-2%'])
+  // CURTAIN CLOSE — paper closes in from left + right via clip-path inset.
+  // Card never moves and never scales; only the visible window narrows.
+  // Inset reaches 50% (fully closed) by progress 0.95, leaving a touch of
+  // settled stillness before the pin releases.
+  const insetX = useTransform(progress, [0, 0.95], [0, 50])
+  const cardRadius = useTransform(progress, [0, 0.55], [0, 20])
+  const clipPath = useMotionTemplate`inset(0% ${insetX}% 0% ${insetX}% round ${cardRadius}px)`
 
-  // Hero content (headline + CTA) — fades out early during the zoom-out
-  const contentOpacity = useTransform(progress, [0, 0.22], [1, 0])
+  // Hero content (headline + CTA) — fades out early so the curtain reads clean.
+  const contentOpacity = useTransform(progress, [0, 0.2], [1, 0])
   const contentY = useTransform(progress, [0, 1], [0, -60])
 
   return (
@@ -167,24 +157,16 @@ export default function HeroContent() {
     >
       <div className="sticky top-0 isolate w-full h-[100svh] min-h-[640px] overflow-hidden bg-[color:var(--paper-dark)] flex items-center justify-center">
 
-        {/* Water card — full-bleed at scroll 0, shrinks as scroll progresses.
+        {/* Water card — full-bleed at scroll 0. As scroll progresses, the
+            paper "closes in" from both sides via clip-path inset; the card
+            itself never moves or scales.
             data-theme="dark" forces dark tokens INSIDE the card so the
             headline + CTA stay readable over the water; surrounding sticky
             uses page-mode tokens (cream on light, charcoal on dark). */}
         <motion.div
           data-theme="dark"
-          className="relative isolate w-full h-full origin-center overflow-hidden bg-black z-10 will-change-transform"
-          style={
-            reduce
-              ? undefined
-              : {
-                  scale: cardScale,
-                  borderRadius: cardRadius,
-                  y: cardLift,
-                  boxShadow:
-                    '0 30px 80px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset',
-                }
-          }
+          className="relative isolate w-full h-full overflow-hidden bg-black z-10 will-change-[clip-path]"
+          style={reduce ? undefined : { clipPath }}
         >
           {/* Galdu-water backdrop — dark macro lake surface, 5.4s seamless
               loop. Reduced-motion users (and any video failure) see the
