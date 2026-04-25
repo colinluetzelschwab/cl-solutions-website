@@ -1,0 +1,115 @@
+{
+  "Nav": {
+    "services": "Palvelut",
+    "work": "Työt",
+    "contact": "Yhteys",
+    "startProject": "Aloita projekti",
+    "homeLabel": "CL Solutions — Etusivu",
+    "toggleMenu": "Avaa valikko"
+  },
+  "Footer": {
+    "tagline": "Itsenäinen putiikkistudio, joka rakentaa nopeita, yksilöllisiä verkkosivuja perustajille kaikkialla. Kiinteä laajuus. Kiinteä hinta. Julkaisu viikossa.",
+    "explore": "Tutustu",
+    "services": "Palvelut",
+    "work": "Työt",
+    "contact": "Yhteys",
+    "startProject": "Aloita projekti",
+    "reach": "Tavoita",
+    "responseWindow": "Vastaus ≤ 24 h",
+    "rights": "© 2026 CL Solutions · Suunnitellut ja rakentanut",
+    "credit": "Colin Lützelschwab",
+    "privacy": "Tietosuoja",
+    "imprint": "Tiedot",
+    "language": "Kieli"
+  },
+  "Hero": {
+    "builtWith": "Rakennettu",
+    "wordIntent": "tarkoituksella",
+    "wordCare": "huolella",
+    "wordCraft": "käsityönä",
+    "wordPrecision": "täsmällisesti",
+    "startProject": "Aloita projekti"
+  },
+  "Services": {
+    "eyebrow": "Luku I · Paketit",
+    "headlineLead": "Kolme vaihtoehtoa.",
+    "headlineEmphasis": "Ei yllätyksiä.",
+    "lead": "Kiinteä laajuus, kiinteä hinta, kiinteä aikataulu. Tiedät tarkalleen, mitä saat — ennen kuin kirjoitamme riviäkään koodia.",
+    "currency": "CHF",
+    "eurApprox": "EUR",
+    "starter": {
+      "name": "Starter",
+      "price": "1 500",
+      "priceEur": "≈ 1 600",
+      "description": "Selkeä, nopea sivusto, joka menee suoraan asiaan.",
+      "feature1": "Enintään 4 sivua",
+      "feature2": "Mobiilioptimoitu",
+      "feature3": "Yksi muutoskierros",
+      "feature4": "Toimitus 3–5 päivässä"
+    },
+    "business": {
+      "name": "Business",
+      "price": "3 500",
+      "priceEur": "≈ 3 700",
+      "description": "Täysi paketti — design, sisällönhallinta, animaatiot, SEO.",
+      "feature1": "Enintään 6 sivua",
+      "feature2": "Sisällönhallinta mukana",
+      "feature3": "Räätälöidyt animaatiot",
+      "feature4": "SEO-optimoitu"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "7 500+",
+      "priceEur": "≈ 7 900+",
+      "description": "Räätälöity laajuus perustajille, jotka tarvitsevat enemmän.",
+      "feature1": "Vapaa sivumäärä",
+      "feature2": "Monikielinen",
+      "feature3": "Verkkokauppavalmis",
+      "feature4": "Ylläpitosopimus mahdollinen"
+    },
+    "mostPicked": "Suosituin",
+    "startCta": "Aloita {name}",
+    "compareAll": "Vertaile kaikkia paketteja →"
+  },
+  "Proof": {
+    "quoteLead": "Korkealaatuinen sivusto, joka tuntuu aidosti meidän vastaanotoltamme — toimitettu viikossa, mukana",
+    "quoteEmphasis": "sisällönhallinta, jota osaamme käyttää itse.",
+    "authorName": "Kreetta L.",
+    "authorRole": "Perustaja · Core Medical · Zürich",
+    "caseStudy": "Lue tapaus",
+    "stat1Value": "3–5",
+    "stat1Label": "päivän toimitus",
+    "stat1Sub": "keskimääräinen rakennusaika",
+    "stat2Value": "100%",
+    "stat2Label": "kiinteä hinta",
+    "stat2Sub": "ei avoimia laskuja",
+    "stat3Value": "24 h",
+    "stat3Label": "vastausaika",
+    "stat3Sub": "ensimmäinen kirjallinen tarjous"
+  },
+  "Process": {
+    "eyebrow": "Luku II — Prosessi",
+    "headlineLead": "Briefistä julkaisuun,",
+    "headlineEmphasis": "neljässä vaiheessa.",
+    "step1Title": "Brief",
+    "step1Text": "Kerrot meille yrityksestäsi, tavoitteistasi ja aikataulustasi.",
+    "step1Marker": "Päivä 0",
+    "step2Title": "Suunnitelma",
+    "step2Text": "Kartoitamme jokaisen sivun ja osion ennen ensimmäistäkään riviä koodia.",
+    "step2Marker": "Päivä 1",
+    "step3Title": "Rakennus",
+    "step3Text": "Sivustosi rakennetaan 3–5 päivässä. Saat säännöllisesti päivityksiä.",
+    "step3Marker": "Päivä 2–4",
+    "step4Title": "Julkaisu",
+    "step4Text": "Yhdistämme verkkotunnuksesi, julkaisemme sivuston ja luovutamme avaimet.",
+    "step4Marker": "Päivä 5"
+  },
+  "CTA": {
+    "eyebrow": "Kun sinä olet valmis",
+    "headlineLead": "Rakennetaan yhdessä jotain,",
+    "headlineEmphasis": "joka kestää.",
+    "subtext": "Täytä brief — palaamme asiaan 24 tunnin sisällä kirjallisella tarjouksella.",
+    "primary": "Aloita projekti",
+    "secondary": "Selaa paketteja"
+  }
+}

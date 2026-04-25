@@ -1,0 +1,115 @@
+{
+  "Nav": {
+    "services": "Leistungen",
+    "work": "Arbeiten",
+    "contact": "Kontakt",
+    "startProject": "Projekt starten",
+    "homeLabel": "CL Solutions — Startseite",
+    "toggleMenu": "Menü öffnen"
+  },
+  "Footer": {
+    "tagline": "Ein unabhängiges Boutique-Studio für schnelle, individuelle Websites — für Founder überall. Fester Umfang. Fester Preis. Live in einer Woche.",
+    "explore": "Entdecken",
+    "services": "Leistungen",
+    "work": "Arbeiten",
+    "contact": "Kontakt",
+    "startProject": "Projekt starten",
+    "reach": "Erreichbar",
+    "responseWindow": "Antwort ≤ 24 h",
+    "rights": "© 2026 CL Solutions · Gestaltet & gebaut von",
+    "credit": "Colin Lützelschwab",
+    "privacy": "Datenschutz",
+    "imprint": "Impressum",
+    "language": "Sprache"
+  },
+  "Hero": {
+    "builtWith": "Gebaut mit",
+    "wordIntent": "Absicht",
+    "wordCare": "Sorgfalt",
+    "wordCraft": "Handwerk",
+    "wordPrecision": "Präzision",
+    "startProject": "Projekt starten"
+  },
+  "Services": {
+    "eyebrow": "Kapitel I · Pakete",
+    "headlineLead": "Drei Optionen.",
+    "headlineEmphasis": "Null Überraschungen.",
+    "lead": "Fester Umfang, fester Preis, feste Timeline. Du weisst genau, was du bekommst — bevor wir die erste Zeile Code schreiben.",
+    "currency": "CHF",
+    "eurApprox": "EUR",
+    "starter": {
+      "name": "Starter",
+      "price": "1'500",
+      "priceEur": "≈ 1'600",
+      "description": "Eine klare, schnelle Website, die direkt auf den Punkt kommt.",
+      "feature1": "Bis zu 4 Seiten",
+      "feature2": "Mobil-optimiert",
+      "feature3": "Eine Revisionsrunde",
+      "feature4": "3–5 Tage Lieferzeit"
+    },
+    "business": {
+      "name": "Business",
+      "price": "3'500",
+      "priceEur": "≈ 3'700",
+      "description": "Das volle Paket — Design, Content-Management, Animationen, SEO.",
+      "feature1": "Bis zu 6 Seiten",
+      "feature2": "CMS inklusive",
+      "feature3": "Individuelle Animationen",
+      "feature4": "SEO-optimiert"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "7'500+",
+      "priceEur": "≈ 7'900+",
+      "description": "Individueller Umfang für Founder mit grösseren Ansprüchen.",
+      "feature1": "Beliebige Seitenanzahl",
+      "feature2": "Mehrsprachig",
+      "feature3": "E-Commerce-ready",
+      "feature4": "Wartung optional"
+    },
+    "mostPicked": "Am meisten gewählt",
+    "startCta": "{name} starten",
+    "compareAll": "Alle Pakete vergleichen →"
+  },
+  "Proof": {
+    "quoteLead": "Eine hochwertige Website, die sich tatsächlich wie unsere Praxis anfühlt — geliefert in einer Woche, mit einem",
+    "quoteEmphasis": "CMS, das wir selbst bedienen können.",
+    "authorName": "Kreetta L.",
+    "authorRole": "Gründerin · Core Medical · Zürich",
+    "caseStudy": "Zur Case Study",
+    "stat1Value": "3–5",
+    "stat1Label": "Tage Lieferzeit",
+    "stat1Sub": "durchschnittliche Bauzeit",
+    "stat2Value": "100%",
+    "stat2Label": "Festpreis",
+    "stat2Sub": "keine offenen Rechnungen",
+    "stat3Value": "24 h",
+    "stat3Label": "Antwortfenster",
+    "stat3Sub": "erstes schriftliches Angebot"
+  },
+  "Process": {
+    "eyebrow": "Kapitel II — Ablauf",
+    "headlineLead": "Vom Briefing bis zum Launch,",
+    "headlineEmphasis": "in vier Schritten.",
+    "step1Title": "Briefing",
+    "step1Text": "Du erzählst uns von deinem Unternehmen, deinen Zielen und deiner Timeline.",
+    "step1Marker": "Tag 0",
+    "step2Title": "Plan",
+    "step2Text": "Wir planen jede Seite und jeden Abschnitt, bevor wir die erste Zeile Code schreiben.",
+    "step2Marker": "Tag 1",
+    "step3Title": "Build",
+    "step3Text": "Deine Website wird in 3–5 Tagen gebaut. Du bekommst regelmässig Updates.",
+    "step3Marker": "Tag 2–4",
+    "step4Title": "Launch",
+    "step4Text": "Wir verbinden deine Domain, gehen live und übergeben dir die Schlüssel.",
+    "step4Marker": "Tag 5"
+  },
+  "CTA": {
+    "eyebrow": "Bereit, wenn du es bist",
+    "headlineLead": "Lass uns etwas bauen,",
+    "headlineEmphasis": "das bleibt.",
+    "subtext": "Füll dein Briefing aus — wir melden uns innerhalb von 24 Stunden mit einem schriftlichen Angebot.",
+    "primary": "Projekt starten",
+    "secondary": "Pakete ansehen"
+  }
+}

@@ -1,21 +1,10 @@
 'use client'
 
 import React, { useEffect, useRef, useState, type CSSProperties } from 'react'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
-
-// Testimonial — quiet confidence. Left: quote block with hanging mono opener.
-// Right: 3-row stats ledger with tabular numbers and micro-rules between rows.
-//
-// Scroll behaviour: blockquote enters from the left, stats enter from the
-// right with a stagger. IO-driven (one-shot, no opacity-stuck regression).
-
-const stats = [
-  { value: '3–5',   label: 'day delivery',   sub: 'average ship time' },
-  { value: '100%',  label: 'fixed scope',    sub: 'no open-ended bills' },
-  { value: '24 h',  label: 'reply window',   sub: 'first written proposal' },
-]
 
 function useInView<T extends HTMLElement>(threshold = 0.15) {
   const ref = useRef<T | null>(null)
@@ -48,8 +37,15 @@ function useInView<T extends HTMLElement>(threshold = 0.15) {
 }
 
 export default function SocialProof() {
+  const t = useTranslations('Proof')
   const [quoteRef, quoteIn] = useInView<HTMLDivElement>(0.18)
   const [statsRef, statsIn] = useInView<HTMLUListElement>(0.18)
+
+  const stats = [
+    { value: t('stat1Value'), label: t('stat1Label'), sub: t('stat1Sub') },
+    { value: t('stat2Value'), label: t('stat2Label'), sub: t('stat2Sub') },
+    { value: t('stat3Value'), label: t('stat3Label'), sub: t('stat3Sub') },
+  ]
 
   return (
     <section className="relative w-full py-28 md:py-40 border-t border-[color:var(--border-subtle)]">
@@ -62,10 +58,9 @@ export default function SocialProof() {
             className="proof-quote relative"
           >
             <blockquote className="display text-[clamp(1.7rem,3vw,2.6rem)] leading-[1.22] text-[color:var(--ink)] max-w-[32ch] pl-0">
-              A premium website that actually feels like our practice —
-              delivered in a week, with a{' '}
+              {t('quoteLead')}{' '}
               <span className="serif-italic text-[color:var(--ink-soft)]">
-                CMS we can run ourselves.
+                {t('quoteEmphasis')}
               </span>
             </blockquote>
 
@@ -73,7 +68,7 @@ export default function SocialProof() {
               <div className="relative h-14 w-14 shrink-0 rounded-full overflow-hidden border border-[color:var(--border-default)] bg-[color:var(--surface-2)]">
                 <Image
                   src="/work/core-medical.jpg"
-                  alt="Kreetta L., founder of Core Medical, portrait"
+                  alt={t('authorName')}
                   fill
                   sizes="56px"
                   className="object-cover"
@@ -81,9 +76,9 @@ export default function SocialProof() {
               </div>
               <figcaption>
                 <p className="text-[15px] text-[color:var(--ink)] font-medium">
-                  Kreetta L.
+                  {t('authorName')}
                 </p>
-                <p className="eyebrow mt-1">Founder · Core Medical · Zurich</p>
+                <p className="eyebrow mt-1">{t('authorRole')}</p>
               </figcaption>
             </figure>
 
@@ -91,7 +86,7 @@ export default function SocialProof() {
               href="/work"
               className="mt-10 inline-flex items-center gap-1.5 text-sm text-[color:var(--ink-muted)] hover:text-[color:var(--ink)] transition-colors group link-ghost"
             >
-              See the case study
+              {t('caseStudy')}
               <ArrowUpRight className="h-3.5 w-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </div>

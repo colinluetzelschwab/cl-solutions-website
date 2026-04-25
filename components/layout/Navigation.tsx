@@ -1,28 +1,24 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
+import { Link, usePathname } from '@/i18n/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowUpRight } from 'lucide-react'
 import Logo from '@/components/ui/Logo'
 
-interface NavLink {
-  label: string
-  href: string
-}
-
-const navLinks: NavLink[] = [
-  { label: 'Services', href: '/services' },
-  { label: 'Work',     href: '/work' },
-  { label: 'Contact',  href: '/contact' },
-]
-
 export default function Navigation() {
+  const t = useTranslations('Nav')
   const pathname = usePathname()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [hoverKey, setHoverKey] = useState<string | null>(null)
   const [scrolled, setScrolled] = useState(false)
+
+  const navLinks = [
+    { label: t('services'), href: '/services' },
+    { label: t('work'),     href: '/work' },
+    { label: t('contact'),  href: '/contact' },
+  ]
 
   // Determine active link — match exact route or section prefix.
   const isActive = (href: string) => {
@@ -47,15 +43,12 @@ export default function Navigation() {
   }, [])
 
   const isHome = pathname === '/'
-  // Hero mode = homepage AND at the very top AND no mobile menu open.
-  // In hero mode: no pill background, nav items render white over the dark hero.
   const heroMode = isHome && !scrolled && !isMobileMenuOpen
 
   return (
     <>
       <div className="fixed top-4 md:top-5 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-1.5rem)] max-w-[960px]">
         <nav aria-label="Primary" className="relative">
-          {/* Animated pill background — fades out only on homepage hero */}
           <motion.div
             aria-hidden
             className="nav-pill absolute inset-0 pointer-events-none"
@@ -67,10 +60,9 @@ export default function Navigation() {
             data-theme={heroMode ? 'dark' : undefined}
             className="relative flex items-center justify-between px-3 md:px-4 py-2 transition-colors duration-300"
           >
-          {/* Logo — hidden during homepage hero mode */}
           <Link
             href="/"
-            aria-label="CL Solutions — Home"
+            aria-label={t('homeLabel')}
             aria-hidden={heroMode}
             tabIndex={heroMode ? -1 : 0}
             className={`flex items-center rounded-full pl-1.5 pr-3 py-1 hover:bg-[color:var(--surface-2)]/60 transition-all duration-300 ${
@@ -80,7 +72,6 @@ export default function Navigation() {
             <Logo />
           </Link>
 
-          {/* Desktop links */}
           <div
             className="hidden lg:flex items-center gap-0.5 relative"
             onMouseLeave={() => setHoverKey(null)}
@@ -90,7 +81,7 @@ export default function Navigation() {
               const hovered = hoverKey === link.href
               return (
                 <Link
-                  key={link.label}
+                  key={link.href}
                   href={link.href}
                   onMouseEnter={() => setHoverKey(link.href)}
                   className="relative px-4 py-2 text-[13px] tracking-tight text-[color:var(--ink-muted)] hover:text-[color:var(--ink)] transition-colors"
@@ -116,7 +107,6 @@ export default function Navigation() {
             })}
           </div>
 
-          {/* CTA + mobile toggle — CTA hidden during homepage hero mode */}
           <div className="flex items-center gap-2">
             <Link
               href="/contact/start"
@@ -126,13 +116,13 @@ export default function Navigation() {
                 heroMode ? 'opacity-0 pointer-events-none translate-x-1' : 'opacity-100'
               }`}
             >
-              Start a project
+              {t('startProject')}
               <ArrowUpRight className="h-3.5 w-3.5" />
             </Link>
             <button
               onClick={() => setIsMobileMenuOpen((v) => !v)}
               className="lg:hidden inline-flex items-center justify-center h-9 w-9 rounded-full border border-[color:var(--border-subtle)] text-[color:var(--ink)] hover:bg-[color:var(--surface-2)]/70 transition-colors"
-              aria-label="Toggle menu"
+              aria-label={t('toggleMenu')}
               aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
@@ -142,7 +132,6 @@ export default function Navigation() {
         </nav>
       </div>
 
-      {/* Mobile overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -161,7 +150,7 @@ export default function Navigation() {
               <ul className="flex flex-col gap-2">
                 {navLinks.map((link, i) => (
                   <motion.li
-                    key={link.label}
+                    key={link.href}
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.08 + i * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
@@ -189,7 +178,7 @@ export default function Navigation() {
                   className="btn btn-primary w-full justify-center"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Start a Project
+                  {t('startProject')}
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
                 <p className="text-xs text-[color:var(--ink-faint)] tracking-wide">

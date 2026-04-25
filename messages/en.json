@@ -1,0 +1,115 @@
+{
+  "Nav": {
+    "services": "Services",
+    "work": "Work",
+    "contact": "Contact",
+    "startProject": "Start a project",
+    "homeLabel": "CL Solutions — Home",
+    "toggleMenu": "Toggle menu"
+  },
+  "Footer": {
+    "tagline": "An independent boutique studio building fast, custom websites for founders anywhere. Fixed scope. Fixed pricing. Shipped in a week.",
+    "explore": "Explore",
+    "services": "Services",
+    "work": "Work",
+    "contact": "Contact",
+    "startProject": "Start a project",
+    "reach": "Reach",
+    "responseWindow": "Response ≤ 24 h",
+    "rights": "© 2026 CL Solutions · Designed & built by",
+    "credit": "Colin Lützelschwab",
+    "privacy": "Privacy",
+    "imprint": "Imprint",
+    "language": "Language"
+  },
+  "Hero": {
+    "builtWith": "Built with",
+    "wordIntent": "intent",
+    "wordCare": "care",
+    "wordCraft": "craft",
+    "wordPrecision": "precision",
+    "startProject": "Start a project"
+  },
+  "Services": {
+    "eyebrow": "Chapter I · Packages",
+    "headlineLead": "Three options.",
+    "headlineEmphasis": "Zero surprises.",
+    "lead": "Fixed scope, fixed pricing, fixed timeline. You know exactly what you're getting before we write a single line of code.",
+    "currency": "CHF",
+    "eurApprox": "EUR",
+    "starter": {
+      "name": "Starter",
+      "price": "1,500",
+      "priceEur": "≈ 1,600",
+      "description": "A clean, fast website that gets straight to the point.",
+      "feature1": "Up to 4 pages",
+      "feature2": "Mobile-optimized",
+      "feature3": "1 revision round",
+      "feature4": "3–5 day delivery"
+    },
+    "business": {
+      "name": "Business",
+      "price": "3,500",
+      "priceEur": "≈ 3,700",
+      "description": "The full package — design, content management, animations, SEO.",
+      "feature1": "Up to 6 pages",
+      "feature2": "CMS included",
+      "feature3": "Custom animations",
+      "feature4": "SEO optimized"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "7,500+",
+      "priceEur": "≈ 7,900+",
+      "description": "Custom scope for founders who need more.",
+      "feature1": "Custom page count",
+      "feature2": "Multilingual",
+      "feature3": "E-commerce ready",
+      "feature4": "Retainer option"
+    },
+    "mostPicked": "Most picked",
+    "startCta": "Start {name}",
+    "compareAll": "Compare all packages →"
+  },
+  "Proof": {
+    "quoteLead": "A premium website that actually feels like our practice — delivered in a week, with a",
+    "quoteEmphasis": "CMS we can run ourselves.",
+    "authorName": "Kreetta L.",
+    "authorRole": "Founder · Core Medical · Zurich",
+    "caseStudy": "See the case study",
+    "stat1Value": "3–5",
+    "stat1Label": "day delivery",
+    "stat1Sub": "average ship time",
+    "stat2Value": "100%",
+    "stat2Label": "fixed scope",
+    "stat2Sub": "no open-ended bills",
+    "stat3Value": "24 h",
+    "stat3Label": "reply window",
+    "stat3Sub": "first written proposal"
+  },
+  "Process": {
+    "eyebrow": "Chapter II — Process",
+    "headlineLead": "From brief to launch,",
+    "headlineEmphasis": "in four moves.",
+    "step1Title": "Brief",
+    "step1Text": "You tell us about your business, your goals, and your timeline.",
+    "step1Marker": "Day 0",
+    "step2Title": "Plan",
+    "step2Text": "We map out every page and section before writing a single line of code.",
+    "step2Marker": "Day 1",
+    "step3Title": "Build",
+    "step3Text": "Your site is built in 3–5 days. You get progress updates along the way.",
+    "step3Marker": "Day 2–4",
+    "step4Title": "Launch",
+    "step4Text": "We connect your domain, go live, and hand over the keys.",
+    "step4Marker": "Day 5"
+  },
+  "CTA": {
+    "eyebrow": "Ready when you are",
+    "headlineLead": "Let's build something",
+    "headlineEmphasis": "worth keeping.",
+    "subtext": "Fill out our brief — we'll get back within 24 hours with a written proposal.",
+    "primary": "Start your project",
+    "secondary": "Browse packages"
+  }
+}

@@ -1,18 +1,17 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
 import { Analytics } from "@vercel/analytics/next";
 import OrganizationJsonLd from "@/components/seo/OrganizationJsonLd";
 import "./globals.css";
 
-// Body + UI
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-// Display face + italic philosophical emphasis (Ravi Klaassens pattern)
 const instrumentSerif = Instrument_Serif({
   variable: "--font-instrument",
   subsets: ["latin"],
@@ -20,7 +19,6 @@ const instrumentSerif = Instrument_Serif({
   style: ["normal", "italic"],
 });
 
-// Eyebrows, tabular numerals
 const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
@@ -35,15 +33,6 @@ export const metadata: Metadata = {
   },
   description:
     "An independent boutique studio building fast, custom websites for founders anywhere. Fixed scope. Fixed pricing. Shipped in a week.",
-  keywords: [
-    "custom website design",
-    "boutique web studio",
-    "founder websites",
-    "Next.js agency",
-    "fixed price website",
-    "Zurich Helsinki web studio",
-    "international web design",
-  ],
   authors: [{ name: "CL Solutions" }],
   openGraph: {
     title: "CL Solutions — Fast custom websites for serious founders",
@@ -51,7 +40,6 @@ export const metadata: Metadata = {
       "Premium sites for founders anywhere. Fixed pricing, one-week delivery. Zurich · Helsinki base, remote-first.",
     url: "https://clsolutions.dev",
     siteName: "CL Solutions",
-    locale: "en",
     type: "website",
     images: [
       {
@@ -72,14 +60,15 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${inter.variable} ${instrumentSerif.variable} ${plexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >

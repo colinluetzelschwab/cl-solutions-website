@@ -28,7 +28,7 @@ export default function StartProjectPage() {
       <section className="relative w-full pt-36 md:pt-44 pb-6 md:pb-8 overflow-hidden">
         <div aria-hidden className="grid-noise" />
 
-        <div className="relative mx-auto max-w-3xl px-6 sm:px-10 lg:px-16">
+        <div className="relative mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
           <div className="fade-up mb-10 md:mb-14">
             <span className="eyebrow">Brief · 6 steps · ~ 4 minutes</span>
           </div>
@@ -70,7 +70,7 @@ export default function StartProjectPage() {
       </section>
 
       <section className="w-full pb-20 md:pb-28">
-        <div className="mx-auto max-w-3xl px-6 sm:px-10 lg:px-16">
+        <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
           <Suspense>
             <OnboardingWizard />
           </Suspense>

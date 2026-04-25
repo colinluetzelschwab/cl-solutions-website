@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { ArrowUpRight } from 'lucide-react'

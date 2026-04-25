@@ -1,6 +1,6 @@
 import React from 'react'
 import type { Metadata } from 'next'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { ArrowUpRight, Mail, MapPin, Clock } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'

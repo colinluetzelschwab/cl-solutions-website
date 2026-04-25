@@ -10,11 +10,16 @@ export default function Home() {
   return (
     <>
       <Navigation />
-      <HeroContent />
-      <ServicesOverview />
-      <SocialProof />
-      <Process />
-      <CTABanner />
+      {/* data-page="home" opts this page into proximity scroll-snap so each
+          section lands as the user pauses, giving the homepage a chapter-
+          by-chapter feel. See `html:has([data-page="home"])` in globals.css. */}
+      <div data-page="home">
+        <HeroContent />
+        <ServicesOverview />
+        <SocialProof />
+        <Process />
+        <CTABanner cinematic />
+      </div>
       <Footer />
     </>
   )

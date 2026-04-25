@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ArrowLeft, ArrowRight, Send, Loader2, Check } from 'lucide-react'
 import StepIndicator from './StepIndicator'
@@ -26,6 +26,23 @@ export default function OnboardingWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitResult, setSubmitResult] = useState<{ success: boolean; briefId?: string } | null>(null)
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Scroll to the top of the wizard whenever the step changes — without
+  // this, clicking Next leaves the user mid-page on the next step. Skip
+  // initial mount so opening the page doesn't auto-scroll. Offset matches
+  // the floating nav clearance.
+  const wizardRef = useRef<HTMLDivElement | null>(null)
+  const isFirstStep = useRef(true)
+  useEffect(() => {
+    if (isFirstStep.current) {
+      isFirstStep.current = false
+      return
+    }
+    const node = wizardRef.current
+    if (!node) return
+    const top = node.getBoundingClientRect().top + window.scrollY - 96
+    window.scrollTo({ top, behavior: 'smooth' })
+  }, [step])
 
   const [businessInfo, setBusinessInfo] = useState<BusinessInfoData>({
     name: '', email: '', phone: '', businessType: '', businessTypeOther: '',
@@ -155,7 +172,7 @@ export default function OnboardingWizard() {
   }
 
   return (
-    <div className="card-surface p-6 md:p-10">
+    <div ref={wizardRef} className="card-surface p-6 md:p-10">
       <StepIndicator currentStep={step} />
 
       <div className="min-h-[400px]">

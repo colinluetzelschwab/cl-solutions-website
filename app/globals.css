@@ -253,6 +253,38 @@
   }
 }
 
+/* Homepage scroll padding so anchor jumps and Lenis programmatic scroll
+   land sections below the floating navigation pill. Snap removed — Lenis
+   smoothing + per-section mask reveals deliver the chapter-by-chapter
+   feel without forcing pagination. */
+html:has([data-page="home"]) {
+  scroll-padding-top: 96px;
+}
+
+/* Section-arrival mask reveal — text wipes up from below as the section
+   header enters the viewport. Apply to eyebrow + h2 + supporting copy.
+   The parent must toggle `data-in="true"` (IntersectionObserver pattern).
+   --arrive-delay staggers eyebrow → headline → lead. */
+.section-arrive {
+  clip-path: inset(0 0 100% 0);
+  transform: translate3d(0, 22%, 0);
+  transition:
+    clip-path 1.15s cubic-bezier(0.22, 1, 0.36, 1) var(--arrive-delay, 0s),
+    transform 1.15s cubic-bezier(0.22, 1, 0.36, 1) var(--arrive-delay, 0s);
+  will-change: clip-path, transform;
+}
+[data-in="true"] .section-arrive {
+  clip-path: inset(0 0 0 0);
+  transform: translate3d(0, 0, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .section-arrive {
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════
  * @layer components
  * ═══════════════════════════════════════════════════════════════ */
@@ -474,7 +506,11 @@
     animation: live-pulse 2.4s ease-in-out infinite;
   }
 
-  /* Cream wash backdrop — near-invisible */
+  /* Cream wash backdrop — near-invisible.
+     mesh-drift animation removed: it forced a continuous repaint of a
+     full-section radial gradient at every frame, which collided with
+     Lenis's scroll RAF and made long pages feel like they "hang" on
+     scroll. The static gradient is visually almost identical. */
   .gradient-mesh {
     position: relative;
     background:
@@ -482,16 +518,12 @@
       radial-gradient(ellipse 55% 45% at 85% 28%, var(--mesh-stop-2), transparent 65%),
       radial-gradient(ellipse 65% 45% at 48% 92%, var(--mesh-stop-3), transparent 60%),
       var(--paper-dark);
-    background-size: 180% 180%, 160% 160%, 180% 180%, 100% 100%;
-    animation: mesh-drift 30s ease-in-out infinite alternate;
   }
   .gradient-mesh-subtle {
     background:
       radial-gradient(ellipse 80% 60% at 20% 20%, var(--mesh-stop-1-subtle), transparent 60%),
       radial-gradient(ellipse 60% 50% at 85% 80%, var(--mesh-stop-2-subtle), transparent 65%),
       var(--paper-dark);
-    background-size: 180% 180%, 160% 160%, 100% 100%;
-    animation: mesh-drift 36s ease-in-out infinite alternate;
   }
 
   .divider-gradient {
@@ -621,6 +653,105 @@
 @media (prefers-reduced-motion: reduce) {
   .draw-underline path { stroke-dashoffset: 0; animation: none; }
   .word-reveal { opacity: 1; transform: none; animation: none; }
+}
+
+/* Card stagger reveal — IntersectionObserver-driven (see ServicesOverview).
+   All cards enter from the same lifted-y position; staggered via
+   --card-delay. Once the grid hits data-in="true" the cards land and
+   stay landed (IO is disconnected). */
+.cards-stagger .card-reveal {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay, 0s),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay, 0s),
+    filter 0.95s cubic-bezier(0.22, 1, 0.36, 1) var(--card-delay, 0s);
+  filter: blur(2px);
+  will-change: opacity, transform, filter;
+}
+.cards-stagger[data-in="true"] .card-reveal {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0);
+}
+
+/* Floating card surface — soft warm shadow, rounded, hover lift.
+   Composes with .card-reveal: the reveal manages opacity/transform/filter
+   on first entry, then .card-floating handles hover transforms only. */
+.card-floating {
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition:
+    transform 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 350ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 350ms ease;
+}
+.cards-stagger[data-in="true"] .card-floating:hover {
+  transform: translate3d(0, -6px, 0);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--border-default);
+}
+
+/* SocialProof — testimonial enters from left, stat rows from right.
+   IO-driven; once data-in="true" they land and stay landed. */
+.proof-quote {
+  opacity: 0;
+  transform: translate3d(-32px, 0, 0);
+  transition:
+    opacity 0.95s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.proof-quote[data-in="true"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.proof-stats .stat-row {
+  opacity: 0;
+  transform: translate3d(28px, 0, 0);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--stat-delay, 0s),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1) var(--stat-delay, 0s);
+  will-change: opacity, transform;
+}
+.proof-stats[data-in="true"] .stat-row {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* CTA cinematic mode — centre card scales up + fades in as it enters. */
+.cta-card-reveal {
+  opacity: 0;
+  transform: scale(0.94) translate3d(0, 24px, 0);
+  transition:
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+.cta-card-reveal[data-in="true"] {
+  opacity: 1;
+  transform: scale(1) translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cards-stagger .card-reveal,
+  .proof-quote,
+  .proof-stats .stat-row,
+  .cta-card-reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    will-change: auto;
+  }
+  .card-floating,
+  .cards-stagger[data-in="true"] .card-floating:hover {
+    transform: none;
+    transition: none;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════

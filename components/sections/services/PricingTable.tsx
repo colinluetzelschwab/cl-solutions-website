@@ -1,5 +1,5 @@
 import React from 'react'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
