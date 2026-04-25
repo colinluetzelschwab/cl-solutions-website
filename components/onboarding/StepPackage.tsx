@@ -95,15 +95,14 @@ export default function StepPackage({ data, onChange, errors }: Props) {
               {/* Name */}
               <p className="eyebrow text-[color:var(--ink-muted)] mb-3">{pkg.name}</p>
 
-              {/* Price */}
-              <div className="flex items-baseline gap-1.5 mb-4">
-                <span className="text-[11px] font-[var(--font-plex-mono)] uppercase tracking-[0.2em] text-[color:var(--ink-faint)]">
-                  CHF
-                </span>
-                <span className="display text-4xl md:text-5xl leading-none text-[color:var(--ink)] tabular">
-                  {pkg.price.toLocaleString()}
-                </span>
-              </div>
+              {/* Price — matches /services treatment: Instrument Serif with
+                  CSS tabular numerals (no Plex Mono swap, no split "CHF"). */}
+              <p
+                className="display text-4xl md:text-5xl leading-none text-[color:var(--ink)] mb-4"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                CHF {pkg.price.toLocaleString()}
+              </p>
 
               {/* Description */}
               <p className="text-sm text-[color:var(--ink-muted)] mb-6 leading-relaxed">
@@ -177,7 +176,10 @@ export default function StepPackage({ data, onChange, errors }: Props) {
                     <span className="display text-2xl text-[color:var(--ink)]">—</span>
                   ) : (
                     <>
-                      <span className="display text-2xl text-[color:var(--ink)] tabular">
+                      <span
+                        className="display text-2xl text-[color:var(--ink)]"
+                        style={{ fontVariantNumeric: 'tabular-nums' }}
+                      >
                         CHF {plan.price}
                       </span>
                       <span className="text-xs text-[color:var(--ink-muted)]">/ month</span>
@@ -227,19 +229,26 @@ export default function StepPackage({ data, onChange, errors }: Props) {
           <div className="text-right">
             <p className="eyebrow mb-1">One-time</p>
             <p
-              className={`display text-4xl leading-none tabular ${
+              className={`display text-4xl leading-none ${
                 data.couponValid ? 'text-[color:var(--accent)]' : 'text-[color:var(--ink)]'
               }`}
+              style={{ fontVariantNumeric: 'tabular-nums' }}
             >
               CHF {finalPrice.toLocaleString()}
             </p>
             {data.couponValid && (
-              <p className="text-xs text-[color:var(--ink-faint)] line-through mt-1 tabular">
+              <p
+                className="text-xs text-[color:var(--ink-faint)] line-through mt-1"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
                 CHF {selectedPkg?.price.toLocaleString()}
               </p>
             )}
             {selectedHosting && selectedHosting.price > 0 && (
-              <p className="text-xs text-[color:var(--ink-muted)] mt-1.5 tabular">
+              <p
+                className="text-xs text-[color:var(--ink-muted)] mt-1.5"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
                 + CHF {selectedHosting.price}/month hosting
               </p>
             )}
