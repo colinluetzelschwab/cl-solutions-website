@@ -15,17 +15,17 @@ import {
 // Hero composition — galdu.fi register: dark macro lake-water surface as a
 // 5.4s seamless loop video. Layered under the Ravi-style editorial overlay.
 //
-// SCROLL CHOREOGRAPHY ("The Curtain Close") — sticky-pin + horizontal reveal:
-//   The section is 200svh tall (170svh on mobile) with a sticky inner that
-//   pins the hero for 100svh of scroll. As scrollYProgress goes 0 → 1:
-//     · The water card stays FULL-BLEED — it does not shrink and does not
-//       move. Paper-coloured curtains close in from the LEFT and RIGHT
-//       (`clip-path: inset(0 X% 0 X%)`, X going 0 → 50). By the end of the
-//       pin the video is fully covered by the page paper.
-//     · The "Built with intent." headline + CTA fade out within the first
-//       ~20% of scroll so the close reads as a clean reveal, not a fight.
-//   When the pin releases, the next section is already at the top of the
-//   viewport — services "appears" rather than scrolling up from below.
+// SCROLL CHOREOGRAPHY ("Curtain + Stack") — sticky-pin in three acts:
+//   The section is 300svh tall (270svh on mobile) with a sticky inner that
+//   pins the hero for 200svh of scroll. As scrollYProgress goes 0 → 1:
+//     · 0 → 0.33 (first 100svh) — the four-sided paper curtain closes
+//       proportionally over the still video card. Headline + CTA fade out
+//       within the first ~7% so they don't fight the close.
+//     · 0.33 → 0.66 (next 100svh) — curtain stays fully closed, hero
+//       remains pinned. The next section (ServicesOverview) is pulled up
+//       via negative margin + z-index so it RISES from the bottom of the
+//       viewport over the static curtain-closed hero.
+//     · 0.66 → 1.0 — pin releases as Services completes its overlay.
 //   `prefers-reduced-motion` disables all scroll-driven motion entirely.
 
 
@@ -135,26 +135,26 @@ export default function HeroContent() {
   })
 
   // CURTAIN CLOSE — paper closes in from all four sides at the same rate
-  // (uniform iris) via clip-path inset. The visible window keeps the
-  // viewport's aspect ratio as it shrinks toward the centre. Card never
-  // moves and never scales. Inset reaches 50% (fully closed) by progress
-  // 0.95, leaving a touch of settled stillness before the pin releases.
-  const inset = useTransform(progress, [0, 0.95], [0, 50])
-  const cardRadius = useTransform(progress, [0, 0.55], [0, 20])
+  // (uniform iris) via clip-path inset. Completes in the FIRST THIRD of the
+  // pin runway (progress 0 → 0.33). After that the curtain stays closed
+  // while Services rises over it from the bottom of the viewport.
+  const inset = useTransform(progress, [0, 0.33], [0, 50])
+  const cardRadius = useTransform(progress, [0, 0.18], [0, 20])
   const clipPath = useMotionTemplate`inset(${inset}% ${inset}% ${inset}% ${inset}% round ${cardRadius}px)`
 
-  // Hero content (headline + CTA) — fades out early so the curtain reads clean.
-  const contentOpacity = useTransform(progress, [0, 0.2], [1, 0])
-  const contentY = useTransform(progress, [0, 1], [0, -60])
+  // Hero content (headline + CTA) — fades out within the first 7% of scroll
+  // so the curtain reads clean.
+  const contentOpacity = useTransform(progress, [0, 0.07], [1, 0])
+  const contentY = useTransform(progress, [0, 0.33], [0, -60])
 
   return (
     <section
       ref={sectionRef}
-      // Outer wrapper: tall enough that the sticky inner pins as the user
-      // scrolls. Mobile gets ~70svh of pin runway (160svh outer − 100svh
-      // sticky = 60svh of scroll-driven zoom-out, plus 10svh easing room).
-      // Desktop keeps the original 100svh runway (200svh − 100svh).
-      className="relative w-full h-[170svh] md:h-[200svh]"
+      // Outer wrapper: 300svh (270svh on mobile) for 200svh of pin runway
+      // (sticky inner is 100svh). Curtain close uses the first 100svh of
+      // pin; the second 100svh is a "static curtain-closed" phase during
+      // which Services overlays the hero from below.
+      className="relative w-full h-[270svh] md:h-[300svh]"
     >
       <div className="sticky top-0 isolate w-full h-[100svh] min-h-[640px] overflow-hidden bg-[color:var(--paper-dark)] flex items-center justify-center">
 

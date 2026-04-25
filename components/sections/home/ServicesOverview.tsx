@@ -96,6 +96,14 @@ export default function ServicesOverview() {
                 style={{ ['--card-delay' as string]: `${i * 140}ms` } as CSSProperties}
                 className="card-reveal card-floating group relative flex flex-col px-7 md:px-9 py-11 md:py-13 overflow-hidden"
               >
+                {/* Whole-card click target — lands in the wizard with this
+                    package already selected. Other interactive elements
+                    inside need higher z-index than the stretched link. */}
+                <Link
+                  href={`/contact/start?package=${pkg.key}`}
+                  aria-label={t('startCta', { name })}
+                  className="absolute inset-0 z-[1]"
+                />
                 {pkg.popular && (
                   <div
                     aria-hidden
@@ -141,13 +149,16 @@ export default function ServicesOverview() {
                   ))}
                 </ul>
 
-                <Link
-                  href="/contact/start"
-                  className="mt-10 inline-flex items-center gap-1.5 text-sm text-[color:var(--ink)] hover:text-[color:var(--accent)] transition-colors group/link"
+                {/* Visual CTA only — the click target is the stretched link
+                    that wraps the whole card. Hover colour is driven by the
+                    article's :hover via the `group` class. */}
+                <span
+                  aria-hidden
+                  className="mt-10 inline-flex items-center gap-1.5 text-sm text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors"
                 >
                   {t('startCta', { name })}
-                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-                </Link>
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </span>
               </article>
             )
           })}

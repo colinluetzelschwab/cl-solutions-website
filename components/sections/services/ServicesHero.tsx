@@ -57,7 +57,7 @@ export default function ServicesHero() {
           {tiers.map((t, i) => (
             <Link
               key={t.id}
-              href={`#package-${t.id}`}
+              href={`/contact/start?package=${t.id}`}
               className={`group block px-0 md:px-8 py-10 md:py-12 ${
                 i < tiers.length - 1 ? 'md:border-r border-b md:border-b-0' : ''
               } border-[color:var(--border-subtle)] ${i === 0 ? 'md:pl-0' : ''} ${

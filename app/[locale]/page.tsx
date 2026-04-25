@@ -15,7 +15,12 @@ export default function Home() {
           by-chapter feel. See `html:has([data-page="home"])` in globals.css. */}
       <div data-page="home">
         <HeroContent />
-        <ServicesOverview />
+        {/* Services rises over the static (curtain-closed) hero — pulled up
+            via negative margin so it overlaps the second half of the hero's
+            pin runway, with z-10 to stack on top. */}
+        <div className="relative z-10 -mt-[100svh]">
+          <ServicesOverview />
+        </div>
         <SocialProof />
         <Process />
         <CTABanner cinematic />
