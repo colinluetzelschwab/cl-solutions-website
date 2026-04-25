@@ -43,15 +43,11 @@ const faqs: FAQItem[] = [
 
 export default function FAQ() {
   return (
-    <section className="relative w-full py-24 md:py-32 border-t border-[color:var(--border-subtle)]">
+    <section className="relative w-full py-28 md:py-36 border-t border-[color:var(--border-subtle)]">
       <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16">
-        <div className="mb-14 md:mb-20">
-          <p className="eyebrow mb-6">Chapter · V · Questions</p>
-          <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] text-[color:var(--ink)] leading-[1.02]">
-            Everything you{' '}
-            <span className="serif-italic text-[color:var(--accent)]">need to know.</span>
-          </h2>
-        </div>
+        <h2 className="display text-[clamp(2.4rem,5vw,3.8rem)] text-[color:var(--ink)] leading-[1.02] mb-16 md:mb-20">
+          Questions
+        </h2>
 
         <Accordion>
           {faqs.map((faq, index) => (

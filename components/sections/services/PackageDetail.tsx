@@ -1,11 +1,10 @@
 import React from 'react'
 import { Link } from '@/i18n/navigation'
 import Image from 'next/image'
-import { ArrowUpRight, ArrowRight, Minus } from 'lucide-react'
+import { ArrowUpRight, ArrowRight } from 'lucide-react'
 
 interface Page { name: string; description: string }
 interface IncludedExtra { text: string }
-interface ProcessStep { n: string; label: string }
 interface Reference {
   client: string
   sector: string
@@ -17,7 +16,6 @@ interface Reference {
 }
 interface Package {
   id: 'starter' | 'business' | 'pro'
-  chapter: string
   name: string
   price: string
   delivery: string
@@ -26,10 +24,8 @@ interface Package {
   bestForLong: string
   pages: Page[]
   pageNote: string
-  design: { label: string; description: string }
+  designDescription: string
   extras?: IncludedExtra[]
-  notIncluded: string[]
-  process: ProcessStep[]
   reference?: Reference
   isHighlight?: boolean
 }
@@ -37,11 +33,10 @@ interface Package {
 const packages: Package[] = [
   {
     id: 'starter',
-    chapter: 'I',
     name: 'Starter',
     price: 'CHF 1,500',
     delivery: '3–5 business days',
-    revisions: '1 round',
+    revisions: '1 revision round',
     bestFor: 'Freelancers · Landing pages · New ventures',
     bestForLong:
       'A focused brochure site that converts — one well-crafted funnel, nothing that looks cheap, nothing you don’t need.',
@@ -52,32 +47,15 @@ const packages: Package[] = [
       { name: 'Contact',  description: 'Form · email · location · legal' },
     ],
     pageNote: 'Up to 4 pages. Add more for CHF 150 each.',
-    design: {
-      label: 'Light brand system',
-      description:
-        'Deliberate palette (2–3 tones), one display + one body font, spacing scale, mobile-first. Clean, modular — not templated.',
-    },
-    notIncluded: [
-      'Content management (CMS) — copy edits go through us',
-      'Scroll animations beyond subtle fades',
-      'Multilingual (DE + EN)',
-      'Third-party integrations',
-    ],
-    process: [
-      { n: '01', label: 'Brief' },
-      { n: '02', label: 'Design' },
-      { n: '03', label: 'Build' },
-      { n: '04', label: 'Review' },
-      { n: '05', label: 'Launch' },
-    ],
+    designDescription:
+      'A light brand system — deliberate palette, one display + one body font, spacing scale, mobile-first. Clean and modular, not templated.',
   },
   {
     id: 'business',
-    chapter: 'II',
     name: 'Business',
     price: 'CHF 3,500',
     delivery: '5–7 business days',
-    revisions: '1 round',
+    revisions: '1 revision round',
     bestFor: 'KMU · Clinics · Studios · Agencies',
     bestForLong:
       'The sweet spot for most Swiss SMEs. A real brand system, editable content, SEO that ranks, animation that carries meaning — not decoration.',
@@ -90,11 +68,8 @@ const packages: Package[] = [
       { name: 'Contact',    description: 'Form · email · map · legal' },
     ],
     pageNote: 'Up to 6 pages. Structure tuned to your business.',
-    design: {
-      label: 'Full brand system',
-      description:
-        'Custom palette, type-pairing, spacing and motion tokens. Scroll-driven reveals and micro-interactions that match the industry — medical feels different from gastronomy feels different from architecture.',
-    },
+    designDescription:
+      'A full brand system — custom palette, type-pairing, spacing and motion tokens. Scroll-driven reveals and micro-interactions that match the industry.',
     extras: [
       { text: 'Sanity CMS — edit text, images, team, blog' },
       { text: 'Scroll animations + micro-interactions' },
@@ -103,19 +78,6 @@ const packages: Package[] = [
       { text: 'Privacy-friendly analytics dashboard' },
       { text: 'Partial copywriting assistance' },
       { text: 'Lighthouse 90+ guarantee' },
-    ],
-    notIncluded: [
-      'Multilingual (add CHF 400–800)',
-      'E-commerce / product pages',
-      'Custom integrations beyond standard (booking, CRM)',
-    ],
-    process: [
-      { n: '01', label: 'Brief' },
-      { n: '02', label: 'Design' },
-      { n: '03', label: 'Build' },
-      { n: '04', label: 'CMS' },
-      { n: '05', label: 'Review' },
-      { n: '06', label: 'Launch' },
     ],
     reference: {
       client: 'Core Medical',
@@ -129,11 +91,10 @@ const packages: Package[] = [
   },
   {
     id: 'pro',
-    chapter: 'III',
     name: 'Pro',
     price: 'From CHF 7,500',
     delivery: 'Scoped per project',
-    revisions: '2 rounds',
+    revisions: '2 revision rounds',
     bestFor: 'Larger SMEs · E-commerce · Multilingual · Integrations',
     bestForLong:
       'When off-the-shelf stops scaling. Custom design direction, multi-language, real integrations (Supabase, Stripe, booking, CRM), production e-commerce, retainer-ready.',
@@ -144,11 +105,8 @@ const packages: Package[] = [
       { name: 'Protected areas',    description: 'Member logins, dashboards, admin' },
     ],
     pageNote: 'Scope defined during the discovery phase.',
-    design: {
-      label: 'Custom design direction',
-      description:
-        'We research your industry and propose a design system that is yours alone. Custom illustration and photography direction, bespoke motion, typography hand-picked — not a template that works.',
-    },
+    designDescription:
+      'A custom design direction — we research your industry and propose a design system that is yours alone. Bespoke motion, typography hand-picked, not a template that works.',
     extras: [
       { text: 'Multilingual engine (DE + EN baseline)' },
       { text: 'E-commerce ready (Stripe / Stripe Connect)' },
@@ -158,21 +116,6 @@ const packages: Package[] = [
       { text: 'Custom photography direction' },
       { text: 'Retainer option for ongoing work' },
       { text: 'Discovery + strategy phase before build' },
-    ],
-    notIncluded: [
-      'Photoshoots (we direct; external photographer bills separately)',
-      'Legal counsel (we wire cookie banners; you confirm wording)',
-      'Paid ads / SEA management',
-    ],
-    process: [
-      { n: '01', label: 'Discovery' },
-      { n: '02', label: 'Strategy' },
-      { n: '03', label: 'Design' },
-      { n: '04', label: 'Build' },
-      { n: '05', label: 'Content' },
-      { n: '06', label: 'Integrations' },
-      { n: '07', label: 'Review' },
-      { n: '08', label: 'Launch' },
     ],
     reference: {
       client: 'Veloscout',
@@ -185,71 +128,48 @@ const packages: Package[] = [
   },
 ]
 
-function Row({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 md:gap-10 border-t border-[color:var(--border-subtle)] pt-10">
-      <p className="eyebrow">{label}</p>
-      <div>{children}</div>
-    </div>
-  )
-}
-
 function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
-  const accent = pkg.isHighlight
   const isFirst = index === 0
 
   return (
     <article
       id={`package-${pkg.id}`}
-      className={`scroll-mt-28 py-14 md:py-20 ${isFirst ? '' : 'border-t border-[color:var(--border-subtle)]'}`}
+      className={`scroll-mt-28 py-20 md:py-28 ${isFirst ? '' : 'border-t border-[color:var(--border-subtle)]'}`}
     >
       <div className="mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
-        {/* Chapter masthead */}
-        <div className="mb-10 md:mb-14 flex items-baseline gap-5">
-          <span
-            className={`serif-italic text-5xl md:text-6xl lg:text-7xl leading-none ${
-              accent ? 'text-[color:var(--accent)]' : 'text-[color:var(--ink-faint)]/70'
-            }`}
-          >
-            {pkg.chapter}
-          </span>
-          <span className="flex-1 divider-gradient" aria-hidden />
-          <span className={`eyebrow ${accent ? 'text-[color:var(--accent)]' : ''}`}>
-            {accent ? 'Most picked' : `Tier · ${pkg.id}`}
-          </span>
-        </div>
-
-        {/* Identity band — editorial two-col */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-14">
-          <div className="lg:col-span-7 flex flex-col justify-center">
-            <h2 className="display text-5xl md:text-6xl lg:text-7xl text-[color:var(--ink)]">
+        {/* Identity band */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 mb-16 md:mb-20">
+          <div className="lg:col-span-7">
+            <h2 className="display text-5xl md:text-6xl lg:text-7xl text-[color:var(--ink)] leading-[1.0]">
               {pkg.name}
             </h2>
-            <p className="mt-6 md:mt-8 text-lg md:text-xl text-[color:var(--ink-muted)] leading-[1.5] max-w-xl">
+            {pkg.isHighlight && (
+              <p className="mt-3 text-base md:text-lg text-[color:var(--ink-muted)]">
+                — most picked
+              </p>
+            )}
+            <p className="mt-8 text-xl md:text-2xl text-[color:var(--ink-muted)] leading-[1.5] max-w-2xl">
               {pkg.bestForLong}
             </p>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="border-y border-[color:var(--border-default)] py-6">
-              <p className="eyebrow mb-2">Investment</p>
-              <p className="display text-4xl md:text-5xl text-[color:var(--ink)]">
-                {pkg.price}
-              </p>
-
-              <dl className="mt-6 grid grid-cols-[auto_1fr] gap-x-5 gap-y-3 text-sm border-t border-[color:var(--border-subtle)] pt-5">
-                <dt className="eyebrow self-center">Delivery</dt>
-                <dd className="text-[color:var(--ink-muted)]">{pkg.delivery}</dd>
-                <dt className="eyebrow self-center">Revisions</dt>
-                <dd className="text-[color:var(--ink-muted)]">{pkg.revisions}</dd>
-                <dt className="eyebrow self-center">Best for</dt>
-                <dd className="text-[color:var(--ink-muted)] leading-snug">{pkg.bestFor}</dd>
-              </dl>
-            </div>
+          <div className="lg:col-span-5 lg:pl-10 lg:border-l border-[color:var(--border-subtle)] flex flex-col justify-center">
+            <p
+              className="display text-4xl md:text-5xl text-[color:var(--ink)]"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
+              {pkg.price}
+            </p>
+            <p className="mt-4 text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed">
+              {pkg.delivery} · {pkg.revisions}
+            </p>
+            <p className="mt-1 text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed">
+              {pkg.bestFor}
+            </p>
 
             <Link
               href={`/contact/start?package=${pkg.id}`}
-              className="mt-7 btn btn-primary w-full justify-between"
+              className="mt-10 btn btn-primary w-full justify-between"
             >
               Start {pkg.name} brief
               <ArrowRight className="h-4 w-4" />
@@ -257,120 +177,82 @@ function DetailBlock({ pkg, index }: { pkg: Package; index: number }) {
           </div>
         </div>
 
-        <div className="space-y-10 md:space-y-12">
-          <Row label="Typical pages">
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8">
-              {pkg.pages.map((p, i) => (
-                <li key={p.name} className="flex items-baseline gap-4 py-4 border-t border-[color:var(--border-subtle)]">
-                  <span className="eyebrow !tracking-[0.18em] text-[color:var(--accent)] tabular shrink-0 mt-0.5">
-                    {String(i + 1).padStart(2, '0')}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-base md:text-lg text-[color:var(--ink)] font-medium">{p.name}</p>
-                    <p className="text-sm text-[color:var(--ink-muted)] mt-1 leading-relaxed">{p.description}</p>
-                  </div>
+        {/* What's in it */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 mb-16 md:mb-20">
+          <p className="lg:col-span-5 text-lg md:text-xl text-[color:var(--ink-muted)] leading-[1.6]">
+            {pkg.designDescription}
+          </p>
+
+          <div className="lg:col-span-7 lg:border-l lg:pl-10 border-[color:var(--border-subtle)]">
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-5">
+              {pkg.pages.map((p) => (
+                <li key={p.name}>
+                  <p className="text-lg md:text-xl text-[color:var(--ink)]">{p.name}</p>
+                  <p className="mt-1 text-sm md:text-base text-[color:var(--ink-muted)] leading-relaxed">
+                    {p.description}
+                  </p>
                 </li>
               ))}
             </ul>
-            <p className="mt-5 text-xs text-[color:var(--ink-faint)] italic">{pkg.pageNote}</p>
-          </Row>
-
-          <Row label="Design level">
-            <p className="display text-xl md:text-2xl text-[color:var(--ink)] mb-3">
-              <span className="serif-italic text-[color:var(--accent)]">{pkg.design.label}</span>
+            <p className="mt-6 text-sm md:text-base text-[color:var(--ink-muted)]">
+              {pkg.pageNote}
             </p>
-            <p className="text-base text-[color:var(--ink-muted)] leading-[1.65] measure">
-              {pkg.design.description}
-            </p>
-          </Row>
 
-          {pkg.extras && pkg.extras.length > 0 && (
-            <Row label={pkg.id === 'pro' ? 'Beyond Business' : 'Beyond Starter'}>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+            {pkg.extras && pkg.extras.length > 0 && (
+              <ul className="mt-10 pt-10 border-t border-[color:var(--border-subtle)] grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3">
                 {pkg.extras.map((e) => (
-                  <li key={e.text} className="flex items-start gap-3 text-sm text-[color:var(--ink-muted)] leading-relaxed">
-                    <span className="mt-2 inline-block w-3 h-[2px] bg-[color:var(--accent)] shrink-0" aria-hidden />
-                    <span>{e.text}</span>
+                  <li
+                    key={e.text}
+                    className="text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed"
+                  >
+                    {e.text}
                   </li>
                 ))}
               </ul>
-            </Row>
-          )}
-
-          <Row label="Not included">
-            <ul className="space-y-2.5">
-              {pkg.notIncluded.map((n) => (
-                <li key={n} className="flex items-start gap-3 text-sm text-[color:var(--ink-faint)] leading-relaxed">
-                  <Minus className="mt-1 h-3 w-3 text-[color:var(--ink-faint)]/60 shrink-0" aria-hidden />
-                  <span>{n}</span>
-                </li>
-              ))}
-            </ul>
-          </Row>
-
-          <Row label="Process">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-              {pkg.process.map((step, i) => (
-                <React.Fragment key={step.n}>
-                  <div className="flex items-baseline gap-2">
-                    <span className="eyebrow !tracking-[0.18em] text-[color:var(--accent)] tabular">{step.n}</span>
-                    <span className="text-sm md:text-base text-[color:var(--ink)]">{step.label}</span>
-                  </div>
-                  {i < pkg.process.length - 1 && (
-                    <span className="text-[color:var(--ink-faint)]/40 text-xs" aria-hidden>→</span>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          </Row>
-
-          {pkg.reference && (
-            <Row label="Live reference">
-              <a
-                href={pkg.reference.href}
-                target={pkg.reference.external ? '_blank' : undefined}
-                rel={pkg.reference.external ? 'noopener noreferrer' : undefined}
-                className="group block"
-              >
-                {pkg.reference.image && (
-                  <div className={`${pkg.reference.imageSwap ? 'dual-img ' : ''}relative aspect-[16/9] mb-6 overflow-hidden border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]`}>
-                    <Image
-                      src={pkg.reference.image}
-                      alt={pkg.reference.client}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 66vw"
-                      className={`${pkg.reference.imageSwap ? 'dual-img__base ' : ''}object-cover`}
-                    />
-                    {pkg.reference.imageSwap && (
-                      <Image
-                        src={pkg.reference.imageSwap}
-                        alt=""
-                        fill
-                        sizes="(max-width: 1024px) 100vw, 66vw"
-                        className="dual-img__swap object-cover"
-                        aria-hidden
-                        loading="lazy"
-                      />
-                    )}
-                  </div>
-                )}
-                <div className="flex items-start justify-between gap-6">
-                  <div className="min-w-0 flex-1">
-                    <p className="display text-2xl md:text-3xl text-[color:var(--ink)] leading-tight">{pkg.reference.client}</p>
-                    <p className="mt-1 eyebrow">{pkg.reference.sector}</p>
-                    <p className="mt-4 text-sm md:text-base text-[color:var(--ink-muted)] leading-relaxed max-w-xl">
-                      {pkg.reference.note}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-1 text-[color:var(--ink)] shrink-0 pt-2">
-                    <span className="eyebrow group-hover:text-[color:var(--accent)] transition-colors">Visit</span>
-                    <ArrowUpRight className="h-5 w-5 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" strokeWidth={1.5} />
-                  </div>
-                </div>
-              </a>
-            </Row>
-          )}
+            )}
+          </div>
         </div>
+
+        {/* Live reference */}
+        {pkg.reference && (
+          <div className="border-t border-[color:var(--border-subtle)] pt-16 md:pt-20">
+            <a
+              href={pkg.reference.href}
+              target={pkg.reference.external ? '_blank' : undefined}
+              rel={pkg.reference.external ? 'noopener noreferrer' : undefined}
+              className="group block"
+            >
+              {pkg.reference.image && (
+                <div className="relative aspect-[16/9] mb-8 overflow-hidden border border-[color:var(--border-subtle)] bg-[color:var(--surface-2)]">
+                  <Image
+                    src={pkg.reference.image}
+                    alt={pkg.reference.client}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 1024px"
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div className="flex items-start justify-between gap-6">
+                <div className="min-w-0 flex-1">
+                  <p className="display text-2xl md:text-3xl text-[color:var(--ink)] leading-tight">
+                    {pkg.reference.client}
+                  </p>
+                  <p className="mt-2 text-base md:text-lg text-[color:var(--ink-muted)]">
+                    {pkg.reference.sector}
+                  </p>
+                  <p className="mt-4 text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed max-w-2xl">
+                    {pkg.reference.note}
+                  </p>
+                </div>
+                <ArrowUpRight
+                  className="h-6 w-6 text-[color:var(--ink)] shrink-0 mt-2 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform"
+                  strokeWidth={1.5}
+                />
+              </div>
+            </a>
+          </div>
+        )}
       </div>
     </article>
   )
