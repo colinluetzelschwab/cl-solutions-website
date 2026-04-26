@@ -98,12 +98,9 @@ export default function Process() {
           className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 mb-16 md:mb-20"
         >
           <div className="lg:col-span-7">
-            <p className="eyebrow mb-6 section-arrive" style={{ ['--arrive-delay' as string]: '0ms' } as CSSProperties}>
-              {t('eyebrow')}
-            </p>
             <h2
               className="display text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.02] section-arrive"
-              style={{ ['--arrive-delay' as string]: '160ms' } as CSSProperties}
+              style={{ ['--arrive-delay' as string]: '0ms' } as CSSProperties}
             >
               {t('headlineLead')}{' '}
               <span className="serif-italic text-[color:var(--ink-soft)]">{t('headlineEmphasis')}</span>

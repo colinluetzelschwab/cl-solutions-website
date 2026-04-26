@@ -37,12 +37,6 @@ export default function WorkPage() {
         <div aria-hidden className="grid-noise" />
 
         <div className="relative mx-auto max-w-6xl px-6 sm:px-10 lg:px-16">
-          <div className="fade-up flex items-center gap-4 mb-10 md:mb-14">
-            <span className="eyebrow">Portfolio · Live</span>
-            <span className="flex-1 divider-gradient" aria-hidden />
-            <span className="hidden sm:inline eyebrow">4 case studies</span>
-          </div>
-
           <h1 className="display text-[clamp(2.8rem,7vw,5.4rem)] text-[color:var(--ink)] leading-[0.98]">
             {headlineTokens.map((tok, i) => {
               const delay = `${0.2 + i * wordStride}s`

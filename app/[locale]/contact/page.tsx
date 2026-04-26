@@ -37,10 +37,6 @@ export default function ContactPage() {
         <div aria-hidden className="grid-noise" />
 
         <div className="relative mx-auto max-w-3xl px-6 sm:px-10 lg:px-16">
-          <div className="fade-up mb-10 md:mb-14">
-            <span className="eyebrow">Contact · Available now</span>
-          </div>
-
           <h1 className="display text-[clamp(2.6rem,6vw,4.6rem)] text-[color:var(--ink)] leading-[0.98]">
             {headlineTokens.map((tok, i) => {
               const delay = `${0.2 + i * wordStride}s`
@@ -76,6 +72,10 @@ export default function ContactPage() {
           </p>
 
           {/* Editorial hairline-divided list */}
+          {/* Mobile collapses to a 3-col grid (icon · stacked label+value · arrow)
+              so long values like the email address aren't clipped by a fixed
+              label column; sm+ restores the four-column ledger via `sm:contents`
+              promoting the inner pair to direct grid items. */}
           <ul className="mt-14 md:mt-20 border-t border-[color:var(--border-default)]">
             {rows.map((row) => {
               const Tag: React.ElementType = row.href ? 'a' : 'div'
@@ -83,13 +83,15 @@ export default function ContactPage() {
                 <li key={row.label} className="border-b border-[color:var(--border-subtle)]">
                   <Tag
                     href={row.href}
-                    className="group grid grid-cols-[28px_140px_1fr_auto] md:grid-cols-[32px_160px_1fr_auto] items-center gap-4 md:gap-6 py-5 md:py-6"
+                    className="group grid grid-cols-[24px_1fr_auto] sm:grid-cols-[28px_140px_1fr_auto] md:grid-cols-[32px_160px_1fr_auto] items-center gap-3 sm:gap-4 md:gap-6 py-5 md:py-6"
                   >
                     <row.icon className="h-4 w-4 text-[color:var(--ink-muted)] group-hover:text-[color:var(--accent)] transition-colors" />
-                    <p className="eyebrow">{row.label}</p>
-                    <p className="text-[15px] md:text-base text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors">
-                      {row.value}
-                    </p>
+                    <div className="flex flex-col gap-0.5 sm:contents">
+                      <p className="eyebrow">{row.label}</p>
+                      <p className="text-[15px] md:text-base text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors break-words">
+                        {row.value}
+                      </p>
+                    </div>
                     {row.href && (
                       <ArrowUpRight className="h-4 w-4 text-[color:var(--ink-faint)] group-hover:text-[color:var(--accent)] group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-all" />
                     )}

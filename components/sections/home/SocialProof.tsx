@@ -102,7 +102,7 @@ export default function SocialProof() {
                 <li
                   key={s.label}
                   style={{ ['--stat-delay' as string]: `${i * 110}ms` } as CSSProperties}
-                  className={`stat-row group grid grid-cols-[auto_1fr] items-baseline gap-6 py-7 ${
+                  className={`stat-row group flex flex-col gap-2 sm:grid sm:grid-cols-[auto_1fr] sm:items-baseline sm:gap-6 py-6 sm:py-7 ${
                     i < stats.length - 1
                       ? 'border-b border-[color:var(--border-subtle)]'
                       : ''
@@ -114,7 +114,7 @@ export default function SocialProof() {
                     </p>
                     <p className="eyebrow mt-3">{s.sub}</p>
                   </div>
-                  <p className="text-right text-[11px] font-[var(--font-plex-mono)] uppercase tracking-[0.22em] text-[color:var(--ink-muted)] self-end pb-1">
+                  <p className="text-left sm:text-right text-[11px] font-[var(--font-plex-mono)] uppercase tracking-[0.16em] sm:tracking-[0.22em] text-[color:var(--ink-muted)] sm:self-end sm:pb-1">
                     {s.label}
                   </p>
                 </li>

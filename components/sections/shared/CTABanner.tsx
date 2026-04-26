@@ -65,7 +65,6 @@ export default function CTABanner({
           cinematic ? 'cta-card-reveal' : ''
         }`}
       >
-        <p className="eyebrow mb-8">{t('eyebrow')}</p>
         <h2 className="display text-[clamp(2.2rem,5vw,4.2rem)] leading-[1.04]">
           {headline ? (
             headline

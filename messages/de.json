@@ -31,7 +31,6 @@
     "startProject": "Projekt starten"
   },
   "Services": {
-    "eyebrow": "Kapitel I · Pakete",
     "headlineLead": "Drei Optionen.",
     "headlineEmphasis": "Null Überraschungen.",
     "lead": "Fester Umfang, fester Preis, feste Timeline. Du weisst genau, was du bekommst — bevor wir die erste Zeile Code schreiben.",
@@ -88,7 +87,6 @@
     "stat3Sub": "erstes schriftliches Angebot"
   },
   "Process": {
-    "eyebrow": "Kapitel II — Ablauf",
     "headlineLead": "Vom Briefing bis zum Launch,",
     "headlineEmphasis": "in vier Schritten.",
     "step1Title": "Briefing",
@@ -105,7 +103,6 @@
     "step4Marker": "Tag 5"
   },
   "CTA": {
-    "eyebrow": "Bereit, wenn du es bist",
     "headlineLead": "Lass uns etwas bauen,",
     "headlineEmphasis": "das bleibt.",
     "subtext": "Füll dein Briefing aus — wir melden uns innerhalb von 24 Stunden mit einem schriftlichen Angebot.",

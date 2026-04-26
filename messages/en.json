@@ -31,7 +31,6 @@
     "startProject": "Start a project"
   },
   "Services": {
-    "eyebrow": "Chapter I · Packages",
     "headlineLead": "Three options.",
     "headlineEmphasis": "Zero surprises.",
     "lead": "Fixed scope, fixed pricing, fixed timeline. You know exactly what you're getting before we write a single line of code.",
@@ -88,7 +87,6 @@
     "stat3Sub": "first written proposal"
   },
   "Process": {
-    "eyebrow": "Chapter II — Process",
     "headlineLead": "From brief to launch,",
     "headlineEmphasis": "in four moves.",
     "step1Title": "Brief",
@@ -105,7 +103,6 @@
     "step4Marker": "Day 5"
   },
   "CTA": {
-    "eyebrow": "Ready when you are",
     "headlineLead": "Let's build something",
     "headlineEmphasis": "worth keeping.",
     "subtext": "Fill out our brief — we'll get back within 24 hours with a written proposal.",

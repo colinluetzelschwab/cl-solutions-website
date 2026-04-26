@@ -31,7 +31,6 @@
     "startProject": "Aloita projekti"
   },
   "Services": {
-    "eyebrow": "Luku I · Paketit",
     "headlineLead": "Kolme vaihtoehtoa.",
     "headlineEmphasis": "Ei yllätyksiä.",
     "lead": "Kiinteä laajuus, kiinteä hinta, kiinteä aikataulu. Tiedät tarkalleen, mitä saat — ennen kuin kirjoitamme riviäkään koodia.",
@@ -88,7 +87,6 @@
     "stat3Sub": "ensimmäinen kirjallinen tarjous"
   },
   "Process": {
-    "eyebrow": "Luku II — Prosessi",
     "headlineLead": "Briefistä julkaisuun,",
     "headlineEmphasis": "neljässä vaiheessa.",
     "step1Title": "Brief",
@@ -105,7 +103,6 @@
     "step4Marker": "Päivä 5"
   },
   "CTA": {
-    "eyebrow": "Kun sinä olet valmis",
     "headlineLead": "Rakennetaan yhdessä jotain,",
     "headlineEmphasis": "joka kestää.",
     "subtext": "Täytä brief — palaamme asiaan 24 tunnin sisällä kirjallisella tarjouksella.",
