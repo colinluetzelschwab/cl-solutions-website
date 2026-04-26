@@ -83,10 +83,15 @@ export default function StepNotes({ brief, onNotesChange, onEditStep }: Props) {
             </div>
             <div>
               <p className="text-text-muted text-xs">One-time price</p>
-              <p className={`font-bold text-lg ${basePrice === 0 ? 'text-green-500' : 'text-text-primary'}`}>
+              <p
+                className={`display text-2xl md:text-3xl leading-none mt-1 ${
+                  basePrice === 0 ? 'text-green-500' : 'text-text-primary'
+                }`}
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
                 CHF {basePrice.toLocaleString()}
                 {brief.package.couponValid && (
-                  <span className="text-xs text-green-500 ml-2">Coupon applied</span>
+                  <span className="text-xs text-green-500 ml-2 align-middle font-[var(--font-inter)]">Coupon applied</span>
                 )}
               </p>
             </div>
@@ -108,9 +113,17 @@ export default function StepNotes({ brief, onNotesChange, onEditStep }: Props) {
           {(logoPrice > 0 || (hosting && hosting.price > 0)) && (
             <div className="mt-3 pt-3 border-t border-border-subtle text-sm">
               <p className="text-text-muted text-xs">Total one-time</p>
-              <p className="text-text-primary font-bold text-xl">CHF {totalPrice.toLocaleString()}</p>
+              <p
+                className="display text-3xl md:text-4xl leading-none mt-1 text-text-primary"
+                style={{ fontVariantNumeric: 'tabular-nums' }}
+              >
+                CHF {totalPrice.toLocaleString()}
+              </p>
               {hosting && hosting.price > 0 && (
-                <p className="text-text-muted text-xs mt-1">+ CHF {hosting.price}/mt recurring</p>
+                <p
+                  className="text-text-muted text-xs mt-2"
+                  style={{ fontVariantNumeric: 'tabular-nums' }}
+                >+ CHF {hosting.price}/mt recurring</p>
               )}
             </div>
           )}
