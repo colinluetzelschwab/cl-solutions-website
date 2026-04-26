@@ -108,5 +108,228 @@
     "subtext": "Täytä brief — palaamme asiaan 24 tunnin sisällä kirjallisella tarjouksella.",
     "primary": "Aloita projekti",
     "secondary": "Selaa paketteja"
+  },
+  "ServicesPage": {
+    "metadata": {
+      "title": "Paketit & hinnat",
+      "description": "Kolme pakettia. Yksi standardi. Starter CHF 1 500 · Business CHF 3 500 · Pro alkaen CHF 7 500. Sivut, prosessi, designtaso ja oikeat asiakasreferenssit — kiinteä hinta etukäteen.",
+      "ogTitle": "Paketit & hinnat — CL Solutions",
+      "ogDescription": "Kolme pakettia. Yksi standardi. Kiinteä hinta etukäteen, oikeilla asiakasreferensseillä."
+    },
+    "Hero": {
+      "headlineWord1": "Kolme",
+      "headlineWord2": "vaihtoehtoa.",
+      "headlineWord3": "Yksi",
+      "headlineWord4": "standardi.",
+      "body": "Jokainen sivusto rakennetaan käsin ja suunnitellaan räätälöidysti. Tasot eroavat laajuudessa ja syvyydessä, eivät laadussa.",
+      "tier": {
+        "starter": { "name": "Starter", "price": "CHF 1 500", "delivery": "3–5 päivää", "oneLiner": "Yksi keskittynyt funneli." },
+        "business": { "name": "Business", "price": "CHF 3 500", "delivery": "5–7 päivää", "oneLiner": "Täysi brändijärjestelmä." },
+        "pro": { "name": "Pro", "price": "alkaen CHF 7 500", "delivery": "Sopimuksen mukaan", "oneLiner": "Kun valmiit ratkaisut eivät enää riitä." }
+      },
+      "mostPicked": "— suosituin"
+    },
+    "Detail": {
+      "startBriefCta": "Aloita {name}-brief",
+      "mostPicked": "— suosituin",
+      "starter": {
+        "delivery": "3–5 työpäivää",
+        "revisions": "Yksi muutoskierros",
+        "bestFor": "Freelancerit · Laskeutumissivut · Uudet hankkeet",
+        "bestForLong": "Keskittynyt esitesivusto, joka konvertoi — yksi huolella tehty funneli, ei mitään halpaa, ei mitään turhaa.",
+        "pageNote": "Enintään 4 sivua. Lisäsivut CHF 150 / kpl.",
+        "designDescription": "Kevyt brändijärjestelmä — harkittu väripaletti, yksi otsikkofontti + yksi leipätekstifontti, välistysasteikko, mobile-first. Selkeä ja modulaarinen, ei mallipohjasta.",
+        "pages": {
+          "home": { "name": "Etusivu", "description": "Hero · palvelukatsaus · yhteydenottokehotus" },
+          "about": { "name": "Tietoa meistä", "description": "Tarina · lähestymistapa · miksi me" },
+          "services": { "name": "Palvelut", "description": "Mitä tarjoat, jokainen omana selkeänä lohkona" },
+          "contact": { "name": "Yhteystiedot", "description": "Lomake · sähköposti · sijainti · juridiset" }
+        }
+      },
+      "business": {
+        "delivery": "5–7 työpäivää",
+        "revisions": "Yksi muutoskierros",
+        "bestFor": "Pk-yritykset · Vastaanotot · Studiot · Toimistot",
+        "bestForLong": "Suosikki useimmille sveitsiläisille pk-yrityksille. Aito brändijärjestelmä, muokattava sisältö, hakukoneoptimoitu, animaatio jolla on merkitys — ei koristelu.",
+        "pageNote": "Enintään 6 sivua. Rakenne räätälöity yrityksellesi.",
+        "designDescription": "Täysi brändijärjestelmä — räätälöity väripaletti, typografia, välistys- ja liikkeen tokenit. Vieritykseen sidotut paljastukset ja mikrointeraktiot, jotka sopivat alaan.",
+        "pages": {
+          "home": { "name": "Etusivu", "description": "Hero · palvelut · referenssit · tiimi · yhteys" },
+          "about": { "name": "Tietoa meistä", "description": "Tarina · arvot · tiimi" },
+          "services": { "name": "Palvelut", "description": "Yksityiskohtainen tarjonta alipalveluineen" },
+          "team": { "name": "Tiimi", "description": "CMS-hallinnoidut esittelyt + valokuvat" },
+          "blog": { "name": "Blogi / Uutiset", "description": "CMS-hallinnoitu, SEO-valmis" },
+          "contact": { "name": "Yhteystiedot", "description": "Lomake · sähköposti · kartta · juridiset" }
+        },
+        "extras": {
+          "cms": "Sanity CMS — muokkaa tekstit, kuvat, tiimi, blogi itse",
+          "animations": "Vieritysanimaatiot + mikrointeraktiot",
+          "jsonLd": "Strukturoitu data (JSON-LD) rich-tuloksiin",
+          "openGraph": "Open Graph + Twitter-kortit jokaisella sivulla",
+          "analytics": "Yksityisyysystävällinen analytiikkapaneeli",
+          "copywriting": "Osittainen copywriting-tuki",
+          "lighthouse": "Lighthouse 90+ -takuu"
+        },
+        "reference": {
+          "client": "Core Medical",
+          "sector": "Yksityinen terveydenhallinta · Zürich",
+          "note": "Yksisivuinen ankkurinavigaatio, Sanity CMS, perustajamoduuli, Resend-yhteyslomake, kaksikieliseksi valmis."
+        }
+      },
+      "pro": {
+        "delivery": "Projekti­kohtainen",
+        "revisions": "Kaksi muutoskierrosta",
+        "bestFor": "Suuremmat pk-yritykset · Verkkokauppa · Monikielinen · Integraatiot",
+        "bestForLong": "Kun valmiit ratkaisut eivät enää riitä. Räätälöity designsuunta, monikielisyys, oikeat integraatiot (Supabase, Stripe, varaus, CRM), tuotantotason verkkokauppa, retainer-valmis.",
+        "pageNote": "Laajuus määritellään discovery-vaiheessa.",
+        "designDescription": "Räätälöity designsuunta — tutkimme alasi ja ehdotamme designjärjestelmää, joka on vain sinun. Mittatilattu liike, typografia käsin valittuna, ei mallipohjaa joka 'sopii'.",
+        "pages": {
+          "custom": { "name": "Vapaa sivumäärä", "description": "Ei keinotekoista kattoa" },
+          "multilingual": { "name": "Monikielinen", "description": "DE + EN vakiona, lisää lisäpalveluna" },
+          "booking": { "name": "Tuote / varaus", "description": "Stripe · kalenteri · varaukset" },
+          "protected": { "name": "Suojatut alueet", "description": "Käyttäjäkirjautumiset, paneelit, hallinta" }
+        },
+        "extras": {
+          "multilingual": "Monikielimoottori (DE + EN pohja)",
+          "ecommerce": "Verkkokauppa­valmis (Stripe / Stripe Connect)",
+          "integrations": "Räätälöidyt integraatiot (varaus, CRM, kalenterit, API:t)",
+          "revisions": "2 muutoskierrosta (Businessissa 1)",
+          "copywriting": "Täysi copywriting-tuki",
+          "photography": "Räätälöity valokuvauksen suunta",
+          "retainer": "Retainer-vaihtoehto jatkuvaan työhön",
+          "discovery": "Discovery- + strategia­vaihe ennen rakennusta"
+        },
+        "reference": {
+          "client": "Veloscout",
+          "sector": "Sveitsiläinen pyörämarkkinapaikka",
+          "note": "Supabase-tunnistus + Stripe Connect -escrow, esikatselu­portti, listausten CRUD, transaktio­sähköpostit, cron-maksu­webhook, Pro-Shop-tason teollinen suunnittelu."
+        }
+      }
+    },
+    "Extras": {
+      "heading": "Lisät",
+      "lead": "Kaikki kiinteähintaista. Ei \"kysy tarjousta\" -leikkejä.",
+      "addOns": {
+        "copywriting": { "name": "Copywriting", "description": "Yksi sivu tekstiä — tutkimus, luonnos, kaksi muutosta.", "price": "CHF 150" },
+        "extraPage": { "name": "Lisäsivu", "description": "Lisää sivu Starter- tai Business-pakettiin — suunniteltu, rakennettu, tyylissä.", "price": "CHF 150" },
+        "extraRevision": { "name": "Lisämuutoskierros", "description": "Kokonainen palaute­erä, toteutettuna yhdellä kertaa.", "price": "CHF 200" },
+        "logo": { "name": "Logosuunnittelu · perus", "description": "Typografinen merkki + monogrammi sisarstudiomme Aariviivan tekemänä.", "hrefLabel": "aariviiva.fi" },
+        "multilingual": { "name": "Monikielisyys", "description": "Käännösten asennus + reititys. Alkaen DE + EN.", "price": "alkaen CHF 400" }
+      },
+      "Maintenance": {
+        "heading": "Hosting & ylläpito",
+        "lead": "Kuukausittain irtisanottavissa 30 päivän varoitusajalla. Saat koodin joka tapauksessa. Laskutamme CHF, ilman ALV.",
+        "perMonth": "/ kk",
+        "addCta": "Lisää {name}",
+        "mostPicked": "— suosituin",
+        "basic": {
+          "name": "Basic",
+          "price": "CHF 49",
+          "tagline": "Valot palavat.",
+          "f1": "Vercel-hosting · SSL",
+          "f2": "Käytettävyysseuranta",
+          "f3": "99,9 % käytettävyys-SLA",
+          "f4": "Riippuvuuksien päivitys neljännesvuosittain"
+        },
+        "fullService": {
+          "name": "Full Service",
+          "price": "CHF 149",
+          "tagline": "Sinun retainerisi, sinun tiimisi.",
+          "f1": "Kaikki Basicin ominaisuudet",
+          "f2": "Kuukausittaiset teksti- + kuvamuutokset",
+          "f3": "Priority-tuki 24 h sisällä",
+          "f4": "Kuukausittainen suorituskykyraportti"
+        }
+      }
+    },
+    "FAQ": {
+      "heading": "Kysymyksiä",
+      "q1": {
+        "q": "Mitä minun pitää toimittaa ennen kuin alatte rakentaa?",
+        "a": "Tarvitsemme tekstit, kuvat tai valokuvat, logon ja brändivärit. Jos näitä ei ole, tarjoamme copywritingia ja perus-logosuunnittelua lisäpalveluina."
+      },
+      "q2": {
+        "q": "Mitä lasketaan muutoskierrokseksi?",
+        "a": "Yksi erä kirjallista palautetta, kerätty ja toteutettu yhdellä kertaa. Lisäkierrokset CHF 200 / kpl."
+      },
+      "q3": {
+        "q": "Tarjoatteko jatkuvaa tukea julkaisun jälkeen?",
+        "a": "Sisällytämme 7 päivän bugikorjausjakson julkaisun jälkeen. Jatkuvaan tukeen ylläpitoretainer alkaen CHF 149/kk."
+      },
+      "q4": {
+        "q": "Entä jos projektini tarvitsee enemmän kuin 4 tai 6 sivua?",
+        "a": "Lisäsivut CHF 150 / kpl. Suuremmat projektit tarjotaan Pro-paketissa."
+      },
+      "q5": {
+        "q": "Milloin maksan?",
+        "a": "50 % etukäteen ennen aloitusta. 50 % ennen sivuston julkaisua. Verkkotunnus ja hosting siirretään kun maksu on kokonaan suoritettu."
+      },
+      "q6": {
+        "q": "Kuinka nopeasti 3–5 päivää oikeasti on?",
+        "a": "Kello käynnistyy kun saamme sisältösi ja ennakkomaksun. Useimmat Starter-sivustot ovat live 4 työpäivän sisällä."
+      }
+    },
+    "ctaSubtext": "Täytä brief — palaamme asiaan 24 tunnin sisällä kirjallisella tarjouksella ja sveitsiläisellä Werkvertrag-sopimuksella."
+  },
+  "WorkPage": {
+    "metadata": {
+      "title": "Työmme",
+      "description": "Tuoreita verkkosivuprojekteja perustajille ympäri Eurooppaa. Räätälöity, ei koskaan mallipohjasta."
+    },
+    "hero": {
+      "word1": "Valittuja",
+      "word2": "töitä.",
+      "body1": "Jokainen projekti on suunniteltu alusta asti omalle alalleen.",
+      "body2": "Ei mallipohjia, ei oikoteitä."
+    },
+    "comingSoon": {
+      "eyebrow": "Tulossa",
+      "lead": "Lisää projekteja työn alla — jokainen räätälöity omalle alalleen,",
+      "emphasis": "ei koskaan mallipohjasta."
+    },
+    "sendoff": {
+      "headlineLead": "Pidätkö siitä,",
+      "headlineEmphasis": "mitä näet?",
+      "body": "Kerro yrityksestäsi — näytämme mitä voimme rakentaa.",
+      "cta": "Aloita projekti"
+    },
+    "projects": {
+      "coreMedical": { "subtitle": "Yksityinen terveydenhallinnan vastaanotto — Zürich, Sveitsi", "category": "Terveydenhuolto" },
+      "veloscout": { "subtitle": "Kuratoitu pyörämarkkinapaikka — Sveitsi · Pre-launch kevät 2026", "category": "Markkinapaikka" },
+      "lucasvision": { "subtitle": "Elokuvallinen valokuva- ja videostudio — Sveitsi", "category": "Valokuva & Filmi" },
+      "aariviiva": { "subtitle": "Graafisen suunnittelun studio — Virpi Loukamaa, Suomi", "category": "Graafinen suunnittelu" }
+    },
+    "scope": {
+      "design": "Design",
+      "development": "Kehitys",
+      "cms": "CMS",
+      "hosting": "Hosting",
+      "marketplace": "Markkinapaikka",
+      "video": "Video",
+      "bilingual": "Kaksikielinen"
+    }
+  },
+  "ContactPage": {
+    "metadata": {
+      "title": "Yhteys",
+      "description": "Ota yhteyttä CL Solutionsiin. Premium-verkkosivut perustajille kaikkialla."
+    },
+    "hero": {
+      "word1": "Ota",
+      "word2": "",
+      "word3": "yhteyttä.",
+      "body": "Onko sinulla kysymys tai haluatko keskustella projektista? Ota suoraan yhteyttä — ei lomakkeita, ei funneleita."
+    },
+    "rows": {
+      "emailLabel": "Sähköposti",
+      "studioLabel": "Studio",
+      "studioValue": "Zürich · Helsinki",
+      "responseLabel": "Vastausaika",
+      "responseValue": "24 tunnin sisällä"
+    },
+    "footer": {
+      "body": "Valmis aloittamaan? Täytä brief ja palaamme 24 tunnin sisällä suunnitelmalla.",
+      "cta": "Aloita projekti"
+    }
   }
 }

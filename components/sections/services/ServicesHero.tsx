@@ -1,25 +1,19 @@
 import React from 'react'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 
-interface TierSummary {
-  id: 'starter' | 'business' | 'pro'
-  name: string
-  price: string
-  delivery: string
-  oneLiner: string
-  highlight?: boolean
-}
-
-const tiers: TierSummary[] = [
-  { id: 'starter',  name: 'Starter',  price: 'CHF 1,500',      delivery: '3–5 days', oneLiner: 'One focused funnel.' },
-  { id: 'business', name: 'Business', price: 'CHF 3,500',      delivery: '5–7 days', oneLiner: 'The full brand system.', highlight: true },
-  { id: 'pro',      name: 'Pro',      price: 'from CHF 7,500', delivery: 'Scoped',  oneLiner: 'When off-the-shelf stops scaling.' },
-]
-
-const headlineWords = ['Three', 'options.', 'One', 'standard.']
+const TIER_IDS = ['starter', 'business', 'pro'] as const
+const HIGHLIGHT_TIER = 'business'
 
 export default function ServicesHero() {
+  const t = useTranslations('ServicesPage.Hero')
   const wordStride = 0.085
+  const headlineWords = [
+    t('headlineWord1'),
+    t('headlineWord2'),
+    t('headlineWord3'),
+    t('headlineWord4'),
+  ]
 
   return (
     <section className="relative w-full overflow-hidden">
@@ -43,8 +37,7 @@ export default function ServicesHero() {
           className="fade-up mt-10 md:mt-14 measure-wide text-lg md:text-xl leading-[1.55] text-[color:var(--ink-muted)]"
           style={{ ['--fade-delay' as string]: '0.9s' }}
         >
-          Every site is hand-built and custom-designed. The tiers differ in scope and depth,
-          not quality.
+          {t('body')}
         </p>
       </div>
 
@@ -54,36 +47,41 @@ export default function ServicesHero() {
           className="fade-up grid grid-cols-1 md:grid-cols-3 border-t border-[color:var(--border-subtle)]"
           style={{ ['--fade-delay' as string]: '1.1s' }}
         >
-          {tiers.map((t, i) => (
+          {TIER_IDS.map((id, i) => (
             <Link
-              key={t.id}
-              href={`/contact/start?package=${t.id}`}
-              className={`group block px-0 md:px-8 py-10 md:py-12 ${
-                i < tiers.length - 1 ? 'md:border-r border-b md:border-b-0' : ''
+              key={id}
+              href={`/contact/start?package=${id}`}
+              className={`group relative block px-0 md:px-8 py-10 md:py-12 ${
+                i < TIER_IDS.length - 1 ? 'md:border-r border-b md:border-b-0' : ''
               } border-[color:var(--border-subtle)] ${i === 0 ? 'md:pl-0' : ''} ${
-                i === tiers.length - 1 ? 'md:pr-0' : ''
+                i === TIER_IDS.length - 1 ? 'md:pr-0' : ''
               }`}
             >
-              <p className="display text-3xl md:text-[2.4rem] leading-none text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors">
-                {t.name}
-              </p>
-              {t.highlight && (
-                <p className="mt-2 text-sm md:text-base text-[color:var(--ink-muted)]">
-                  — most picked
-                </p>
+              {/* Highlight chip is absolute-positioned in the top-right
+                  corner of the cell so all three tier cards have the
+                  SAME vertical rhythm (name → oneLiner → price → delivery).
+                  Previously the inline "— most picked" subtitle pushed
+                  Business's oneLiner + price down, breaking symmetry. */}
+              {id === HIGHLIGHT_TIER && (
+                <span className="absolute top-10 md:top-12 right-0 md:right-8 inline-flex items-center gap-1.5 chip chip-accent !text-[10px]">
+                  <span className="dot-live" aria-hidden /> {t('mostPicked').replace(/^—\s*/, '')}
+                </span>
               )}
+              <p className="display text-3xl md:text-[2.4rem] leading-none text-[color:var(--ink)] group-hover:text-[color:var(--accent)] transition-colors">
+                {t(`tier.${id}.name`)}
+              </p>
               <p className="mt-3 text-base md:text-lg text-[color:var(--ink-muted)]">
-                {t.oneLiner}
+                {t(`tier.${id}.oneLiner`)}
               </p>
 
               <p
                 className="mt-8 text-xl md:text-2xl text-[color:var(--ink)]"
                 style={{ fontVariantNumeric: 'tabular-nums' }}
               >
-                {t.price}
+                {t(`tier.${id}.price`)}
               </p>
-              <p className="mt-1 text-sm md:text-base text-[color:var(--ink-muted)]">
-                {t.delivery}
+              <p className="mt-1 text-base md:text-lg text-[color:var(--ink-muted)]">
+                {t(`tier.${id}.delivery`)}
               </p>
             </Link>
           ))}

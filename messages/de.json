@@ -108,5 +108,228 @@
     "subtext": "Füll dein Briefing aus — wir melden uns innerhalb von 24 Stunden mit einem schriftlichen Angebot.",
     "primary": "Projekt starten",
     "secondary": "Pakete ansehen"
+  },
+  "ServicesPage": {
+    "metadata": {
+      "title": "Pakete & Preise",
+      "description": "Drei Pakete. Ein Standard. Starter CHF 1'500 · Business CHF 3'500 · Pro ab CHF 7'500. Seiten, Ablauf, Designtiefe und echte Referenzen — Festpreis im Voraus.",
+      "ogTitle": "Pakete & Preise — CL Solutions",
+      "ogDescription": "Drei Pakete. Ein Standard. Festpreis im Voraus, mit echten Kundenreferenzen."
+    },
+    "Hero": {
+      "headlineWord1": "Drei",
+      "headlineWord2": "Optionen.",
+      "headlineWord3": "Ein",
+      "headlineWord4": "Standard.",
+      "body": "Jede Website wird von Hand gebaut und individuell gestaltet. Die Pakete unterscheiden sich in Umfang und Tiefe, nicht in Qualität.",
+      "tier": {
+        "starter": { "name": "Starter", "price": "CHF 1'500", "delivery": "3–5 Tage", "oneLiner": "Ein fokussierter Funnel." },
+        "business": { "name": "Business", "price": "CHF 3'500", "delivery": "5–7 Tage", "oneLiner": "Das volle Brand-System." },
+        "pro": { "name": "Pro", "price": "ab CHF 7'500", "delivery": "Nach Aufwand", "oneLiner": "Wenn Standard-Lösungen nicht mehr reichen." }
+      },
+      "mostPicked": "— am meisten gewählt"
+    },
+    "Detail": {
+      "startBriefCta": "Briefing für {name} starten",
+      "mostPicked": "— am meisten gewählt",
+      "starter": {
+        "delivery": "3–5 Werktage",
+        "revisions": "Eine Revisionsrunde",
+        "bestFor": "Freelancer · Landingpages · Neue Unternehmen",
+        "bestForLong": "Eine fokussierte Broschüren-Website, die konvertiert — ein durchdachter Funnel, nichts Billiges, nichts Überflüssiges.",
+        "pageNote": "Bis zu 4 Seiten. Weitere Seiten für CHF 150 pro Stück.",
+        "designDescription": "Ein leichtes Brand-System — bewusste Farbpalette, eine Display- + eine Body-Schrift, Spacing-Skala, Mobile-First. Sauber und modular, nicht von der Stange.",
+        "pages": {
+          "home": { "name": "Startseite", "description": "Hero · Leistungs-Übersicht · Kontakt-Prompt" },
+          "about": { "name": "Über uns", "description": "Story · Ansatz · Warum Sie" },
+          "services": { "name": "Leistungen", "description": "Was Sie bieten, jeweils ein klarer Block" },
+          "contact": { "name": "Kontakt", "description": "Formular · E-Mail · Standort · Rechtliches" }
+        }
+      },
+      "business": {
+        "delivery": "5–7 Werktage",
+        "revisions": "Eine Revisionsrunde",
+        "bestFor": "KMU · Praxen · Studios · Agenturen",
+        "bestForLong": "Der Sweet Spot für die meisten Schweizer KMU. Ein echtes Brand-System, editierbare Inhalte, SEO, das rankt, Animation mit Bedeutung — keine Deko.",
+        "pageNote": "Bis zu 6 Seiten. Struktur auf dein Geschäft abgestimmt.",
+        "designDescription": "Ein vollständiges Brand-System — individuelle Farbpalette, Type-Pairing, Spacing- und Motion-Tokens. Scroll-getriebene Reveals und Mikro-Interaktionen, die zur Branche passen.",
+        "pages": {
+          "home": { "name": "Startseite", "description": "Hero · Leistungen · Referenzen · Team · Kontakt" },
+          "about": { "name": "Über uns", "description": "Story · Werte · Team" },
+          "services": { "name": "Leistungen", "description": "Detailliertes Angebot mit Sub-Leistungen" },
+          "team": { "name": "Team", "description": "CMS-verwaltete Bios + Fotos" },
+          "blog": { "name": "Blog / News", "description": "CMS-verwaltet, SEO-ready" },
+          "contact": { "name": "Kontakt", "description": "Formular · E-Mail · Karte · Rechtliches" }
+        },
+        "extras": {
+          "cms": "Sanity CMS — Texte, Bilder, Team, Blog selbst editieren",
+          "animations": "Scroll-Animationen + Mikro-Interaktionen",
+          "jsonLd": "Strukturierte Daten (JSON-LD) für Rich Results",
+          "openGraph": "Open Graph + Twitter Cards auf jeder Seite",
+          "analytics": "Datenschutz-freundliches Analytics-Dashboard",
+          "copywriting": "Teilweise Copywriting-Unterstützung",
+          "lighthouse": "Lighthouse 90+ Garantie"
+        },
+        "reference": {
+          "client": "Core Medical",
+          "sector": "Privates Gesundheitsmanagement · Zürich",
+          "note": "Single-Page mit Anchor-Navigation, Sanity CMS, Founders-Modul, Resend-Kontakt, mehrsprachig vorbereitet."
+        }
+      },
+      "pro": {
+        "delivery": "Nach Projekt-Umfang",
+        "revisions": "Zwei Revisionsrunden",
+        "bestFor": "Grössere KMU · E-Commerce · Mehrsprachig · Integrationen",
+        "bestForLong": "Wenn Standard-Lösungen nicht mehr reichen. Individuelle Design-Direction, Mehrsprachigkeit, echte Integrationen (Supabase, Stripe, Buchung, CRM), produktiver E-Commerce, retainer-bereit.",
+        "pageNote": "Umfang in der Discovery-Phase definiert.",
+        "designDescription": "Eine massgeschneiderte Design-Direction — wir recherchieren deine Branche und schlagen ein Design-System vor, das nur dir gehört. Bespoke Motion, Typografie handverlesen, kein One-Size-Template.",
+        "pages": {
+          "custom": { "name": "Beliebige Seitenanzahl", "description": "Keine künstliche Grenze" },
+          "multilingual": { "name": "Mehrsprachig", "description": "DE + EN Standard, mehr als Add-on" },
+          "booking": { "name": "Produkt / Buchung", "description": "Stripe · Kalender · Reservierungen" },
+          "protected": { "name": "Geschützte Bereiche", "description": "Member-Logins, Dashboards, Admin" }
+        },
+        "extras": {
+          "multilingual": "Mehrsprachigkeits-Engine (DE + EN als Basis)",
+          "ecommerce": "E-Commerce-ready (Stripe / Stripe Connect)",
+          "integrations": "Individuelle Integrationen (Buchung, CRM, Kalender, APIs)",
+          "revisions": "2 Revisionsrunden (Business hat 1)",
+          "copywriting": "Vollständige Copywriting-Unterstützung",
+          "photography": "Fotografie-Direction nach Mass",
+          "retainer": "Retainer-Option für laufende Arbeit",
+          "discovery": "Discovery- + Strategie-Phase vor dem Build"
+        },
+        "reference": {
+          "client": "Veloscout",
+          "sector": "Schweizer Velo-Marktplatz",
+          "note": "Supabase-Auth + Stripe Connect Escrow, Preview-Gate, Listings-CRUD, transaktionale E-Mails, Cron-Payout-Webhook, Pro-Shop Industrial-Design."
+        }
+      }
+    },
+    "Extras": {
+      "heading": "Extras",
+      "lead": "Alles mit klarem Preis. Kein „Auf Anfrage\"-Spielchen.",
+      "addOns": {
+        "copywriting": { "name": "Copywriting", "description": "Eine Seite Text — Recherche, Entwurf, zwei Revisionen.", "price": "CHF 150" },
+        "extraPage": { "name": "Zusätzliche Seite", "description": "Erweitere Starter oder Business um eine Seite — gestaltet, gebaut, im Stil.", "price": "CHF 150" },
+        "extraRevision": { "name": "Zusätzliche Revisionsrunde", "description": "Ein voller Feedback-Durchlauf, in einem Pass umgesetzt.", "price": "CHF 200" },
+        "logo": { "name": "Logo-Design · Basic", "description": "Typografische Marke + Monogramm vom Schwester-Studio Aariviiva.", "hrefLabel": "aariviiva.fi" },
+        "multilingual": { "name": "Mehrsprachigkeit", "description": "Übersetzungs-Setup + Routing. Ab DE + EN.", "price": "ab CHF 400" }
+      },
+      "Maintenance": {
+        "heading": "Hosting & Wartung",
+        "lead": "Monatlich kündbar mit 30 Tagen Frist. Du behältst den Code in jedem Fall. Wir verrechnen in CHF, ohne MWST.",
+        "perMonth": "/ Monat",
+        "addCta": "{name} hinzufügen",
+        "mostPicked": "— am meisten gewählt",
+        "basic": {
+          "name": "Basic",
+          "price": "CHF 49",
+          "tagline": "Das Licht bleibt an.",
+          "f1": "Vercel Hosting · SSL",
+          "f2": "Uptime-Monitoring",
+          "f3": "99.9% Uptime-SLA",
+          "f4": "Quartalsweise Dependency-Updates"
+        },
+        "fullService": {
+          "name": "Full Service",
+          "price": "CHF 149",
+          "tagline": "Dein Retainer, dein Team.",
+          "f1": "Alles aus Basic",
+          "f2": "Monatliche Text- + Bild-Anpassungen",
+          "f3": "Priority-Support innert 24 h",
+          "f4": "Monatlicher Performance-Report"
+        }
+      }
+    },
+    "FAQ": {
+      "heading": "Fragen",
+      "q1": {
+        "q": "Was muss ich liefern, bevor ihr mit dem Bau anfangt?",
+        "a": "Wir brauchen deine Texte, Bilder oder Fotos, Logo und Brand-Farben. Falls du das nicht hast, bieten wir Copywriting und Basic-Logo-Design als Add-on."
+      },
+      "q2": {
+        "q": "Was zählt als Revisionsrunde?",
+        "a": "Ein Batch schriftliches Feedback, gesammelt und in einem Durchgang umgesetzt. Weitere Runden CHF 200 pro Stück."
+      },
+      "q3": {
+        "q": "Bietet ihr laufenden Support nach dem Launch?",
+        "a": "Wir geben 7 Tage Bug-Fix-Fenster nach dem Launch. Für laufenden Support gibt es Wartungs-Retainer ab CHF 149/Monat."
+      },
+      "q4": {
+        "q": "Was, wenn mein Projekt mehr als 4 oder 6 Seiten braucht?",
+        "a": "Zusätzliche Seiten kosten CHF 150 pro Stück. Grössere Projekte werden im Pro-Paket offeriert."
+      },
+      "q5": {
+        "q": "Wann zahle ich?",
+        "a": "50% Anzahlung vor Beginn. 50% bevor die Seite live geht. Domain und Hosting werden nach voller Bezahlung übergeben."
+      },
+      "q6": {
+        "q": "Wie schnell sind 3–5 Tage wirklich?",
+        "a": "Die Uhr läuft, sobald wir Inhalte und Anzahlung haben. Die meisten Starter-Sites sind innert 4 Werktagen live."
+      }
+    },
+    "ctaSubtext": "Füll das Briefing aus — wir melden uns innerhalb von 24 Stunden mit einem schriftlichen Angebot und Schweizer Werkvertrag."
+  },
+  "WorkPage": {
+    "metadata": {
+      "title": "Unsere Arbeiten",
+      "description": "Aktuelle Website-Projekte für Founder in Europa. Custom-built, nie aus einer Vorlage."
+    },
+    "hero": {
+      "word1": "Ausgewählte",
+      "word2": "Arbeiten.",
+      "body1": "Jedes Projekt wird von Grund auf für seine Branche gestaltet.",
+      "body2": "Keine Vorlagen, keine Abkürzungen."
+    },
+    "comingSoon": {
+      "eyebrow": "In Arbeit",
+      "lead": "Weitere Projekte sind in Arbeit — jedes individuell für seine Branche gebaut,",
+      "emphasis": "nie von der Vorlage."
+    },
+    "sendoff": {
+      "headlineLead": "Gefällt dir,",
+      "headlineEmphasis": "was du siehst?",
+      "body": "Erzähl uns von deinem Geschäft — wir zeigen dir, was wir bauen können.",
+      "cta": "Projekt starten"
+    },
+    "projects": {
+      "coreMedical": { "subtitle": "Praxis für privates Gesundheitsmanagement — Zürich, Schweiz", "category": "Gesundheit" },
+      "veloscout": { "subtitle": "Kuratierter Velo-Marktplatz — Schweiz · Pre-Launch Frühling 2026", "category": "Marktplatz" },
+      "lucasvision": { "subtitle": "Cinematisches Foto- & Video-Studio — Schweiz", "category": "Fotografie & Film" },
+      "aariviiva": { "subtitle": "Grafikdesign-Studio — Virpi Loukamaa, Finnland", "category": "Grafikdesign" }
+    },
+    "scope": {
+      "design": "Design",
+      "development": "Entwicklung",
+      "cms": "CMS",
+      "hosting": "Hosting",
+      "marketplace": "Marktplatz",
+      "video": "Video",
+      "bilingual": "Zweisprachig"
+    }
+  },
+  "ContactPage": {
+    "metadata": {
+      "title": "Kontakt",
+      "description": "Kontaktiere CL Solutions. Premium Websites für Founder überall."
+    },
+    "hero": {
+      "word1": "In",
+      "word2": "Kontakt",
+      "word3": "treten.",
+      "body": "Hast du eine Frage oder willst ein Projekt besprechen? Direkt erreichbar — keine Formulare, keine Funnels."
+    },
+    "rows": {
+      "emailLabel": "E-Mail",
+      "studioLabel": "Studio",
+      "studioValue": "Zürich · Helsinki",
+      "responseLabel": "Antwort",
+      "responseValue": "Innert 24 Stunden"
+    },
+    "footer": {
+      "body": "Bereit zu starten? Füll dein Briefing aus und wir melden uns innert 24 Stunden mit einem Plan.",
+      "cta": "Projekt starten"
+    }
   }
 }

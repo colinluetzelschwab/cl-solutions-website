@@ -108,5 +108,228 @@
     "subtext": "Fill out our brief — we'll get back within 24 hours with a written proposal.",
     "primary": "Start your project",
     "secondary": "Browse packages"
+  },
+  "ServicesPage": {
+    "metadata": {
+      "title": "Pricing & Packages",
+      "description": "Three packages. One standard. Starter CHF 1,500 · Business CHF 3,500 · Pro from CHF 7,500. Pages, process, design level and live references — priced upfront.",
+      "ogTitle": "Pricing & Packages — CL Solutions",
+      "ogDescription": "Three packages. One standard. Priced up front, with live client references."
+    },
+    "Hero": {
+      "headlineWord1": "Three",
+      "headlineWord2": "options.",
+      "headlineWord3": "One",
+      "headlineWord4": "standard.",
+      "body": "Every site is hand-built and custom-designed. The tiers differ in scope and depth, not quality.",
+      "tier": {
+        "starter": { "name": "Starter", "price": "CHF 1,500", "delivery": "3–5 days", "oneLiner": "One focused funnel." },
+        "business": { "name": "Business", "price": "CHF 3,500", "delivery": "5–7 days", "oneLiner": "The full brand system." },
+        "pro": { "name": "Pro", "price": "from CHF 7,500", "delivery": "Scoped", "oneLiner": "When off-the-shelf stops scaling." }
+      },
+      "mostPicked": "— most picked"
+    },
+    "Detail": {
+      "startBriefCta": "Start {name} brief",
+      "mostPicked": "— most picked",
+      "starter": {
+        "delivery": "3–5 business days",
+        "revisions": "1 revision round",
+        "bestFor": "Freelancers · Landing pages · New ventures",
+        "bestForLong": "A focused brochure site that converts — one well-crafted funnel, nothing that looks cheap, nothing you don't need.",
+        "pageNote": "Up to 4 pages. Add more for CHF 150 each.",
+        "designDescription": "A light brand system — deliberate palette, one display + one body font, spacing scale, mobile-first. Clean and modular, not templated.",
+        "pages": {
+          "home": { "name": "Home", "description": "Hero · services snapshot · contact prompt" },
+          "about": { "name": "About", "description": "Story · approach · why you" },
+          "services": { "name": "Services", "description": "What you offer, one clear block each" },
+          "contact": { "name": "Contact", "description": "Form · email · location · legal" }
+        }
+      },
+      "business": {
+        "delivery": "5–7 business days",
+        "revisions": "1 revision round",
+        "bestFor": "KMU · Clinics · Studios · Agencies",
+        "bestForLong": "The sweet spot for most Swiss SMEs. A real brand system, editable content, SEO that ranks, animation that carries meaning — not decoration.",
+        "pageNote": "Up to 6 pages. Structure tuned to your business.",
+        "designDescription": "A full brand system — custom palette, type-pairing, spacing and motion tokens. Scroll-driven reveals and micro-interactions that match the industry.",
+        "pages": {
+          "home": { "name": "Home", "description": "Hero · services · proof · team · contact" },
+          "about": { "name": "About", "description": "Story · values · team" },
+          "services": { "name": "Services", "description": "Detailed offering with sub-services" },
+          "team": { "name": "Team", "description": "CMS-managed bios + photos" },
+          "blog": { "name": "Blog / News", "description": "CMS-managed, SEO-ready" },
+          "contact": { "name": "Contact", "description": "Form · email · map · legal" }
+        },
+        "extras": {
+          "cms": "Sanity CMS — edit text, images, team, blog",
+          "animations": "Scroll animations + micro-interactions",
+          "jsonLd": "Structured data (JSON-LD) for rich results",
+          "openGraph": "Open Graph + Twitter cards on every page",
+          "analytics": "Privacy-friendly analytics dashboard",
+          "copywriting": "Partial copywriting assistance",
+          "lighthouse": "Lighthouse 90+ guarantee"
+        },
+        "reference": {
+          "client": "Core Medical",
+          "sector": "Private health management · Zürich",
+          "note": "Single-page with anchor nav, Sanity CMS, founders module, Resend contact, bilingual-ready."
+        }
+      },
+      "pro": {
+        "delivery": "Scoped per project",
+        "revisions": "2 revision rounds",
+        "bestFor": "Larger SMEs · E-commerce · Multilingual · Integrations",
+        "bestForLong": "When off-the-shelf stops scaling. Custom design direction, multi-language, real integrations (Supabase, Stripe, booking, CRM), production e-commerce, retainer-ready.",
+        "pageNote": "Scope defined during the discovery phase.",
+        "designDescription": "A custom design direction — we research your industry and propose a design system that is yours alone. Bespoke motion, typography hand-picked, not a template that works.",
+        "pages": {
+          "custom": { "name": "Custom page count", "description": "No artificial cap" },
+          "multilingual": { "name": "Multilingual", "description": "DE + EN standard, more as add-on" },
+          "booking": { "name": "Product / booking", "description": "Stripe · calendar · reservations" },
+          "protected": { "name": "Protected areas", "description": "Member logins, dashboards, admin" }
+        },
+        "extras": {
+          "multilingual": "Multilingual engine (DE + EN baseline)",
+          "ecommerce": "E-commerce ready (Stripe / Stripe Connect)",
+          "integrations": "Custom integrations (booking, CRM, calendars, APIs)",
+          "revisions": "2 revision rounds (Business has 1)",
+          "copywriting": "Full copywriting assistance",
+          "photography": "Custom photography direction",
+          "retainer": "Retainer option for ongoing work",
+          "discovery": "Discovery + strategy phase before build"
+        },
+        "reference": {
+          "client": "Veloscout",
+          "sector": "Swiss cycling marketplace",
+          "note": "Supabase auth + Stripe Connect escrow, preview gate, listings CRUD, transactional email, cron payout webhook, Pro-Shop industrial design."
+        }
+      }
+    },
+    "Extras": {
+      "heading": "Extras",
+      "lead": "Everything priced up front. No \"contact us for a quote\" games.",
+      "addOns": {
+        "copywriting": { "name": "Copywriting", "description": "One page of copy — research, draft, two revisions.", "price": "CHF 150" },
+        "extraPage": { "name": "Extra page", "description": "Add a page to Starter or Business — designed, built, in style.", "price": "CHF 150" },
+        "extraRevision": { "name": "Extra revision round", "description": "A full batch of feedback, implemented in one pass.", "price": "CHF 200" },
+        "logo": { "name": "Logo design · basic", "description": "Typographic mark + monogram by our sister studio Aariviiva.", "hrefLabel": "aariviiva.fi" },
+        "multilingual": { "name": "Multilingual", "description": "Translation setup + routing. Starting at DE + EN.", "price": "from CHF 400" }
+      },
+      "Maintenance": {
+        "heading": "Hosting & maintenance",
+        "lead": "Month to month. Cancel with 30 days notice. You keep the code regardless. We bill in CHF, VAT excluded.",
+        "perMonth": "/ month",
+        "addCta": "Add {name}",
+        "mostPicked": "— most picked",
+        "basic": {
+          "name": "Basic",
+          "price": "CHF 49",
+          "tagline": "Keep the lights on.",
+          "f1": "Vercel hosting · SSL",
+          "f2": "Uptime monitoring",
+          "f3": "99.9% uptime SLA",
+          "f4": "Quarterly dependency updates"
+        },
+        "fullService": {
+          "name": "Full Service",
+          "price": "CHF 149",
+          "tagline": "Your retainer, your team.",
+          "f1": "Everything in Basic",
+          "f2": "Monthly text + image changes",
+          "f3": "Priority support within 24h",
+          "f4": "Monthly performance report"
+        }
+      }
+    },
+    "FAQ": {
+      "heading": "Questions",
+      "q1": {
+        "q": "What do I need to provide before you start building?",
+        "a": "We need your text content, images or photos, logo, and brand colours. If you don't have these, we offer copywriting and basic logo design as add-ons."
+      },
+      "q2": {
+        "q": "What counts as a revision round?",
+        "a": "One batch of written feedback, collected and implemented in one pass. Additional rounds are CHF 200 each."
+      },
+      "q3": {
+        "q": "Do you offer ongoing support after launch?",
+        "a": "We include a 7-day bug-fix window after launch. For ongoing support, maintenance retainers start at CHF 149/month."
+      },
+      "q4": {
+        "q": "What if my project needs more than 4 or 6 pages?",
+        "a": "Extra pages are CHF 150 each. Larger projects are quoted under the Pro package."
+      },
+      "q5": {
+        "q": "When do I pay?",
+        "a": "50% upfront before we start. 50% before the site goes live. Domain and hosting are transferred after full payment."
+      },
+      "q6": {
+        "q": "How fast is 3–5 days, really?",
+        "a": "The clock starts when we receive your content and deposit. Most Starter sites are live within 4 business days."
+      }
+    },
+    "ctaSubtext": "Fill out the brief wizard — we'll get back within 24 hours with a written proposal and Swiss Werkvertrag."
+  },
+  "WorkPage": {
+    "metadata": {
+      "title": "Our Work",
+      "description": "Recent website projects for founders across Europe. Custom-built, never from a template."
+    },
+    "hero": {
+      "word1": "Selected",
+      "word2": "work.",
+      "body1": "Every project is designed from scratch for its industry.",
+      "body2": "No templates, no shortcuts."
+    },
+    "comingSoon": {
+      "eyebrow": "Coming soon",
+      "lead": "More projects in the works — each one custom-built for its industry,",
+      "emphasis": "never from a template."
+    },
+    "sendoff": {
+      "headlineLead": "Like what",
+      "headlineEmphasis": "you see?",
+      "body": "Tell us about your business — we'll show you what we can build.",
+      "cta": "Start a project"
+    },
+    "projects": {
+      "coreMedical": { "subtitle": "Private health management practice — Zurich, Switzerland", "category": "Healthcare" },
+      "veloscout": { "subtitle": "Curated bike marketplace — Switzerland · Pre-launch Spring 2026", "category": "Marketplace" },
+      "lucasvision": { "subtitle": "Cinematic photo & video studio — Switzerland", "category": "Photography & Film" },
+      "aariviiva": { "subtitle": "Graphic design studio — Virpi Loukamaa, Finland", "category": "Graphic Design" }
+    },
+    "scope": {
+      "design": "Design",
+      "development": "Development",
+      "cms": "CMS",
+      "hosting": "Hosting",
+      "marketplace": "Marketplace",
+      "video": "Video",
+      "bilingual": "Bilingual"
+    }
+  },
+  "ContactPage": {
+    "metadata": {
+      "title": "Contact",
+      "description": "Get in touch with CL Solutions. Premium websites for founders anywhere."
+    },
+    "hero": {
+      "word1": "Get",
+      "word2": "in",
+      "word3": "touch.",
+      "body": "Have a question or want to discuss a project? Reach out directly — no forms, no funnels."
+    },
+    "rows": {
+      "emailLabel": "Email",
+      "studioLabel": "Studio",
+      "studioValue": "Zurich · Helsinki",
+      "responseLabel": "Response",
+      "responseValue": "Within 24 hours"
+    },
+    "footer": {
+      "body": "Ready to start? Fill in your brief and we'll send you a plan within 24 hours.",
+      "cta": "Start a project"
+    }
   }
 }

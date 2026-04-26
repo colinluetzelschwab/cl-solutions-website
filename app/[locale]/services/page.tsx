@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import ServicesHero from '@/components/sections/services/ServicesHero'
@@ -8,19 +10,21 @@ import FAQ from '@/components/sections/services/FAQ'
 import CTABanner from '@/components/sections/shared/CTABanner'
 import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 
-export const metadata: Metadata = {
-  title: 'Pricing & Packages',
-  description:
-    'Three packages. One standard. Starter CHF 1,500 · Business CHF 3,500 · Pro from CHF 7,500. Pages, process, design level and live references — priced upfront.',
-  openGraph: {
-    title: 'Pricing & Packages — CL Solutions',
-    description:
-      'Three packages. One standard. Priced up front, with live client references.',
-    type: 'article',
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('ServicesPage.metadata')
+  return {
+    title: t('title'),
+    description: t('description'),
+    openGraph: {
+      title: t('ogTitle'),
+      description: t('ogDescription'),
+      type: 'article',
+    },
+  }
 }
 
 export default function ServicesPage() {
+  const t = useTranslations('ServicesPage')
   return (
     <>
       <BreadcrumbJsonLd
@@ -40,9 +44,7 @@ export default function ServicesPage() {
 
         <FAQ />
 
-        <CTABanner
-          subtext="Fill out the brief wizard — we'll get back within 24 hours with a written proposal and Swiss Werkvertrag."
-        />
+        <CTABanner subtext={t('ctaSubtext')} />
       </main>
 
       <Footer />

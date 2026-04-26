@@ -1,4 +1,6 @@
 import type { Metadata } from 'next'
+import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import Navigation from '@/components/layout/Navigation'
@@ -6,23 +8,24 @@ import Footer from '@/components/layout/Footer'
 import ProjectGrid from '@/components/work/ProjectGrid'
 import BreadcrumbJsonLd from '@/components/seo/BreadcrumbJsonLd'
 
-export const metadata: Metadata = {
-  title: 'Our Work',
-  description:
-    'Recent website projects for founders across Europe. Custom-built, never from a template.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('WorkPage.metadata')
+  return {
+    title: t('title'),
+    description: t('description'),
+  }
 }
 
-type Token =
-  | { kind: 'word'; text: string }
-  | { kind: 'underline'; text: string }
-
-const headlineTokens: Token[] = [
-  { kind: 'word',      text: 'Selected' },
-  { kind: 'underline', text: 'work.' },
-]
-
 export default function WorkPage() {
+  const t = useTranslations('WorkPage')
   const wordStride = 0.11
+
+  // Headline: [word1 plain, word2 underlined italic accent]
+  const headlineTokens = [
+    { kind: 'word' as const, text: t('hero.word1') },
+    { kind: 'underline' as const, text: t('hero.word2') },
+  ]
+
   return (
     <>
       <BreadcrumbJsonLd
@@ -70,8 +73,8 @@ export default function WorkPage() {
             className="fade-up mt-8 md:mt-10 measure text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed"
             style={{ ['--fade-delay' as string]: '0.7s' }}
           >
-            Every project is designed from scratch for its industry.{' '}
-            <span className="serif-italic text-[color:var(--ink)]">No templates, no shortcuts.</span>
+            {t('hero.body1')}{' '}
+            <span className="serif-italic text-[color:var(--ink)]">{t('hero.body2')}</span>
           </p>
         </div>
       </section>
@@ -82,15 +85,15 @@ export default function WorkPage() {
       <section className="relative w-full py-24 md:py-32 border-t border-[color:var(--border-subtle)]">
         <div className="mx-auto max-w-4xl px-6 sm:px-10 lg:px-16 text-center">
           <h2 className="display text-[clamp(2rem,4.4vw,3.4rem)] leading-[1.02]">
-            Like what{' '}
-            <span className="serif-italic text-[color:var(--accent)]">you see?</span>
+            {t('sendoff.headlineLead')}{' '}
+            <span className="serif-italic text-[color:var(--accent)]">{t('sendoff.headlineEmphasis')}</span>
           </h2>
           <p className="mt-6 md:mt-8 measure mx-auto text-base md:text-lg text-[color:var(--ink-muted)] leading-relaxed">
-            Tell us about your business — we&apos;ll show you what we can build.
+            {t('sendoff.body')}
           </p>
           <div className="mt-10 flex items-center justify-center gap-3 flex-wrap">
             <Link href="/contact/start" className="btn btn-primary">
-              Start a project
+              {t('sendoff.cta')}
               <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
