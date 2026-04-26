@@ -202,6 +202,15 @@ export default function HeroContent() {
       }
     }
 
+    // Cooldown prevents ping-pong: after either commit fires, no further
+    // commit (in either direction) can fire for COMMIT_COOLDOWN_MS. Without
+    // this, a user landing on Services who scrolls up slightly to peek at
+    // the curtain immediately gets snapped back to hero, then any
+    // downward intent snaps them forward again. Cooldown gives the user
+    // a chance to settle and decide direction without being yanked.
+    const COMMIT_COOLDOWN_MS = 2000
+    let lastCommitAt = 0
+
     const onScroll = () => {
       const section = sectionRef.current
       if (!section) return
@@ -220,6 +229,10 @@ export default function HeroContent() {
         backwardArmed = true
       }
 
+      // Cooldown gate — silently ignore commit triggers for a beat after
+      // any prior commit (forward OR backward) so we don't oscillate.
+      if (Date.now() - lastCommitAt < COMMIT_COOLDOWN_MS) return
+
       // Forward commit — scrolling down past the inflection lands on Services.
       // Target = hero-section-end minus one viewport, which is exactly where
       // Services starts visually thanks to its `-mt-[100svh]` overlap. This
@@ -227,14 +240,20 @@ export default function HeroContent() {
       // 300svh desktop hero without hard-coding viewport multiples.
       if (dir === 'down' && forwardArmed && progress > COMMIT_PROGRESS && progress < 0.5) {
         forwardArmed = false
+        lastCommitAt = Date.now()
         lenisScrollTo(heroOuterHeight - window.innerHeight)
         return
       }
 
-      // Backward commit — scrolling up back into the curtain zone returns
-      // the user to hero top so they're never stranded mid-pin
-      if (dir === 'up' && backwardArmed && progress < 0.5 && progress > RESET_PROGRESS) {
+      // Backward commit — fires only when the user is BACK in the
+      // curtain-close zone (progress < COMMIT_PROGRESS) going up. The
+      // tighter threshold matches the forward trigger's mirror: user has
+      // to scroll all the way back through the static-curtain phase
+      // before the commit fires, instead of triggering on a small upward
+      // wheel-flick from Services. That's what created the ping-pong.
+      if (dir === 'up' && backwardArmed && progress < COMMIT_PROGRESS && progress > RESET_PROGRESS) {
         backwardArmed = false
+        lastCommitAt = Date.now()
         lenisScrollTo(0)
       }
     }
