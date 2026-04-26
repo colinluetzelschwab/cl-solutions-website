@@ -17,8 +17,12 @@ export default function Home() {
         <HeroContent />
         {/* Services rises over the static (curtain-closed) hero — pulled up
             via negative margin so it overlaps the second half of the hero's
-            pin runway, with z-10 to stack on top. */}
-        <div className="relative z-10 -mt-[100svh]">
+            pin runway, with z-10 to stack on top. The explicit page-bg fill
+            is REQUIRED: without it, Services is transparent on top of the
+            still-pinned hero, and the iris-closed curtain card bleeds through
+            wherever Services has no opaque content (top padding, between
+            cards). The fill matches body bg so the visual seam is invisible. */}
+        <div className="relative z-10 -mt-[100svh] bg-[color:var(--paper-dark)]">
           <ServicesOverview />
         </div>
         <SocialProof />

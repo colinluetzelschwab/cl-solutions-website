@@ -78,7 +78,7 @@ function RotatingWord({
       {words.map((w, i) => (
         <motion.span
           key={w}
-          className="col-start-1 row-start-1 serif-italic text-[color:var(--ink-soft)] whitespace-nowrap leading-[inherit]"
+          className="col-start-1 row-start-1 serif-italic text-[color:var(--ink)] whitespace-nowrap leading-[inherit]"
           initial={{ y: '100%', opacity: 0 }}
           animate={
             active === i
@@ -147,38 +147,95 @@ export default function HeroContent() {
   const contentOpacity = useTransform(progress, [0, 0.07], [1, 0])
   const contentY = useTransform(progress, [0, 0.33], [0, -60])
 
-  // SCROLL COMMIT — once the curtain is past the halfway mark (image at
-  // ~50% of viewport), commit the rest of the slide automatically so the
-  // user lands cleanly on Services without scrolling all the way through
-  // the static curtain phase. One-shot per visit; re-arms once the user
-  // scrolls back to the top.
+  // SCROLL COMMIT (bidirectional) — once the curtain is past the halfway
+  // mark, auto-glide the user to wherever they're heading so they don't
+  // have to manually scroll the static-curtain phase.
+  //   · Scrolling DOWN past the inflection → land on Services top.
+  //   · Scrolling UP from Services back into the curtain zone → land back
+  //     at hero top.
+  // Each direction has its own arm/disarm flag tied to the user's position:
+  // forwardArmed is set while near the top and cleared after firing;
+  // backwardArmed is set after the user passes Services-top so we only
+  // reverse-commit when they're returning, not on the forward animation.
   // Implemented as a native scroll listener (rather than via framer-motion's
   // useMotionValueEvent) so it fires reliably under Lenis-driven scroll.
   useEffect(() => {
     if (reduce) return
-    let committed = false
     const COMMIT_PROGRESS = 0.165 // curtain image at ~50% of viewport
     const RESET_PROGRESS = 0.04
+    const REARM_BACKWARD_AT = 0.6 // user is firmly past static-curtain phase
+
+    let forwardArmed = true
+    let backwardArmed = false
+    let lastScrollY = window.scrollY
+
+    // The auto-commit glide MUST run uninterrupted — without `lock`, the
+    // user's still-active wheel/touch input cancels the scrollTo mid-flight
+    // and they land at a random in-between scroll position (Colin saw the
+    // commit halting partway, with Services barely peeking above the fold).
+    //
+    // BUT Lenis 1.x has a known bug where `{ lock: true }` can fail to clear
+    // after the animation completes, leaving the page permanently un-scrollable
+    // until reload. So we belt-AND-braces it: pass `lock: true` for a clean
+    // glide, AND schedule a forced clear of `isLocked` slightly after the
+    // animation should have finished. If Lenis released it on its own, the
+    // forced clear is a no-op; if Lenis leaked the lock, our clear fixes it.
+    const GLIDE_DURATION = 1.0
+    const LOCK_RELEASE_BUFFER_MS = 1200 // duration * 1000 + 200ms safety margin
+
+    const lenisScrollTo = (y: number) => {
+      const lenis = (window as unknown as {
+        __lenis?: {
+          scrollTo: (y: number, opts?: { duration?: number; lock?: boolean; force?: boolean }) => void
+          isLocked?: boolean
+        }
+      }).__lenis
+      if (lenis) {
+        // If a prior glide leaked its lock, clear it before scheduling the next.
+        if (lenis.isLocked) lenis.isLocked = false
+        lenis.scrollTo(y, { duration: GLIDE_DURATION, lock: true, force: true })
+        window.setTimeout(() => {
+          if (lenis.isLocked) lenis.isLocked = false
+        }, LOCK_RELEASE_BUFFER_MS)
+      } else {
+        window.scrollTo({ top: y, behavior: 'smooth' })
+      }
+    }
 
     const onScroll = () => {
       const section = sectionRef.current
       if (!section) return
       const heroOuterHeight = section.offsetHeight
-      const progress = window.scrollY / heroOuterHeight
+      const scrollY = window.scrollY
+      const progress = scrollY / heroOuterHeight
+      const dir = scrollY > lastScrollY ? 'down' : scrollY < lastScrollY ? 'up' : null
+      lastScrollY = scrollY
 
-      if (!committed && progress > COMMIT_PROGRESS) {
-        committed = true
-        const targetY = window.innerHeight * 2 // 200svh — Services top
-        const lenis = (window as unknown as {
-          __lenis?: { scrollTo: (y: number, opts?: { duration?: number; lock?: boolean }) => void }
-        }).__lenis
-        if (lenis) {
-          lenis.scrollTo(targetY, { duration: 1.2, lock: true })
-        } else {
-          window.scrollTo({ top: targetY, behavior: 'smooth' })
-        }
-      } else if (committed && progress < RESET_PROGRESS) {
-        committed = false
+      // Re-arm flags based on absolute position
+      if (progress < RESET_PROGRESS) {
+        forwardArmed = true
+        backwardArmed = false
+      } else if (progress > REARM_BACKWARD_AT) {
+        forwardArmed = false
+        backwardArmed = true
+      }
+
+      // Forward commit — scrolling down past the inflection lands on Services.
+      // Target = hero-section-end minus one viewport, which is exactly where
+      // Services starts visually thanks to its `-mt-[100svh]` overlap. This
+      // formula is responsive: works for both the 200svh mobile hero and the
+      // 300svh desktop hero without hard-coding viewport multiples.
+      if (dir === 'down' && forwardArmed && progress > COMMIT_PROGRESS && progress < 0.5) {
+        forwardArmed = false
+        lenisScrollTo(heroOuterHeight - window.innerHeight)
+        return
+      }
+
+      // Backward commit — scrolling up back into the curtain zone returns
+      // the user to hero top so they're never stranded mid-pin
+      if (dir === 'up' && backwardArmed && progress < 0.5 && progress > RESET_PROGRESS) {
+        backwardArmed = false
+        lenisScrollTo(0)
       }
     }
 
@@ -189,11 +246,13 @@ export default function HeroContent() {
   return (
     <section
       ref={sectionRef}
-      // Outer wrapper: 300svh (270svh on mobile) for 200svh of pin runway
-      // (sticky inner is 100svh). Curtain close uses the first 100svh of
-      // pin; the second 100svh is a "static curtain-closed" phase during
-      // which Services overlays the hero from below.
-      className="relative w-full h-[270svh] md:h-[300svh]"
+      // Outer wrapper: 300svh on desktop (200svh of pin runway), 200svh on
+      // mobile (100svh of pin runway). Curtain close uses the first ~33% of
+      // section progress; remainder is the "static curtain-closed" phase
+      // during which Services overlays the hero from below. The mobile
+      // height is tighter so phone users don't have to drag through three
+      // viewport-heights of pinned scroll before the auto-commit fires.
+      className="relative w-full h-[200svh] md:h-[300svh]"
     >
       <div className="sticky top-0 isolate w-full h-[100svh] min-h-[640px] overflow-hidden bg-[color:var(--paper-dark)] flex items-center justify-center">
 
