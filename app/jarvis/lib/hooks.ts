@@ -5,12 +5,12 @@ import type { Tab, BriefSummary, ProjectSummary, ActiveBuild, BuildHistoryEntry,
 
 /* ═══ Tab persistence ═══ */
 
-export function useTab(defaultTab: Tab = "briefs"): [Tab, (t: Tab) => void] {
+export function useTab(defaultTab: Tab = "actions"): [Tab, (t: Tab) => void] {
   const [tab, setTabState] = useState<Tab>(defaultTab);
 
   useEffect(() => {
     const saved = localStorage.getItem("jarvis-tab") as Tab | null;
-    if (saved && ["briefs", "live", "systems", "settings"].includes(saved)) {
+    if (saved && ["briefs", "live", "systems", "settings", "pipeline", "money", "actions"].includes(saved)) {
       setTabState(saved);
     }
   }, []);
@@ -30,7 +30,10 @@ export function useAuth() {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    fetch("/api/dashboard/projects")
+    // Use /api/dashboard/leads as the auth probe (JARVIS-internal, no external API).
+    // Previously hit /api/dashboard/projects which depends on the Vercel API and
+    // 500s in local dev when VERCEL_API_TOKEN isn't configured.
+    fetch("/api/dashboard/leads")
       .then(res => { if (res.ok) setAuthed(true); })
       .catch(() => {})
       .finally(() => setChecking(false));
@@ -82,7 +85,22 @@ export function useBriefs() {
     }).catch(() => {});
   }, []);
 
-  return { briefs, loading, refresh, updateStatus };
+  const remove = useCallback(async (briefId: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/dashboard/briefs", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ briefId }),
+      });
+      if (res.ok) {
+        setBriefs(b => b.filter(x => x.id !== briefId));
+        return true;
+      }
+    } catch { /* */ }
+    return false;
+  }, []);
+
+  return { briefs, loading, refresh, updateStatus, remove };
 }
 
 /* ═══ Projects ═══ */
@@ -247,14 +265,46 @@ export function useActiveBuild() {
 export function useBuildHistory() {
   const [history, setHistory] = useState<BuildHistoryEntry[]>([]);
 
-  useEffect(() => {
-    fetch("/api/dashboard/build-state")
-      .then(res => res.ok ? res.json() : null)
-      .then(data => { if (data?.history) setHistory(data.history); })
-      .catch(() => {});
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch("/api/dashboard/build-state");
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data?.history) setHistory(data.history);
+    } catch { /* */ }
   }, []);
 
-  return history;
+  useEffect(() => { refresh(); }, [refresh]);
+
+  const removeEntry = useCallback(async (slug: string): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/dashboard/build-state", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ slug }),
+      });
+      if (res.ok) {
+        setHistory(h => h.filter(e => e.slug !== slug));
+        return true;
+      }
+    } catch { /* */ }
+    return false;
+  }, []);
+
+  const clearAll = useCallback(async (): Promise<boolean> => {
+    try {
+      const res = await fetch("/api/dashboard/build-state", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clearAll: true }),
+      });
+      if (res.ok) { setHistory([]); return true; }
+    } catch { /* */ }
+    return false;
+  }, []);
+
+  return Object.assign(history, { refresh, removeEntry, clearAll }) as
+    BuildHistoryEntry[] & { refresh: () => Promise<void>; removeEntry: (slug: string) => Promise<boolean>; clearAll: () => Promise<boolean> };
 }
 
 /* ═══ Media Query ═══ */

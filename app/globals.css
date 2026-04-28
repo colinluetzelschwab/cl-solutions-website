@@ -822,3 +822,68 @@ html:has([data-page="home"]) {
 }
 .hud-boot           { animation: hud-boot 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .hud-success-border { animation: hud-success-flash 1.5s ease-out; }
+
+/* ──────────────────────────────────────────────────────────────────────
+   JARVIS — editorial-dark master dashboard tokens
+   Scoped to .jarvis-shell so the public site is never affected.
+   ────────────────────────────────────────────────────────────────────── */
+.jarvis-shell {
+  --jarvis-bg:               #0a0a0a;
+  --jarvis-surface-1:        rgba(255, 255, 255, 0.025);
+  --jarvis-surface-2:        rgba(255, 255, 255, 0.05);
+  --jarvis-surface-3:        rgba(255, 255, 255, 0.08);
+  --jarvis-border-subtle:    rgba(255, 255, 255, 0.06);
+  --jarvis-border:           rgba(255, 255, 255, 0.1);
+  --jarvis-border-strong:    rgba(255, 255, 255, 0.18);
+
+  --jarvis-text-primary:     rgba(255, 255, 255, 0.95);
+  --jarvis-text-secondary:   rgba(255, 255, 255, 0.62);
+  --jarvis-text-muted:       rgba(255, 255, 255, 0.4);
+  --jarvis-text-faint:       rgba(255, 255, 255, 0.22);
+
+  /* Brand red — matches the public-site accent so JARVIS feels like CL Solutions */
+  --jarvis-accent:           #dc2222;
+  --jarvis-accent-soft:      #f87171;
+  --jarvis-accent-bg:        rgba(220, 34, 34, 0.12);
+  --jarvis-accent-border:    rgba(220, 34, 34, 0.35);
+
+  --jarvis-success:          #34d399;
+  --jarvis-warning:          #fbbf24;
+  --jarvis-error:            #f87171;
+  --jarvis-info:             #60a5fa;
+  --jarvis-violet:           #a78bfa;
+
+  --jarvis-sans:             var(--font-geist), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --jarvis-mono:             var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+/* Numerical heroes — modern sans, tight tracking, tabular figures. */
+.jarvis-hero-num {
+  font-family: var(--jarvis-sans);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Mono only for IDs, timestamps, slugs, code-shaped content. */
+.jarvis-mono { font-family: var(--jarvis-mono); font-feature-settings: "ss01", "ss02"; }
+
+/* JARVIS scope — force Geist sans on every element inside the dashboard,
+   regardless of @layer base rules (h1/h2/h3 → serif on the public site). */
+.jarvis-shell,
+.jarvis-shell * {
+  font-family: var(--jarvis-sans);
+}
+.jarvis-shell h1,
+.jarvis-shell h2,
+.jarvis-shell h3,
+.jarvis-shell h4 {
+  font-family: var(--jarvis-sans);
+  letter-spacing: -0.025em;
+  font-weight: 600;
+}
+.jarvis-shell .jarvis-mono,
+.jarvis-shell .jarvis-mono * {
+  font-family: var(--jarvis-mono);
+}

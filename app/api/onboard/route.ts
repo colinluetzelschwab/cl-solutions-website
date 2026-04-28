@@ -3,6 +3,8 @@ import { put } from '@vercel/blob'
 import { Resend } from 'resend'
 import type { OnboardingBrief } from '@/lib/onboarding-types'
 import { COUPON_CODE, PACKAGES, HOSTING_PLANS, LOGO_GENERATION_PRICE } from '@/lib/onboarding-constants'
+import { crmCreate } from '@/app/jarvis/lib/crm-store'
+import type { Lead } from '@/app/jarvis/lib/crm-types'
 
 function getResendClient(): Resend {
   const apiKey = process.env.RESEND_API_KEY
@@ -36,11 +38,41 @@ export async function POST(request: NextRequest) {
     const logoPrice = brief.uploads?.requestLogoGeneration ? LOGO_GENERATION_PRICE : 0
     const totalPrice = isCouponValid ? logoPrice : basePrice + logoPrice
 
-    // Generate brief ID and store
+    // Generate brief ID
     const briefId = crypto.randomUUID()
+
+    // ── Auto-create CRM Lead (step 10) ───────────────────────
+    // The brief = a paying customer. Write a Lead with status "won"
+    // and source "brief" so Pipeline shows the closed deal. Best-effort:
+    // if CRM write fails (blob unavailable, etc.) fall back to leadId
+    // = undefined and continue with the brief flow. The brief itself
+    // is the source of truth — the lead is bookkeeping.
+    const businessType = brief.businessInfo.businessType === 'other'
+      ? brief.businessInfo.businessTypeOther
+      : brief.businessInfo.businessType
+    let leadId: string | undefined
+    try {
+      const partial: Omit<Lead, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'> = {
+        businessName: brief.businessInfo.name,
+        email: brief.businessInfo.email,
+        phone: brief.businessInfo.phone || undefined,
+        industry: businessType || undefined,
+        priority: 1,
+        status: 'won',
+        source: 'brief',
+        briefId,
+        notes: `Auto-created from brief — ${selectedPkg?.name ?? 'Unknown'} (CHF ${totalPrice})`,
+      }
+      const lead = await crmCreate('leads', { ...partial, createdBy: 'system' })
+      leadId = lead.id
+    } catch (leadErr) {
+      console.error('Brief→Lead auto-create error:', leadErr)
+    }
+
     const storedBrief = {
       ...brief,
       id: briefId,
+      leadId,                                  // back-link for step 9 mockup auto-link
       createdAt: new Date().toISOString(),
       totalPrice,
       package: { ...brief.package, couponValid: isCouponValid },

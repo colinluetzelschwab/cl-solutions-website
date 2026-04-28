@@ -57,4 +57,8 @@ export interface VpsHealth {
   error?: string;
 }
 
-export type Tab = "briefs" | "live" | "systems" | "settings";
+export type Tab =
+  // OPS group (existing)
+  | "briefs" | "live" | "systems" | "settings"
+  // CRM group (new in MVP)
+  | "pipeline" | "money" | "actions";

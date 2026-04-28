@@ -67,10 +67,40 @@ function BriefDetail({ brief }: { brief: BriefSummary }) {
 }
 
 export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: ActiveBuild) => void }) {
-  const { briefs, loading, refresh, updateStatus } = useBriefs();
+  const { briefs, loading, refresh, updateStatus, remove } = useBriefs();
   const { startBuild } = useActiveBuild();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [building, setBuilding] = useState(false);
+  const [deleting, setDeleting] = useState<string | null>(null);
+  const [promoting, setPromoting] = useState<string | null>(null);
+
+  const handlePromote = async (brief: BriefSummary) => {
+    if (promoting) return;
+    if (!confirm(`Promote "${brief.clientName}" to a CRM project? Pages + features will be seeded as open tasks.`)) return;
+    setPromoting(brief.id);
+    try {
+      const res = await fetch("/api/dashboard/crm-projects/from-brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ briefId: brief.id }),
+      });
+      if (res.ok) {
+        alert(`Project created — open MONEY tab to see it.`);
+      } else {
+        alert("Promote failed — check console.");
+      }
+    } finally {
+      setPromoting(null);
+    }
+  };
+
+  const handleDelete = async (brief: BriefSummary) => {
+    if (deleting) return;
+    if (!confirm(`Delete brief from ${brief.clientName}? This cannot be undone.`)) return;
+    setDeleting(brief.id);
+    await remove(brief.id);
+    setDeleting(null);
+  };
 
   const newBriefs = briefs.filter(b => b.status === "new");
   const builtBriefs = briefs.filter(b => b.status !== "new");
@@ -142,7 +172,7 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
 
       {/* ── New briefs ─────────────────────────────────────────── */}
       {loading ? <HudSkeleton /> : newBriefs.length === 0 ? (
-        <HudEmpty message="NO NEW BRIEFS" />
+        <HudEmpty message="No new briefs in the queue." />
       ) : (
         <>
           {/* Mobile: stacked cards */}
@@ -327,9 +357,17 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
           {/* Mobile list */}
           <div className="space-y-1 mt-2 md:hidden">
             {builtBriefs.map(brief => (
-              <div key={brief.id} className="flex items-center justify-between py-3 px-3" style={{ background: C.surface }}>
-                <span className="text-sm" style={{ color: "rgba(255,255,255,0.25)" }}>{brief.clientName}</span>
+              <div key={brief.id} className="flex items-center justify-between py-3 px-3 gap-2" style={{ background: C.surface }}>
+                <span className="text-sm flex-1 truncate" style={{ color: "rgba(255,255,255,0.4)" }}>{brief.clientName}</span>
                 <HudBadge label={brief.status.toUpperCase()} color={brief.status === "built" ? C.success : brief.status === "failed" ? C.error : C.warning} />
+                <button
+                  onClick={() => handleDelete(brief)}
+                  disabled={deleting === brief.id}
+                  className="text-[11px] tracking-wider font-bold px-2.5 py-1.5 disabled:opacity-30"
+                  style={{ background: `${C.error}10`, border: `1px solid ${C.error}30`, color: C.error }}
+                >
+                  {deleting === brief.id ? "..." : "DEL"}
+                </button>
               </div>
             ))}
           </div>
@@ -339,8 +377,8 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
             <table className="w-full border-collapse">
               <thead>
                 <tr style={{ borderBottom: `1px solid ${C.dim}` }}>
-                  {["CLIENT", "PACKAGE", "BUSINESS TYPE", "STATUS", "SUBMITTED"].map(h => (
-                    <th key={h} className="pb-2 text-left text-[9px] tracking-widest font-medium pr-6" style={{ color: "rgba(255,255,255,0.15)" }}>
+                  {["CLIENT", "PACKAGE", "BUSINESS TYPE", "STATUS", "SUBMITTED", ""].map(h => (
+                    <th key={h} className={`pb-2.5 text-[10px] tracking-[0.2em] font-semibold pr-6 ${h === "" ? "text-right" : "text-left"}`} style={{ color: "rgba(255,255,255,0.3)" }}>
                       {h}
                     </th>
                   ))}
@@ -367,10 +405,34 @@ export default function BriefsTab({ onBuildStarted }: { onBuildStarted: (b: Acti
                       <td className="py-2.5 pr-6">
                         <HudBadge label={brief.status.toUpperCase()} color={statusC} />
                       </td>
-                      <td className="py-2.5">
-                        <span className="text-[10px] tabular-nums" style={{ color: "rgba(255,255,255,0.15)" }}>
+                      <td className="py-2.5 pr-6">
+                        <span className="text-[11px] tabular-nums font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>
                           {relTime(brief.createdAt)}
                         </span>
+                      </td>
+                      <td className="py-2.5 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          {brief.status === "built" && (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); handlePromote(brief); }}
+                              disabled={promoting === brief.id}
+                              className="text-[10px] tracking-wider font-bold px-2.5 py-1 disabled:opacity-30 hover:opacity-80 active:scale-95"
+                              style={{ background: `${C.success}12`, border: `1px solid ${C.success}40`, color: C.success }}
+                              title="Promote to CRM project"
+                            >
+                              {promoting === brief.id ? "..." : "▸ PROJECT"}
+                            </button>
+                          )}
+                          <button
+                            onClick={(e) => { e.stopPropagation(); handleDelete(brief); }}
+                            disabled={deleting === brief.id}
+                            className="text-[10px] tracking-wider font-bold px-2.5 py-1 disabled:opacity-30 hover:opacity-80 active:scale-95"
+                            style={{ background: `${C.error}10`, border: `1px solid ${C.error}30`, color: C.error }}
+                            title="Delete brief"
+                          >
+                            {deleting === brief.id ? "..." : "DEL"}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );

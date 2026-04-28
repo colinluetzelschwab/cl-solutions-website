@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Instrument_Serif, IBM_Plex_Mono } from "next/font/google";
+import { Inter, Instrument_Serif, IBM_Plex_Mono, Geist, Geist_Mono } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import ScrollProgress from "@/components/ui/ScrollProgress";
@@ -23,6 +23,18 @@ const plexMono = IBM_Plex_Mono({
   variable: "--font-plex-mono",
   subsets: ["latin"],
   weight: ["400", "500"],
+});
+
+// Geist — the current standard for dev-tool UI (Vercel / Linear / v0).
+// Used inside the JARVIS shell only. Public site stays on Inter.
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
@@ -69,7 +81,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
-      className={`${inter.variable} ${instrumentSerif.variable} ${plexMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${instrumentSerif.variable} ${plexMono.variable} ${geist.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-[color:var(--paper-dark)] text-[color:var(--ink)]">

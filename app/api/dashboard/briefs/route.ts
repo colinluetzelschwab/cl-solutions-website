@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { list, put } from '@vercel/blob'
+import { list, put, del } from '@vercel/blob'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -101,5 +101,35 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     console.error('Brief status update error:', error)
     return NextResponse.json({ error: 'Failed to update status' }, { status: 500 })
+  }
+}
+
+/** DELETE — remove a brief and its status sidecar from blob storage.
+ *  Body: { briefId: string }. Best-effort: missing blobs are ignored. */
+export async function DELETE(request: NextRequest) {
+  if (!isAuthenticated(request)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  try {
+    const { briefId } = await request.json()
+    if (!briefId) {
+      return NextResponse.json({ error: 'briefId required' }, { status: 400 })
+    }
+
+    // Find both the brief blob and its .status.json sidecar.
+    const { blobs } = await list({ prefix: `briefs/${briefId}` })
+    const targets = blobs.filter(b =>
+      b.pathname === `briefs/${briefId}.json` ||
+      b.pathname === `briefs/${briefId}.status.json`
+    )
+    for (const t of targets) {
+      try { await del(t.url) } catch { /* skip — best effort */ }
+    }
+
+    return NextResponse.json({ success: true, deleted: targets.length })
+  } catch (error) {
+    console.error('Brief delete error:', error)
+    return NextResponse.json({ error: 'Failed to delete brief' }, { status: 500 })
   }
 }

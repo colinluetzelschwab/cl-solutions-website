@@ -6,7 +6,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  themeColor: "#050508",
+  themeColor: "#0a0a0a",
 };
 
 export const metadata: Metadata = {
@@ -23,9 +23,21 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * JARVIS shell — modern dark master dashboard.
+ * - Geist sans for everything, Geist Mono for IDs / timestamps / slugs.
+ * - No serif anywhere (Instrument Serif is reserved for the public marketing site).
+ * - jarvis-shell namespace scopes typography away from the public site.
+ */
 export default function JarvisLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#050508] text-[#FAFAFA] font-mono select-none">
+    <div
+      className="jarvis-shell min-h-screen select-none antialiased"
+      style={{
+        background: "var(--jarvis-bg)",
+        color: "var(--jarvis-text-primary)",
+      }}
+    >
       {children}
     </div>
   );

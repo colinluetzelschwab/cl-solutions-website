@@ -40,6 +40,15 @@ export const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "live", label: "LIVE", icon: "◉" },
   { id: "systems", label: "SYSTEMS", icon: "◈" },
   { id: "settings", label: "CONFIG", icon: "⚙" },
+  { id: "pipeline", label: "PIPELINE", icon: "▤" },
+  { id: "money", label: "MONEY", icon: "₣" },
+  { id: "actions", label: "ACTIONS", icon: "▸" },
+];
+
+/** Sidebar grouping (desktop). Mobile bottom-bar uses the flat TABS list. */
+export const TAB_GROUPS: { label: string; tabs: Tab[] }[] = [
+  { label: "OPS", tabs: ["briefs", "live", "systems", "settings"] },
+  { label: "CRM", tabs: ["pipeline", "money", "actions"] },
 ];
 
 export const LINKS = [
@@ -52,9 +61,18 @@ export const LINKS = [
 
 export function statusColor(s: string): string {
   switch (s.toUpperCase()) {
-    case "READY": return C.success;
-    case "BUILDING": case "QUEUED": case "INITIALIZING": return C.warning;
-    case "ERROR": case "CANCELED": return C.error;
+    case "READY": case "WON": case "LIVE": case "PAID": case "POSITIVE":
+      return C.success;
+    case "BUILDING": case "QUEUED": case "INITIALIZING":
+    case "MOCKUP_BUILT": case "CONTACTED": case "REPLIED":
+    case "OFFER_SENT": case "IN_BUILD": case "IN_REVIEW":
+    case "REVISION": case "READY_TO_GO_LIVE":
+      return C.warning;
+    case "ERROR": case "CANCELED": case "LOST": case "FAILED": case "NEGATIVE":
+      return C.error;
+    case "FOUND": case "QUALIFIED": case "BRIEFING":
+    case "WAITING_CONTENT": case "MAINTENANCE":
+      return C.primary;
     default: return "rgba(255,255,255,0.2)";
   }
 }

@@ -84,7 +84,7 @@ export default function SystemsTab() {
         </div>
 
         {projLoading ? <HudSkeleton /> : projects.length === 0 ? (
-          <HudEmpty message="NO PROJECTS" />
+          <HudEmpty message="No projects." />
         ) : (
           <>
             {/* Mobile: card grid */}

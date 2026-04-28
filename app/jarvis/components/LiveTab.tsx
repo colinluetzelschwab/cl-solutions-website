@@ -77,24 +77,50 @@ function BuildStatsPanel({ history }: { history: ReturnType<typeof useBuildHisto
       <div>
         <div className="flex items-center justify-between mb-2">
           <HudLabel>Recent Runs</HudLabel>
-          <span className="text-[9px] tabular-nums" style={{ color: `${C.primary}30` }}>{history.length}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-[11px] tabular-nums font-medium" style={{ color: `${C.primary}50` }}>{history.length}</span>
+            {history.length > 0 && (
+              <button
+                onClick={async () => {
+                  if (!confirm(`Clear all ${history.length} build history entries? Old test runs will be wiped.`)) return;
+                  await history.clearAll();
+                }}
+                className="text-[10px] tracking-wider font-bold px-2 py-1"
+                style={{ background: `${C.error}10`, border: `1px solid ${C.error}30`, color: C.error }}
+                title="Clear all history"
+              >
+                CLEAR ALL
+              </button>
+            )}
+          </div>
         </div>
         <div className="space-y-1">
-          {history.slice(0, 6).map((h, i) => {
+          {history.slice(0, 12).map((h, i) => {
             const sColor = h.status === "complete" ? C.success : h.status === "failed" ? C.error : C.warning;
             return (
-              <div key={`${h.slug}-${i}`} className="flex items-center justify-between py-2 px-2.5" style={{ background: C.surface }}>
+              <div key={`${h.slug}-${i}`} className="flex items-center justify-between py-2 px-2.5 gap-2" style={{ background: C.surface }}>
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs truncate" style={{ color: "rgba(255,255,255,0.4)" }}>{h.clientName}</p>
+                  <p className="text-sm truncate font-medium" style={{ color: "rgba(255,255,255,0.55)" }}>{h.clientName}</p>
                   {h.startedAt && (
-                    <p className="text-[9px] mt-0.5" style={{ color: "rgba(255,255,255,0.15)" }}>{relTime(h.startedAt)}</p>
+                    <p className="text-[10px] mt-0.5 tabular-nums" style={{ color: "rgba(255,255,255,0.3)" }}>{relTime(h.startedAt)}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2 ml-2 shrink-0">
                   {h.duration && (
-                    <span className="text-[9px] tabular-nums" style={{ color: "rgba(255,255,255,0.2)" }}>{fmt(h.duration)}</span>
+                    <span className="text-[10px] tabular-nums font-medium" style={{ color: "rgba(255,255,255,0.35)" }}>{fmt(h.duration)}</span>
                   )}
-                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: sColor }} />
+                  <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: sColor }} title={h.status} />
+                  <button
+                    onClick={async () => {
+                      if (!confirm(`Delete "${h.clientName}" build entry?`)) return;
+                      await history.removeEntry(h.slug);
+                    }}
+                    className="text-[10px] tracking-wider font-bold px-1.5 py-0.5"
+                    style={{ background: "transparent", color: `${C.error}80` }}
+                    title="Delete entry"
+                  >
+                    ×
+                  </button>
                 </div>
               </div>
             );
@@ -291,23 +317,36 @@ export default function LiveTab() {
           </HudCard>
         )}
 
-        {!build && <HudEmpty message="NO ACTIVE BUILDS" />}
+        {!build && <HudEmpty message="Nothing building right now." />}
 
         {history.length > 0 && (
           <div className="mt-4">
             <div className="flex items-center justify-between mb-3">
               <HudLabel>Build History</HudLabel>
-              <span className="text-[10px] lg:text-xs tabular-nums" style={{ color: `${C.primary}30` }}>{history.length}</span>
+              <div className="flex items-center gap-3">
+                <span className="text-[12px] tabular-nums font-medium" style={{ color: `${C.primary}50` }}>{history.length}</span>
+                <button
+                  onClick={async () => {
+                    if (!confirm(`Clear all ${history.length} build history entries? Old test runs will be wiped.`)) return;
+                    await history.clearAll();
+                  }}
+                  className="text-[11px] tracking-wider font-bold px-2.5 py-1.5"
+                  style={{ background: `${C.error}10`, border: `1px solid ${C.error}30`, color: C.error }}
+                >
+                  CLEAR ALL
+                </button>
+              </div>
             </div>
             <div className="space-y-2">
               {history.map((h, i) => (
                 <HudCard key={`${h.slug}-${i}`}>
                   <div className="flex items-center justify-between">
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm lg:text-base font-medium truncate">{h.clientName}</p>
-                      <div className="flex items-center gap-3 mt-1 text-[10px] lg:text-xs" style={{ color: "rgba(255,255,255,0.2)" }}>
+                      <p className="text-sm lg:text-base font-semibold truncate">{h.clientName}</p>
+                      <div className="flex items-center gap-3 mt-1 text-[11px] lg:text-[12px] tabular-nums font-medium" style={{ color: "rgba(255,255,255,0.4)" }}>
                         <span>{h.startedAt ? relTime(h.startedAt) : "—"}</span>
                         {h.duration && <span>{fmt(h.duration)}</span>}
+                        <span className="font-mono opacity-60">{h.slug}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 ml-3 shrink-0">
@@ -320,13 +359,24 @@ export default function LiveTab() {
                           href={h.deployUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-[10px] lg:text-xs tracking-wider font-medium active:opacity-60"
-                          style={{ color: `${C.primary}60` }}
+                          className="text-[11px] lg:text-[12px] tracking-wider font-bold active:opacity-60"
+                          style={{ color: `${C.primary}90` }}
                           onClick={e => e.stopPropagation()}
                         >
                           OPEN →
                         </a>
                       )}
+                      <button
+                        onClick={async () => {
+                          if (!confirm(`Delete "${h.clientName}" build entry?`)) return;
+                          await history.removeEntry(h.slug);
+                        }}
+                        className="text-[10px] tracking-wider font-bold px-2 py-1 ml-1"
+                        style={{ background: `${C.error}10`, border: `1px solid ${C.error}30`, color: C.error }}
+                        title="Delete entry"
+                      >
+                        DEL
+                      </button>
                     </div>
                   </div>
                 </HudCard>
