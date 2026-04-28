@@ -101,15 +101,36 @@ async function testStripe(): Promise<TestResult> {
 async function testResend(): Promise<TestResult> {
   const key = process.env.RESEND_API_KEY;
   if (!key) return { status: "missing-token", detail: "RESEND_API_KEY not set in env" };
+  if (!key.startsWith("re_")) return { status: "error", detail: "Key does not look like a Resend key (expected re_…)" };
   try {
-    // /domains list is read-only and cheap.
-    const res = await fetch("https://api.resend.com/domains", {
+    // Try /domains first (full-scope keys). If 401, the key is likely a
+    // restricted send-only key — verify by hitting POST /emails with an
+    // intentionally bad body. Auth-valid keys return 422 (validation);
+    // bad keys return 401.
+    const dom = await fetch("https://api.resend.com/domains", {
       headers: { Authorization: `Bearer ${key}` },
     });
-    if (!res.ok) return { status: "error", detail: `${res.status} ${res.statusText}` };
-    const data = await res.json();
-    const verified = (data.data ?? []).filter((d: { status?: string }) => d.status === "verified").length;
-    return { status: "connected", detail: `Verified domains: ${verified}` };
+    if (dom.ok) {
+      const data = await dom.json();
+      const verified = (data.data ?? []).filter((d: { status?: string }) => d.status === "verified").length;
+      return { status: "connected", detail: `Full-scope key · verified domains: ${verified}` };
+    }
+    if (dom.status === 401 || dom.status === 403) {
+      // Probe send-scope with a deliberately malformed payload (no `to`).
+      const probe = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+        body: JSON.stringify({}),
+      });
+      if (probe.status === 422 || probe.status === 400) {
+        return { status: "connected", detail: "Restricted send-only key (auth ok, no domain read scope)" };
+      }
+      if (probe.status === 401 || probe.status === 403) {
+        return { status: "error", detail: "Key rejected (bad or revoked)" };
+      }
+      return { status: "connected", detail: `Auth ok (probe returned ${probe.status})` };
+    }
+    return { status: "error", detail: `${dom.status} ${dom.statusText}` };
   } catch (e) {
     return { status: "error", detail: e instanceof Error ? e.message : String(e) };
   }
@@ -168,17 +189,25 @@ async function testCheckvibe(): Promise<TestResult> {
 }
 
 async function testVps(): Promise<TestResult> {
-  // Reuse the existing health probe.
+  // Probe the VPS health endpoint directly. Going through our internal
+  // /api/dashboard/vps route would 401 because that route requires a
+  // dashboard_auth cookie which server-to-server fetches can't carry.
+  const vpsUrl = process.env.VPS_BUILD_URL || "http://46.225.88.110:3333";
+  const token = process.env.VPS_BUILD_TOKEN;
+  if (!token) return { status: "missing-token", detail: "VPS_BUILD_TOKEN not set in env" };
   try {
-    const base = process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
-    const res = await fetch(`${base}/api/dashboard/vps`, { cache: "no-store" });
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 4000);
+    const res = await fetch(`${vpsUrl}/health`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: controller.signal,
+      cache: "no-store",
+    });
+    clearTimeout(timeout);
     if (!res.ok) return { status: "error", detail: `${res.status} ${res.statusText}` };
-    const data = await res.json();
-    return data.status === "online"
-      ? { status: "connected", detail: `Uptime: ${Math.round(data.uptime ?? 0)}s` }
-      : { status: "error", detail: data.error ?? "VPS offline" };
+    const data = await res.json().catch(() => ({}));
+    const uptime = typeof data.uptime === "number" ? data.uptime : 0;
+    return { status: "connected", detail: `Uptime: ${Math.floor(uptime / 3600)}h${Math.floor((uptime % 3600) / 60)}m` };
   } catch (e) {
     return { status: "error", detail: e instanceof Error ? e.message : String(e) };
   }
