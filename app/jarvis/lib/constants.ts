@@ -1,4 +1,4 @@
-import type { Tab } from "./types";
+import type { Surface, Tab } from "./types";
 
 export const C = {
   primary: "#00E5FF",
@@ -35,21 +35,31 @@ export const PACKAGE_LABELS: Record<string, string> = {
   pro: "PRO",
 };
 
-export const TABS: { id: Tab; label: string; icon: string }[] = [
-  { id: "briefs", label: "BRIEFS", icon: "▧" },
-  { id: "live", label: "LIVE", icon: "◉" },
-  { id: "systems", label: "SYSTEMS", icon: "◈" },
-  { id: "settings", label: "CONFIG", icon: "⚙" },
-  { id: "pipeline", label: "PIPELINE", icon: "▤" },
-  { id: "money", label: "MONEY", icon: "₣" },
-  { id: "actions", label: "ACTIONS", icon: "▸" },
+/* ── JARVIS 2.0: 7-surface IA ─────────────────────────────── */
+
+export const SURFACES: { id: Surface; label: string; icon: string; sublabel?: string }[] = [
+  { id: "today",  label: "Today",   icon: "◐", sublabel: "What needs me now" },
+  { id: "deals",  label: "Deals",   icon: "▤", sublabel: "Lead → live → maintenance" },
+  { id: "inbox",  label: "Inbox",   icon: "✉", sublabel: "Replies · payments · alerts" },
+  { id: "agents", label: "Agents",  icon: "◇", sublabel: "Multi-step AI workflows" },
+  { id: "ops",    label: "Ops",     icon: "◉", sublabel: "Builds + infra (live)" },
+  { id: "money",  label: "Money",   icon: "₣", sublabel: "Revenue · costs · MRR" },
+  { id: "config", label: "Config",  icon: "⚙", sublabel: "Connections + secrets" },
 ];
 
-/** Sidebar grouping (desktop). Mobile bottom-bar uses the flat TABS list. */
-export const TAB_GROUPS: { label: string; tabs: Tab[] }[] = [
-  { label: "OPS", tabs: ["briefs", "live", "systems", "settings"] },
-  { label: "CRM", tabs: ["pipeline", "money", "actions"] },
+export const SURFACE_GROUPS: { label: string; surfaces: Surface[] }[] = [
+  { label: "Work", surfaces: ["today", "deals", "inbox", "agents"] },
+  { label: "Ops",  surfaces: ["ops", "money"] },
+  { label: "",     surfaces: ["config"] },
 ];
+
+/** Mobile bottom-bar shows top 5 surfaces; rest live in a "More" sheet. */
+export const MOBILE_PRIMARY_SURFACES: Surface[] = ["today", "deals", "inbox", "money", "ops"];
+export const MOBILE_OVERFLOW_SURFACES: Surface[] = ["agents", "config"];
+
+/** Legacy: kept for any code path still importing this. Empty in 2.0. */
+export const TABS: { id: Tab; label: string; icon: string }[] = [];
+export const TAB_GROUPS: { label: string; tabs: Tab[] }[] = [];
 
 export const LINKS = [
   { label: "Vercel", url: "https://vercel.com/colinluetzelschwabs-projects" },
@@ -93,3 +103,35 @@ export function relTime(d: string): string {
   const day = Math.floor(ms / 86400000);
   return `${day}d`;
 }
+
+/* ── Integration registry (drives Connections panel) ──────── */
+
+export type IntegrationId =
+  | "vercel"
+  | "github"
+  | "stripe"
+  | "resend"
+  | "anthropic"
+  | "higgsfield"
+  | "checkvibe"
+  | "vps";
+
+export interface IntegrationDef {
+  id: IntegrationId;
+  label: string;
+  description: string;
+  envVar: string;
+  testEndpoint: string;
+  externalUrl?: string;
+}
+
+export const INTEGRATIONS: IntegrationDef[] = [
+  { id: "vercel",     label: "Vercel",      description: "Live deployments, redeploy, rollback", envVar: "VERCEL_API_TOKEN",    testEndpoint: "/api/dashboard/integrations/vercel/test",     externalUrl: "https://vercel.com/account/tokens" },
+  { id: "github",     label: "GitHub",      description: "Auto-create repos, pull PR + CI status", envVar: "GITHUB_TOKEN",       testEndpoint: "/api/dashboard/integrations/github/test",     externalUrl: "https://github.com/settings/tokens" },
+  { id: "stripe",     label: "Stripe",      description: "Auto-invoice on signed offers, webhook payment confirm", envVar: "STRIPE_API_KEY", testEndpoint: "/api/dashboard/integrations/stripe/test", externalUrl: "https://dashboard.stripe.com/apikeys" },
+  { id: "resend",     label: "Resend",      description: "Send outreach + receive replies (inbound)", envVar: "RESEND_API_KEY",   testEndpoint: "/api/dashboard/integrations/resend/test",     externalUrl: "https://resend.com/api-keys" },
+  { id: "anthropic",  label: "Anthropic",   description: "Claude API for personalised drafts + ⌘K NL", envVar: "ANTHROPIC_API_KEY", testEndpoint: "/api/dashboard/integrations/anthropic/test",  externalUrl: "https://console.anthropic.com/settings/keys" },
+  { id: "higgsfield", label: "Higgsfield",  description: "Hero imagery + cinematic video generation", envVar: "HIGGSFIELD_API_KEY", testEndpoint: "/api/dashboard/integrations/higgsfield/test", externalUrl: "https://cloud.higgsfield.ai" },
+  { id: "checkvibe",  label: "CheckVibe",   description: "Per-deal security scans (XSS / auth / headers / secrets)", envVar: "CHECKVIBE_API_KEY", testEndpoint: "/api/dashboard/integrations/checkvibe/test", externalUrl: "https://checkvibe.dev" },
+  { id: "vps",        label: "VPS (Hetzner)", description: "Build pipeline host (Claude Code in tmux)", envVar: "VPS_BUILD_TOKEN", testEndpoint: "/api/dashboard/integrations/vps/test",        externalUrl: "https://console.hetzner.cloud" },
+];

@@ -31,8 +31,10 @@ const KIND_BUTTON: Record<NextActionKind, string> = {
 
 export default function ActionsTab({
   onNavigate,
+  hideHeader,
 }: {
   onNavigate?: (target: { tab: "pipeline" | "money"; refId?: string }) => void;
+  hideHeader?: boolean;
 }) {
   const { actions, loading, refresh } = useNextActions();
 
@@ -56,25 +58,27 @@ export default function ActionsTab({
 
   return (
     <div>
-      <PageHeader
-        title="Today"
-        subtitle={
-          total === 0
-            ? "Inbox zero. Pipeline is calm."
-            : `${total} ${total === 1 ? "thing" : "things"} on your plate · ${urgent} urgent`
-        }
-        action={
-          <button
-            onClick={refresh}
-            className="text-[12px] font-medium px-3 py-2 rounded-lg"
-            style={{ color: "var(--jarvis-text-muted)" }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--jarvis-text-primary)"}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--jarvis-text-muted)"}
-          >
-            Refresh
-          </button>
-        }
-      />
+      {!hideHeader && (
+        <PageHeader
+          title="Today"
+          subtitle={
+            total === 0
+              ? "Inbox zero. Pipeline is calm."
+              : `${total} ${total === 1 ? "thing" : "things"} on your plate · ${urgent} urgent`
+          }
+          action={
+            <button
+              onClick={refresh}
+              className="text-[12px] font-medium px-3 py-2 rounded-lg"
+              style={{ color: "var(--jarvis-text-muted)" }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = "var(--jarvis-text-primary)"}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = "var(--jarvis-text-muted)"}
+            >
+              Refresh
+            </button>
+          }
+        />
+      )}
 
       {/* Desktop summary strip — minimal, sentence case, big italic numbers */}
       {actions.length > 0 && (

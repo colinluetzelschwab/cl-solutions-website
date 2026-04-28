@@ -17,8 +17,9 @@
  * `var(--jarvis-text-secondary)`, etc.
  */
 
-import { TABS, TAB_GROUPS } from "../lib/constants";
-import type { Tab } from "../lib/types";
+import { SURFACES, SURFACE_GROUPS, MOBILE_PRIMARY_SURFACES, MOBILE_OVERFLOW_SURFACES } from "../lib/constants";
+import type { Surface, Tab } from "../lib/types";
+import { useState } from "react";
 
 /* ── Reusable token strings (so JSX stays compact) ───────── */
 const T = {
@@ -62,7 +63,7 @@ export function HudLabel({ children }: { children: string }) {
 
 /* ── Big stat tile — bold sans, tight tracking, tabular figures ── */
 
-export function HudBox({ label, value, color }: { label: string; value: string; color?: string }) {
+export function HudBox({ label, value, color, trend }: { label: string; value: string; color?: string; trend?: string }) {
   return (
     <div
       className="rounded-xl p-5 transition-colors"
@@ -79,6 +80,9 @@ export function HudBox({ label, value, color }: { label: string; value: string; 
       >
         {value}
       </p>
+      {trend && (
+        <p className="mt-1 text-[11px]" style={{ color: T.textMuted }}>{trend}</p>
+      )}
     </div>
   );
 }
@@ -123,20 +127,21 @@ export function HudCard({
 
 /* ── Empty state ─────────────────────────────────────────── */
 
-export function HudEmpty({ message }: { message: string }) {
+export function HudEmpty({ message, hint }: { message: string; hint?: string }) {
   return (
     <div className="py-20 text-center">
       <p className="text-base" style={{ color: T.textMuted }}>{message}</p>
+      {hint && <p className="text-[13px] mt-2" style={{ color: T.textFaint }}>{hint}</p>}
     </div>
   );
 }
 
 /* ── Skeleton ─────────────────────────────────────────────── */
 
-export function HudSkeleton() {
+export function HudSkeleton({ rows = 3 }: { rows?: number }) {
   return (
     <div className="space-y-2">
-      {[1, 2, 3].map(i => (
+      {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="h-16 rounded-xl animate-pulse" style={{ background: T.surface1 }} />
       ))}
     </div>
@@ -171,13 +176,12 @@ export function PageHeader({
       {action && <div className="shrink-0">{action}</div>}
     </div>
   );
-  // (`accentWord` retained in signature so callers don't need to change.)
   void accentWord;
 }
 
 /* ── Top header bar ──────────────────────────────────────── */
 
-export function HudHeader({ hasActiveBuild }: { hasActiveBuild: boolean }) {
+export function HudHeader({ hasActiveBuild, unreadInbox, onCommandBar }: { hasActiveBuild: boolean; unreadInbox?: number; onCommandBar?: () => void }) {
   return (
     <header
       className="px-6 lg:px-12 py-4 flex items-center justify-between"
@@ -193,6 +197,29 @@ export function HudHeader({ hasActiveBuild }: { hasActiveBuild: boolean }) {
         <span className="jarvis-mono text-[11px]" style={{ color: T.textFaint }}>v2.0</span>
       </div>
       <div className="flex items-center gap-4">
+        {!!unreadInbox && unreadInbox > 0 && (
+          <span className="inline-flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full" style={{ background: T.accent }} />
+            <span className="text-[12px] font-medium" style={{ color: T.textSecondary }}>{unreadInbox} unread</span>
+          </span>
+        )}
+        {onCommandBar && (
+          <button
+            onClick={onCommandBar}
+            className="hidden md:inline-flex items-center gap-2 px-3 py-1.5 rounded-md transition-colors"
+            style={{
+              background: T.surface1,
+              border: `1px solid ${T.borderSubtle}`,
+              color: T.textMuted,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = T.surface2)}
+            onMouseLeave={e => (e.currentTarget.style.background = T.surface1)}
+            title="Command palette (⌘K)"
+          >
+            <span className="text-[12px]">Search · run command</span>
+            <kbd className="jarvis-mono text-[10px] px-1.5 py-0.5 rounded" style={{ background: T.surface2, color: T.textFaint }}>⌘K</kbd>
+          </button>
+        )}
         {hasActiveBuild && (
           <span className="inline-flex items-center gap-2">
             <span
@@ -211,52 +238,99 @@ export function HudHeader({ hasActiveBuild }: { hasActiveBuild: boolean }) {
   );
 }
 
-/* ── Mobile bottom tab bar ───────────────────────────────── */
+/* ── Mobile bottom tab bar (5 primary + overflow drawer) ── */
 
 export function HudTabBar({
-  active, onChange, hasLiveDot,
-}: { active: Tab; onChange: (t: Tab) => void; hasLiveDot: boolean }) {
+  active, onChange, hasLiveDot, unreadInbox,
+}: { active: Tab; onChange: (t: Surface) => void; hasLiveDot: boolean; unreadInbox?: number }) {
+  const [showOverflow, setShowOverflow] = useState(false);
+  const surfaceById = Object.fromEntries(SURFACES.map(s => [s.id, s]));
+
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 flex md:hidden overflow-x-auto"
-      style={{
-        background: "rgba(10,10,10,0.92)",
-        backdropFilter: "blur(12px)",
-        borderTop: `1px solid ${T.borderSubtle}`,
-        paddingBottom: "env(safe-area-inset-bottom)",
-      }}
-    >
-      {TABS.map(t => {
-        const isActive = active === t.id;
-        return (
-          <button
-            key={t.id}
-            onClick={() => onChange(t.id)}
-            className="shrink-0 flex-1 min-w-[60px] py-3 flex flex-col items-center gap-1 transition-colors relative"
+    <>
+      <nav
+        className="fixed bottom-0 left-0 right-0 flex md:hidden"
+        style={{
+          background: "rgba(10,10,10,0.92)",
+          backdropFilter: "blur(12px)",
+          borderTop: `1px solid ${T.borderSubtle}`,
+          paddingBottom: "env(safe-area-inset-bottom)",
+        }}
+      >
+        {MOBILE_PRIMARY_SURFACES.map(id => {
+          const s = surfaceById[id];
+          if (!s) return null;
+          const isActive = active === id;
+          return (
+            <button
+              key={id}
+              onClick={() => onChange(id)}
+              className="flex-1 min-w-[60px] py-3 flex flex-col items-center gap-1 transition-colors relative"
+            >
+              <span className="text-[15px]" style={{ color: isActive ? T.accent : T.textFaint }}>{s.icon}</span>
+              <span className="text-[10px] font-medium" style={{ color: isActive ? T.textPrimary : T.textMuted }}>
+                {s.label.toLowerCase()}
+              </span>
+              {id === "ops" && hasLiveDot && (
+                <span className="absolute top-2 right-1/4 w-1.5 h-1.5 rounded-full hud-dot-pulse" style={{ background: T.warning }} />
+              )}
+              {id === "inbox" && !!unreadInbox && unreadInbox > 0 && (
+                <span className="absolute top-2 right-1/4 w-1.5 h-1.5 rounded-full" style={{ background: T.accent }} />
+              )}
+            </button>
+          );
+        })}
+        <button
+          onClick={() => setShowOverflow(true)}
+          className="flex-1 min-w-[60px] py-3 flex flex-col items-center gap-1"
+        >
+          <span className="text-[15px]" style={{ color: T.textFaint }}>···</span>
+          <span className="text-[10px] font-medium" style={{ color: T.textMuted }}>more</span>
+        </button>
+      </nav>
+
+      {showOverflow && (
+        <div
+          className="fixed inset-0 z-50 md:hidden flex items-end"
+          style={{ background: "rgba(0,0,0,0.6)" }}
+          onClick={() => setShowOverflow(false)}
+        >
+          <div
+            className="w-full p-5 rounded-t-2xl"
+            style={{ background: "#0a0a0a", border: `1px solid ${T.borderSubtle}` }}
+            onClick={e => e.stopPropagation()}
           >
-            <span className="text-[15px]" style={{ color: isActive ? T.accent : T.textFaint }}>{t.icon}</span>
-            <span className="text-[10px] font-medium" style={{ color: isActive ? T.textPrimary : T.textMuted }}>
-              {t.label.toLowerCase()}
-            </span>
-            {t.id === "live" && hasLiveDot && (
-              <span
-                className="absolute top-2 right-1/4 w-1.5 h-1.5 rounded-full hud-dot-pulse"
-                style={{ color: T.warning, background: T.warning }}
-              />
-            )}
-          </button>
-        );
-      })}
-    </nav>
+            <p className="text-[11px] mb-3" style={{ color: T.textFaint, letterSpacing: "0.12em" }}>MORE</p>
+            <div className="space-y-1">
+              {MOBILE_OVERFLOW_SURFACES.map(id => {
+                const s = surfaceById[id];
+                if (!s) return null;
+                return (
+                  <button
+                    key={id}
+                    onClick={() => { onChange(id); setShowOverflow(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left"
+                    style={{ background: T.surface1, color: T.textPrimary }}
+                  >
+                    <span className="text-[15px]" style={{ color: T.textMuted }}>{s.icon}</span>
+                    <span className="text-[13px] font-medium">{s.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 /* ── Sidebar — grouped sections, pill-active, sentence case ─ */
 
 export function HudSidebar({
-  active, onChange, hasLiveDot,
-}: { active: Tab; onChange: (t: Tab) => void; hasLiveDot: boolean }) {
-  const tabById = Object.fromEntries(TABS.map(t => [t.id, t]));
+  active, onChange, hasLiveDot, unreadInbox,
+}: { active: Tab; onChange: (s: Surface) => void; hasLiveDot: boolean; unreadInbox?: number }) {
+  const surfaceById = Object.fromEntries(SURFACES.map(s => [s.id, s]));
 
   return (
     <aside
@@ -280,20 +354,22 @@ export function HudSidebar({
       </div>
       <HudLine />
 
-      {/* Tabs */}
-      <nav className="flex-1 px-3 py-5 space-y-6 overflow-y-auto">
-        {TAB_GROUPS.map(group => (
-          <div key={group.label}>
-            <p
-              className="px-3 mb-2 text-[10px] font-semibold uppercase"
-              style={{ color: T.textFaint, letterSpacing: "0.12em" }}
-            >
-              {group.label}
-            </p>
+      {/* Surfaces */}
+      <nav className="flex-1 px-3 py-5 space-y-5 overflow-y-auto">
+        {SURFACE_GROUPS.map((group, groupIdx) => (
+          <div key={groupIdx}>
+            {group.label && (
+              <p
+                className="px-3 mb-2 text-[10px] font-semibold uppercase"
+                style={{ color: T.textFaint, letterSpacing: "0.12em" }}
+              >
+                {group.label}
+              </p>
+            )}
             <div className="space-y-0.5">
-              {group.tabs.map(id => {
-                const t = tabById[id];
-                if (!t) return null;
+              {group.surfaces.map(id => {
+                const s = surfaceById[id];
+                if (!s) return null;
                 const isActive = active === id;
                 return (
                   <button
@@ -308,16 +384,14 @@ export function HudSidebar({
                     onMouseLeave={e => { if (!isActive) (e.currentTarget as HTMLElement).style.background = "transparent"; }}
                   >
                     <span className="text-[14px] w-4 text-center" style={{ color: isActive ? T.accent : T.textMuted }}>
-                      {t.icon}
+                      {s.icon}
                     </span>
-                    <span className="text-[13px] font-medium">
-                      {t.label.charAt(0) + t.label.slice(1).toLowerCase()}
-                    </span>
-                    {id === "live" && hasLiveDot && (
-                      <span
-                        className="w-1.5 h-1.5 rounded-full ml-auto hud-dot-pulse"
-                        style={{ color: T.warning, background: T.warning }}
-                      />
+                    <span className="text-[13px] font-medium flex-1">{s.label}</span>
+                    {id === "ops" && hasLiveDot && (
+                      <span className="w-1.5 h-1.5 rounded-full hud-dot-pulse" style={{ background: T.warning }} />
+                    )}
+                    {id === "inbox" && !!unreadInbox && unreadInbox > 0 && (
+                      <span className="text-[10px] tabular-nums px-1.5 py-0.5 rounded-md" style={{ background: T.accent, color: "#fff" }}>{unreadInbox}</span>
                     )}
                   </button>
                 );

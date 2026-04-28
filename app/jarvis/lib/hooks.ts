@@ -1,26 +1,131 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import type { Tab, BriefSummary, ProjectSummary, ActiveBuild, BuildHistoryEntry, VpsHealth } from "./types";
+import type { Tab, Surface, BriefSummary, ProjectSummary, ActiveBuild, BuildHistoryEntry, VpsHealth } from "./types";
+import { LEGACY_TO_SURFACE } from "./types";
+import type { InboxEvent } from "./inbox-types";
+import type { DealList } from "./deals";
 
-/* ═══ Tab persistence ═══ */
+const ALL_SURFACES: Surface[] = ["today", "deals", "inbox", "agents", "ops", "money", "config"];
+const ALL_LEGACY = Object.keys(LEGACY_TO_SURFACE);
 
-export function useTab(defaultTab: Tab = "actions"): [Tab, (t: Tab) => void] {
-  const [tab, setTabState] = useState<Tab>(defaultTab);
+/* ═══ Surface (was Tab) persistence ═══ */
+
+export function useTab(defaultSurface: Surface = "today"): [Surface, (s: Surface) => void] {
+  const [surface, setSurfaceState] = useState<Surface>(defaultSurface);
 
   useEffect(() => {
     const saved = localStorage.getItem("jarvis-tab") as Tab | null;
-    if (saved && ["briefs", "live", "systems", "settings", "pipeline", "money", "actions"].includes(saved)) {
-      setTabState(saved);
+    if (!saved) return;
+    if (ALL_SURFACES.includes(saved as Surface)) {
+      setSurfaceState(saved as Surface);
+    } else if (ALL_LEGACY.includes(saved)) {
+      // Migrate legacy tab id to its new surface.
+      const next = LEGACY_TO_SURFACE[saved as keyof typeof LEGACY_TO_SURFACE];
+      if (next) {
+        setSurfaceState(next);
+        localStorage.setItem("jarvis-tab", next);
+      }
     }
   }, []);
 
-  const setTab = useCallback((t: Tab) => {
-    setTabState(t);
-    localStorage.setItem("jarvis-tab", t);
+  const setSurface = useCallback((s: Surface) => {
+    setSurfaceState(s);
+    localStorage.setItem("jarvis-tab", s);
   }, []);
 
-  return [tab, setTab];
+  return [surface, setSurface];
+}
+
+/* ═══ Inbox unread count + events ═══ */
+
+export function useInbox() {
+  const [events, setEvents] = useState<InboxEvent[]>([]);
+  const [unread, setUnread] = useState(0);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    try {
+      const res = await fetch("/api/dashboard/inbox", { cache: "no-store" });
+      if (res.ok) {
+        const data = await res.json();
+        setEvents(data.events ?? []);
+        setUnread(data.unread ?? 0);
+      }
+    } catch { /* */ }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    refresh();
+    const iv = setInterval(refresh, 60000);
+    return () => clearInterval(iv);
+  }, [refresh]);
+
+  const markRead = useCallback(async (id: string) => {
+    setEvents(arr => arr.map(e => e.id === id ? { ...e, readAt: e.readAt ?? new Date().toISOString() } : e));
+    setUnread(u => Math.max(0, u - 1));
+    await fetch(`/api/dashboard/inbox?id=${encodeURIComponent(id)}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ op: "read" }),
+    }).catch(() => {});
+  }, []);
+
+  const markAllRead = useCallback(async () => {
+    const now = new Date().toISOString();
+    setEvents(arr => arr.map(e => e.readAt ? e : { ...e, readAt: now }));
+    setUnread(0);
+    await fetch("/api/dashboard/inbox", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ op: "all-read" }),
+    }).catch(() => {});
+  }, []);
+
+  return { events, unread, loading, refresh, markRead, markAllRead };
+}
+
+/* ═══ Deals projection ═══ */
+
+export function useDeals() {
+  const [list, setList] = useState<DealList | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/dashboard/deals", { cache: "no-store" });
+      if (res.ok) setList(await res.json());
+    } catch { /* */ }
+    setLoading(false);
+  }, []);
+
+  useEffect(() => { refresh(); }, [refresh]);
+
+  return { list, loading, refresh };
+}
+
+/* ═══ Command bar (⌘K) ═══ */
+
+export function useCommandBar() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setOpen(o => !o);
+      }
+      if (e.key === "Escape" && open) {
+        setOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  return { open, setOpen, toggle: () => setOpen(o => !o) };
 }
 
 /* ═══ Auth ═══ */
