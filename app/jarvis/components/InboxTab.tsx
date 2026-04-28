@@ -16,6 +16,7 @@ import { useInbox } from "../lib/hooks";
 import type { InboxEvent, InboxEventKind, InboxEventSeverity } from "../lib/inbox-types";
 import { PageHeader, HudBadge, HudEmpty, HudSkeleton } from "./HudElements";
 import { relTime } from "../lib/constants";
+import MailView from "./MailView";
 
 const T = {
   surface1: "var(--jarvis-surface-1)",
@@ -49,9 +50,11 @@ const KIND_LABEL: Record<InboxEventKind, string> = {
 };
 
 type Filter = "all" | "unread" | InboxEventKind;
+type Mode = "events" | "mail";
 
 export default function InboxTab() {
   const { events, unread, loading, markRead, markAllRead } = useInbox();
+  const [mode, setMode] = useState<Mode>("events");
   const [filter, setFilter] = useState<Filter>("all");
 
   const filtered = useMemo(() => {
@@ -70,9 +73,9 @@ export default function InboxTab() {
     <div className="space-y-6">
       <PageHeader
         title="Inbox"
-        subtitle="Replies · payments · builds · alerts — all in one feed."
+        subtitle={mode === "events" ? "Replies · payments · builds · alerts — all in one feed." : "colin@clsolutions.dev — Hostpoint IMAP."}
         action={
-          unread > 0 ? (
+          mode === "events" && unread > 0 ? (
             <button
               onClick={markAllRead}
               className="px-3 py-1.5 text-[12px] rounded-md"
@@ -84,6 +87,49 @@ export default function InboxTab() {
         }
       />
 
+      {/* Mode toggle: Events ↔ Mail */}
+      <div className="flex items-center gap-1 p-1 rounded-md w-fit" style={{ background: T.surface1, border: `1px solid ${T.border}` }}>
+        {(["events", "mail"] as Mode[]).map(m => (
+          <button
+            key={m}
+            onClick={() => setMode(m)}
+            className="px-3 py-1.5 text-[12px] rounded-md font-medium transition-colors"
+            style={{
+              background: mode === m ? T.accentBg : "transparent",
+              color: mode === m ? T.text : T.textMuted,
+            }}
+          >
+            {m === "events" ? `Events${unread > 0 ? ` · ${unread}` : ""}` : "Mail"}
+          </button>
+        ))}
+      </div>
+
+      {mode === "mail" ? (
+        <MailView />
+      ) : (
+        <EventsView
+          loading={loading}
+          filtered={filtered}
+          counts={counts}
+          filter={filter}
+          setFilter={setFilter}
+          markRead={markRead}
+        />
+      )}
+    </div>
+  );
+}
+
+function EventsView({ loading, filtered, counts, filter, setFilter, markRead }: {
+  loading: boolean;
+  filtered: InboxEvent[];
+  counts: Record<Filter, number>;
+  filter: Filter;
+  setFilter: (f: Filter) => void;
+  markRead: (id: string) => void;
+}) {
+  return (
+    <>
       {/* Filter chips */}
       <div className="flex gap-2 overflow-x-auto pb-2">
         {([
@@ -124,7 +170,7 @@ export default function InboxTab() {
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
