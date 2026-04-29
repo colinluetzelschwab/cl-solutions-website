@@ -26,6 +26,7 @@ import { Resend } from "resend";
 import { crmGet, crmList, crmUpdate } from "@/app/jarvis/lib/crm-store";
 import { activityAppend, inboxAppend } from "@/app/jarvis/lib/inbox-store";
 import { nextTouchFor } from "@/app/jarvis/lib/outreach-touches";
+import { pollOutreachReply } from "@/app/jarvis/lib/outreach-replies";
 import type { Lead, Outreach } from "@/app/jarvis/lib/crm-types";
 
 const FROM_ADDRESS = process.env.RESEND_FROM_ADDRESS || "Colin <colin@clsolutions.dev>";
@@ -44,6 +45,7 @@ interface RunResult {
   processed: number;
   sent: number;
   closed: number;
+  repliesDetected: number;
   errors: Array<{ outreachId: string; reason: string }>;
 }
 
@@ -58,7 +60,7 @@ export async function GET(request: NextRequest) {
   }
 
   const now = Date.now();
-  const result: RunResult = { processed: 0, sent: 0, closed: 0, errors: [] };
+  const result: RunResult = { processed: 0, sent: 0, closed: 0, repliesDetected: 0, errors: [] };
 
   let outreachIndex: Awaited<ReturnType<typeof crmList<"outreach">>>;
   try {
@@ -70,8 +72,82 @@ export async function GET(request: NextRequest) {
     );
   }
 
+  // Phase 1: reply detection. For every open outreach (sentAt set, replyStatus
+  // still "none", sequence not closed), IMAP-poll the INBOX for messages from
+  // the lead's email since sentAt. If found, classify + persist replyStatus.
+  // This runs BEFORE the touch-firing loop so a detected reply skips the bump.
+  for (const entry of outreachIndex) {
+    if (!entry.sentAt) continue;
+    if (entry.replyStatus !== "none") continue;
+    if (entry.sequenceClosedAt) continue;
+
+    let outreach: Outreach | null = null;
+    let lead: Lead | null = null;
+    try {
+      outreach = await crmGet("outreach", entry.id);
+      if (!outreach) continue;
+      lead = await crmGet("leads", outreach.leadId);
+      if (!lead?.email) continue;
+
+      const reply = await pollOutreachReply(outreach, lead);
+      if (!reply.found) continue;
+
+      result.repliesDetected++;
+      const classification = reply.classification ?? "positive";
+      const closes = reply.shouldCloseSequence ?? true;
+      const detectedAt = new Date().toISOString();
+
+      await crmUpdate("outreach", outreach.id, {
+        replyStatus: classification,
+        sequenceClosedAt: closes ? detectedAt : undefined,
+        notes: [outreach.notes, `Reply detected ${detectedAt} (${classification}): "${reply.excerpt ?? ""}"`].filter(Boolean).join(" | "),
+      });
+
+      // If it's a real human reply (not auto-reply), promote the lead.
+      if (closes && lead.status === "contacted") {
+        await crmUpdate("leads", lead.id, { status: "replied" });
+      }
+
+      await activityAppend({
+        source: "internal",
+        action: "outreach.reply.detected",
+        label: `Reply (${classification}) ← ${lead.businessName}`,
+        payload: {
+          outreachId: outreach.id,
+          leadId: lead.id,
+          classification,
+          subject: reply.subject,
+          date: reply.date,
+        },
+      });
+      await inboxAppend({
+        kind: "reply",
+        severity: classification === "negative" ? "warning" : classification === "auto_reply" ? "info" : "success",
+        source: "imap",
+        title: `Reply (${classification}) ← ${lead.businessName}`,
+        body: reply.excerpt ?? reply.subject ?? "(no preview)",
+        ref: { kind: "lead", id: lead.id },
+      });
+    } catch (error) {
+      const reason = error instanceof Error ? error.message : String(error);
+      result.errors.push({ outreachId: entry.id, reason: `reply-poll: ${reason}` });
+    }
+  }
+
+  // Re-fetch the index after reply phase since some replyStatus values may
+  // have changed — we want the touch loop to see fresh state.
+  try {
+    outreachIndex = await crmList("outreach");
+  } catch {
+    // If the re-fetch fails, fall through with the old list — touch loop will
+    // skip records we just updated since their entries still have replyStatus="none"
+    // in the cached index, but the actual record (which the loop refetches
+    // via crmGet) will show the updated status.
+  }
+
   const resend = new Resend(apiKey);
 
+  // Phase 2: touch firing. Existing logic — fires Touch-2 / Touch-3 via Resend.
   for (const entry of outreachIndex) {
     if (!entry.sentAt) continue;
     if (entry.replyStatus !== "none") continue;

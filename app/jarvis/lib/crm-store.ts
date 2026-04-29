@@ -140,8 +140,37 @@ function toIndexEntry<C extends Collection>(collection: C, record: RecordOf<C>):
 /* ── CRUD ────────────────────────────────────────────────── */
 
 export async function crmList<C extends Collection>(collection: C): Promise<IndexEntryOf<C>[]> {
-  const idx = await readBlobJson<IndexEntryOf<C>[]>(indexPath(collection));
-  return idx ?? [];
+  // Read from the canonical blob list, not the cached _index.json file.
+  //
+  // The index file is updated read-modify-write inside crmPut, which is racy
+  // under Vercel Blob's eventual consistency: rapid sequential writes can
+  // overwrite each other's index entries because the second write's read
+  // sees a CDN-stale (pre-write1) version of _index.json. Listing actual
+  // record blobs sidesteps this entirely — record writes are independent
+  // and don't share mutable state.
+  //
+  // Cost: 1 list call + N hydrate fetches per crmList invocation. For our
+  // single-user CRM (typically <50 records per collection) this is well
+  // under 1s round-trip and entirely acceptable for cron + admin UI use.
+  const prefix = `crm/${collection}/`;
+  const { blobs } = await list({ prefix });
+  const recordBlobs = blobs.filter(
+    (b) =>
+      b.pathname.startsWith(prefix) &&
+      b.pathname.endsWith(".json") &&
+      !b.pathname.endsWith("/_index.json"),
+  );
+  const records = await Promise.all(
+    recordBlobs.map(async (b) => {
+      const id = b.pathname.slice(prefix.length, -".json".length);
+      return crmGet(collection, id);
+    }),
+  );
+  const out: IndexEntryOf<C>[] = [];
+  for (const r of records) {
+    if (r) out.push(toIndexEntry(collection, r));
+  }
+  return out;
 }
 
 export async function crmGet<C extends Collection>(collection: C, id: string): Promise<RecordOf<C> | null> {
