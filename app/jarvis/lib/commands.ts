@@ -57,7 +57,7 @@ export const COMMANDS: JarvisCommand[] = [
   { id: "test-anthropic",  label: "Test Anthropic connection",  group: "System", endpoint: "/api/dashboard/integrations/anthropic/test",  method: "GET" },
   { id: "test-checkvibe",  label: "Test CheckVibe connection",  group: "System", endpoint: "/api/dashboard/integrations/checkvibe/test",  method: "GET" },
   { id: "test-vps",        label: "Test VPS connection",        group: "System", endpoint: "/api/dashboard/integrations/vps/test",        method: "GET" },
-  { id: "test-higgsfield", label: "Test Higgsfield connection", group: "System", endpoint: "/api/dashboard/integrations/higgsfield/test", method: "GET" },
+  { id: "test-fal",        label: "Test fal.ai connection",     group: "System", endpoint: "/api/dashboard/integrations/fal/test",        method: "GET" },
 
   // Run agent (one-tap)
   { id: "run-lead-scrape",     label: "Run agent: lead-scrape Zürich",   group: "Run agent", endpoint: "/api/dashboard/agents/lead-scrape/run", method: "POST", body: { city: "Zürich", target: 15 } },

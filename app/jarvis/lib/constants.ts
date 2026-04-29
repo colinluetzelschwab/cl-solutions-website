@@ -112,7 +112,7 @@ export type IntegrationId =
   | "stripe"
   | "resend"
   | "anthropic"
-  | "higgsfield"
+  | "fal"
   | "checkvibe"
   | "vps";
 
@@ -131,7 +131,7 @@ export const INTEGRATIONS: IntegrationDef[] = [
   { id: "stripe",     label: "Stripe",      description: "Auto-invoice on signed offers, webhook payment confirm", envVar: "STRIPE_API_KEY", testEndpoint: "/api/dashboard/integrations/stripe/test", externalUrl: "https://dashboard.stripe.com/apikeys" },
   { id: "resend",     label: "Resend",      description: "Send outreach + receive replies (inbound)", envVar: "RESEND_API_KEY",   testEndpoint: "/api/dashboard/integrations/resend/test",     externalUrl: "https://resend.com/api-keys" },
   { id: "anthropic",  label: "Anthropic",   description: "Claude API for personalised drafts + ⌘K NL", envVar: "ANTHROPIC_API_KEY", testEndpoint: "/api/dashboard/integrations/anthropic/test",  externalUrl: "https://console.anthropic.com/settings/keys" },
-  { id: "higgsfield", label: "Higgsfield",  description: "Hero imagery + cinematic video generation", envVar: "HIGGSFIELD_API_KEY", testEndpoint: "/api/dashboard/integrations/higgsfield/test", externalUrl: "https://cloud.higgsfield.ai" },
+  { id: "fal",        label: "fal.ai",      description: "Hero imagery via FLUX.2 Pro / Recraft / FLUX Kontext models", envVar: "FAL_KEY", testEndpoint: "/api/dashboard/integrations/fal/test", externalUrl: "https://fal.ai/dashboard/keys" },
   { id: "checkvibe",  label: "CheckVibe",   description: "Per-deal security scans (XSS / auth / headers / secrets)", envVar: "CHECKVIBE_API_KEY", testEndpoint: "/api/dashboard/integrations/checkvibe/test", externalUrl: "https://checkvibe.dev" },
   { id: "vps",        label: "VPS (Hetzner)", description: "Build pipeline host (Claude Code in tmux)", envVar: "VPS_BUILD_TOKEN", testEndpoint: "/api/dashboard/integrations/vps/test",        externalUrl: "https://console.hetzner.cloud" },
 ];

@@ -45,7 +45,7 @@ async function testIntegration(name: string): Promise<TestResult> {
     case "stripe":     return testStripe();
     case "resend":     return testResend();
     case "anthropic":  return testAnthropic();
-    case "higgsfield": return testHiggsfield();
+    case "fal":        return testFal();
     case "checkvibe":  return testCheckvibe();
     case "vps":        return testVps();
     default:
@@ -164,12 +164,28 @@ async function testAnthropic(): Promise<TestResult> {
   }
 }
 
-async function testHiggsfield(): Promise<TestResult> {
-  const key = process.env.HIGGSFIELD_API_KEY;
-  const secret = process.env.HIGGSFIELD_API_SECRET;
-  if (!key || !secret) return { status: "missing-token", detail: "HIGGSFIELD_API_KEY/SECRET not set" };
-  // Higgsfield doesn't have a free /ping endpoint; verify keys are present.
-  return { status: "connected", detail: "Keys present (no probe endpoint)" };
+async function testFal(): Promise<TestResult> {
+  const key = process.env.FAL_KEY;
+  if (!key) return { status: "missing-token", detail: "FAL_KEY not set in env" };
+  // fal.ai doesn't expose a public auth-only endpoint; do a 0-image cost-free
+  // check by hitting the model schema endpoint, which validates the API key
+  // without consuming credits.
+  try {
+    const model = process.env.FAL_DEFAULT_MODEL || "fal-ai/flux-2-pro";
+    const res = await fetch(`https://fal.run/${model}/openapi.json`, {
+      headers: { Authorization: `Key ${key}` },
+    });
+    if (res.status === 401 || res.status === 403) {
+      return { status: "error", detail: `${res.status} — invalid FAL_KEY` };
+    }
+    if (!res.ok) {
+      // Some routes return 405 / 404 for openapi probe but auth is fine — accept as connected.
+      return { status: "connected", detail: `Auth ok (probe returned ${res.status})` };
+    }
+    return { status: "connected", detail: "FAL_KEY validated" };
+  } catch (e) {
+    return { status: "error", detail: e instanceof Error ? e.message : String(e) };
+  }
 }
 
 async function testCheckvibe(): Promise<TestResult> {

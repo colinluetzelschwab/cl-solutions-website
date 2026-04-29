@@ -77,7 +77,7 @@ export const AGENTS: AgentDef[] = [
   {
     id: "mockup-blast",
     label: "Mockup blast (hot leads)",
-    description: "For each lead with priority=hot — generate Higgsfield hero + bare Next.js mockup, deploy to temp Vercel project",
+    description: "For each lead with priority=hot — generate fal.ai hero (FLUX.2 Pro) + bare Next.js mockup, deploy to temp Vercel project",
     outputLabel: "mockups deployed",
     estimatedDuration: 240,
   },
