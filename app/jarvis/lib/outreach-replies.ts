@@ -134,9 +134,70 @@ function extractTextFromSource(source: Buffer): string {
 
 /* ── Public API ──────────────────────────────────────────── */
 
+/** Folders to scan, in priority order. INBOX first (most replies land
+ * there). Junk / Spam are checked next so that filtered-but-real replies
+ * don't get missed and trigger a false-bump. Names vary by provider —
+ * Hostpoint uses "Junk"; Gmail-style "[Gmail]/Spam" or "Spam" also tried
+ * for compatibility if mailbox is ever migrated. */
+const REPLY_FOLDER_CANDIDATES = [
+  "INBOX",
+  "Junk",
+  "INBOX.Junk",
+  "Spam",
+  "Junk E-mail",
+];
+
+interface FolderHit {
+  folder: string;
+  uid: number;
+  envelope?: ImapEnv;
+  source?: Buffer;
+}
+
+async function findReplyAcrossFolders(
+  client: ImapFlow,
+  fromEmail: string,
+  since: Date,
+): Promise<FolderHit | null> {
+  for (const folder of REPLY_FOLDER_CANDIDATES) {
+    let lock;
+    try {
+      lock = await client.getMailboxLock(folder);
+    } catch {
+      // Folder doesn't exist on this server — skip silently.
+      continue;
+    }
+    try {
+      const uids = await client.search(
+        { from: fromEmail, since },
+        { uid: true },
+      );
+      const uidArr = Array.isArray(uids) ? uids : [];
+      if (uidArr.length === 0) continue;
+
+      const latestUid = Math.max(...uidArr);
+      for await (const raw of client.fetch(
+        [latestUid],
+        { uid: true, envelope: true, source: true },
+        { uid: true },
+      )) {
+        const m = raw as unknown as ImapMsg;
+        return { folder, uid: latestUid, envelope: m.envelope, source: m.source };
+      }
+      // Search hit but fetch yielded nothing — unusual but not fatal.
+      return { folder, uid: latestUid };
+    } finally {
+      lock.release();
+    }
+  }
+  return null;
+}
+
 /**
- * Search the INBOX for any reply from `lead.email` since `outreach.sentAt`.
- * Returns the latest matching message classified by heuristic.
+ * Search INBOX + Junk/Spam folders for any reply from `lead.email` since
+ * `outreach.sentAt`. Returns the most recent matching message classified
+ * by heuristic. Junk folder is checked specifically so a spam-filtered
+ * real reply doesn't trigger a false-bump on the next cron tick.
  */
 export async function pollOutreachReply(
   outreach: Outreach,
@@ -147,52 +208,40 @@ export async function pollOutreachReply(
 
   const client = await openClient();
   try {
-    const lock = await client.getMailboxLock("INBOX");
-    try {
-      const sinceDate = new Date(outreach.sentAt);
-      // ImapFlow search: { from, since }
-      const uids = await client.search(
-        { from: lead.email, since: sinceDate },
-        { uid: true },
-      );
-      const uidArr = Array.isArray(uids) ? uids : [];
-      if (uidArr.length === 0) return { found: false };
+    const sinceDate = new Date(outreach.sentAt);
+    const hit = await findReplyAcrossFolders(client, lead.email, sinceDate);
+    if (!hit) return { found: false };
 
-      // Most recent matching UID = highest UID for this folder.
-      const latestUid = Math.max(...uidArr);
+    const subject = hit.envelope?.subject;
+    const dateIso = hit.envelope?.date
+      ? new Date(hit.envelope.date).toISOString()
+      : undefined;
+    const bodyText = hit.source ? extractTextFromSource(hit.source) : undefined;
 
-      let envelope: ImapEnv | undefined;
-      let source: Buffer | undefined;
-      for await (const raw of client.fetch(
-        [latestUid],
-        { uid: true, envelope: true, source: true },
-        { uid: true },
-      )) {
-        const m = raw as unknown as ImapMsg;
-        envelope = m.envelope;
-        source = m.source;
-        break;
-      }
+    let { status, closes } = classifyReply(bodyText, subject);
 
-      const subject = envelope?.subject;
-      const dateIso = envelope?.date
-        ? new Date(envelope.date).toISOString()
-        : undefined;
-      const bodyText = source ? extractTextFromSource(source) : undefined;
-
-      const { status, closes } = classifyReply(bodyText, subject);
-
-      return {
-        found: true,
-        classification: status,
-        date: dateIso,
-        subject,
-        excerpt: bodyText?.replace(/\s+/g, " ").trim().slice(0, 220),
-        shouldCloseSequence: closes,
-      };
-    } finally {
-      lock.release();
+    // Defense: if reply was found in a Junk/Spam folder, force a manual-review
+    // signal — the spam filter may have flagged it for a reason, but we still
+    // don't want to keep bumping someone who replied. Close the sequence and
+    // let Colin review via Inbox event severity.
+    const inSpam = hit.folder !== "INBOX";
+    if (inSpam) {
+      closes = true;
     }
+
+    const excerptCore = bodyText?.replace(/\s+/g, " ").trim().slice(0, 200);
+    const excerpt = inSpam
+      ? `[in folder: ${hit.folder}] ${excerptCore ?? ""}`.trim()
+      : excerptCore;
+
+    return {
+      found: true,
+      classification: status,
+      date: dateIso,
+      subject,
+      excerpt,
+      shouldCloseSequence: closes,
+    };
   } finally {
     await client.logout().catch(() => {});
   }
