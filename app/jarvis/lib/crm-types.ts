@@ -59,6 +59,12 @@ export interface Outreach extends AuditFields {
   replyStatus: ReplyStatus;
   mockupUrl?: string;
   notes?: string;
+  /** Number of touches sent: 1 = initial, 2 = bump, 3 = close-out. Undefined when sentAt is also undefined. */
+  touchCount?: 1 | 2 | 3;
+  /** Last touch send timestamp (ISO). Used by Sequence Runner to enforce cadence. */
+  lastTouchAt?: string;
+  /** When the sequence was closed out (touch 3 sent OR positive/negative reply received). */
+  sequenceClosedAt?: string;
 }
 
 /* ── Mockups ─────────────────────────────────────────────── */
@@ -213,6 +219,8 @@ export interface OutreachIndexEntry {
   sentAt?: string;
   followUpAt?: string;
   replyStatus: ReplyStatus;
+  touchCount?: 1 | 2 | 3;
+  sequenceClosedAt?: string;
   updatedAt: string;
 }
 

@@ -12,7 +12,8 @@ export type AgentId =
   | "stale-reaper"
   | "invoice-chase"
   | "retainer-pitch"
-  | "repo-cleanup";
+  | "repo-cleanup"
+  | "brief-to-skeleton";
 
 export interface AgentDef {
   id: AgentId;
@@ -119,6 +120,16 @@ export const AGENTS: AgentDef[] = [
     estimatedDuration: 30,
     fields: [
       { key: "ageDays", label: "Age threshold (days)", kind: "number", default: 14 },
+    ],
+  },
+  {
+    id: "brief-to-skeleton",
+    label: "Brief → Skeleton plan",
+    description: "Read a public-form Brief and generate a structured project skeleton (pages, sections, palette, fonts, copy outline). Saves to crm/skeletons/{briefId}.json — feed to Claude Code to bootstrap the build.",
+    outputLabel: "skeleton plans created",
+    estimatedDuration: 45,
+    fields: [
+      { key: "briefId", label: "Brief ID", kind: "text", placeholder: "brief_xxx" },
     ],
   },
 ];

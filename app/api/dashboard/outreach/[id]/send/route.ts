@@ -56,7 +56,12 @@ export async function POST(
     const messageId = data?.id;
     const followUpAt = new Date(Date.now() + 9 * 86400 * 1000).toISOString();
 
-    const updated = await crmUpdate("outreach", id, { sentAt, followUpAt });
+    const updated = await crmUpdate("outreach", id, {
+      sentAt,
+      followUpAt,
+      touchCount: 1,
+      lastTouchAt: sentAt,
+    });
 
     // Promote lead status to "contacted" if still earlier in the funnel
     if (["found", "qualified", "mockup_built"].includes(lead.status)) {

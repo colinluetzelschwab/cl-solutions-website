@@ -114,7 +114,7 @@ function toIndexEntry<C extends Collection>(collection: C, record: RecordOf<C>):
     }
     case "outreach": {
       const r = record as Outreach;
-      return { id: r.id, leadId: r.leadId, subject: r.subject, sentAt: r.sentAt, followUpAt: r.followUpAt, replyStatus: r.replyStatus, updatedAt: r.updatedAt } as IndexEntryOf<C>;
+      return { id: r.id, leadId: r.leadId, subject: r.subject, sentAt: r.sentAt, followUpAt: r.followUpAt, replyStatus: r.replyStatus, touchCount: r.touchCount, sequenceClosedAt: r.sequenceClosedAt, updatedAt: r.updatedAt } as IndexEntryOf<C>;
     }
     case "mockups": {
       const r = record as Mockup;
