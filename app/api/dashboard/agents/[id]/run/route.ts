@@ -300,9 +300,20 @@ async function runBriefToSkeleton(input: Record<string, string | number>): Promi
   const block = response.content.find((c) => c.type === "text");
   if (!block || block.type !== "text") throw new Error("Anthropic returned no text content");
 
+  // Haiku ignores "no markdown fence" instructions ~30% of the time.
+  // Strip leading ```json / ``` and trailing ``` defensively before JSON.parse.
+  const stripFence = (s: string): string => {
+    let t = s.trim();
+    if (t.startsWith("```")) {
+      t = t.replace(/^```(?:json)?\s*\n?/i, "");
+      t = t.replace(/\n?```\s*$/i, "");
+    }
+    return t.trim();
+  };
+
   let skeleton: Skeleton;
   try {
-    const parsed = JSON.parse(block.text) as Partial<Skeleton>;
+    const parsed = JSON.parse(stripFence(block.text)) as Partial<Skeleton>;
     skeleton = {
       briefId,
       leadId: leadId ?? parsed.leadId,

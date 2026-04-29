@@ -9,12 +9,30 @@ function isAuthenticated(request: NextRequest): boolean {
 }
 
 /**
- * Read all brief blobs from `briefs/*.json`.
- * (Copied from briefs/route.ts pattern; kept inline to avoid import surface.)
+ * Read all brief blobs from `briefs/*.json`. Merges `briefs/{id}.status.json`
+ * sidecars so we know which briefs already shipped (`built`) vs are still
+ * actionable (`new` / `in_progress`). Mirrors the logic in
+ * `app/api/dashboard/briefs/route.ts:GET` so brief-origin deals get the same
+ * status the briefs surface uses.
  */
 async function listBriefs(): Promise<BriefSummary[]> {
   try {
     const { blobs } = await blobList({ prefix: "briefs/" });
+
+    // Build the sidecar status map first so the brief loop can attach status.
+    const statusMap = new Map<string, string>();
+    for (const blob of blobs) {
+      if (!blob.pathname.endsWith(".status.json")) continue;
+      try {
+        const res = await fetch(`${blob.url}?t=${Date.now()}`, { cache: "no-store" });
+        if (!res.ok) continue;
+        const sidecar = await res.json();
+        if (sidecar?.briefId && sidecar?.status) {
+          statusMap.set(String(sidecar.briefId), String(sidecar.status));
+        }
+      } catch { /* skip malformed sidecar */ }
+    }
+
     const summaries: BriefSummary[] = [];
     for (const blob of blobs) {
       if (!blob.pathname.endsWith(".json")) continue;
@@ -23,16 +41,18 @@ async function listBriefs(): Promise<BriefSummary[]> {
         const res = await fetch(`${blob.url}?t=${Date.now()}`, { cache: "no-store" });
         if (!res.ok) continue;
         const data = await res.json();
+        const briefId = data.id ?? blob.pathname.replace(/^briefs\//, "").replace(/\.json$/, "");
         summaries.push({
-          id: data.id ?? blob.pathname.replace(/^briefs\//, "").replace(/\.json$/, ""),
-          clientName: data.businessInfo?.businessName ?? "—",
+          id: briefId,
+          // Public form writes `businessInfo.name` (NOT `businessName`).
+          clientName: data.businessInfo?.name ?? "—",
           email: data.businessInfo?.email ?? "",
-          packageId: data.package?.id ?? "starter",
-          totalPrice: data.package?.totalPrice ?? 0,
+          packageId: data.package?.selectedPackage ?? data.package?.id ?? "starter",
+          totalPrice: data.totalPrice ?? data.package?.totalPrice ?? 0,
           createdAt: data.createdAt ?? blob.uploadedAt.toString(),
-          couponUsed: !!data.coupon?.code,
+          couponUsed: !!data.package?.couponValid || !!data.coupon?.code,
           blobUrl: blob.url,
-          status: data.status ?? "new",
+          status: statusMap.get(briefId) ?? data.status ?? "new",
         });
       } catch { /* skip malformed */ }
     }
@@ -77,9 +97,17 @@ export async function GET(request: NextRequest) {
       }),
     );
 
+    // Exclude briefs whose project already shipped — the deals surface is for
+    // active pipeline, not done-and-delivered work. Built briefs without a
+    // matching CrmProject record were cluttering the view as empty rows.
+    // Keep `new` / `in_progress` (or any unknown status) so genuinely new
+    // briefs still surface as prospects.
+    const TERMINAL_BRIEF_STATUSES = new Set(["built", "live", "delivered"]);
+    const activeBriefs = briefs.filter(b => !TERMINAL_BRIEF_STATUSES.has(b.status ?? "new"));
+
     const list = projectDeals({
       leads: leadsIdx,
-      briefs,
+      briefs: activeBriefs,
       offers: offersIdx,
       projects: projectsIdx,
       fullLeads: fullLeads.filter(Boolean) as Array<{ id: string; businessName: string; briefId?: string }>,
